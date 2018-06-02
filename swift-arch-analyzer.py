@@ -25,7 +25,7 @@ if __name__ == '__main__':
         help='List of paths to exclude from analysis (e.g. submodules, pods, checkouts)'
     )
     CLI.add_argument(
-        "--version",
+        '--version',
         action='version',
         version='%(prog)s ' + version
     )

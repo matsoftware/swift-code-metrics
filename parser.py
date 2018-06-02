@@ -18,8 +18,8 @@ class SwiftFile:
         # filename: framework_name = os.path.basename(self.file)
         subdir = self.file.replace(self.base_path, '')
         first_subpath = self.__extract_first_subpath(subdir)
-        if first_subpath.endswith(".swift"):
-            return "AppTarget"
+        if first_subpath.endswith('.swift'):
+            return 'AppTarget'
         else:
             return first_subpath
 

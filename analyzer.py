@@ -38,28 +38,28 @@ D3 = {D3}\n
 
     def ia_analysis(self, I, A):
         if I <= 0.5 and A <= 0.5:
-            return "(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n" \
-                   "This component should not be volatile (e.g. a stable foundation library such as Strings)."
+            return '(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n' \
+                   'This component should not be volatile (e.g. a stable foundation library such as Strings).'
         elif I >= 0.5 and A >= 0.5:
-            return "(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\n" \
-                   "This component is high likely a leftover that should be removed."
+            return '(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\n' \
+                   'This component is high likely a leftover that should be removed.'
 
         # Standard components
 
-        res = ""
+        res = ''
 
         # I analysis
         if I < 0.2:
-            res += "Highly stable component (hard to change, responsible and independent).\n"
+            res += 'Highly stable component (hard to change, responsible and independent).\n'
         elif I > 0.8:
-            res += "Highly unstable component (lack of dependents, easy to change, irresponsible)\n"
+            res += 'Highly unstable component (lack of dependents, easy to change, irresponsible)\n'
 
         # A analysis
 
         if A < 0.2:
-            res += "Low abstract component, few interfaces.\n"
+            res += 'Low abstract component, few interfaces.\n'
         elif A > 0.8:
-            res += "High abstract component, few concrete data structures.\n"
+            res += 'High abstract component, few concrete data structures.\n'
 
         return res
 
@@ -110,7 +110,7 @@ D3 = {D3}\n
     def __analyze_directory(self, directory, exclude_paths):
         for subdir, dirs, files in os.walk(directory):
             for file in files:
-                if file.endswith(".swift") and \
+                if file.endswith('.swift') and \
                         not 'Test' in file \
                         and not self.__is_excluded_folder(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
