@@ -2,45 +2,59 @@ import os
 import parser
 
 
-class Container:
+class Inspector:
     def __init__(self, directory, exclude_paths=None):
         if exclude_paths is None:
             exclude_paths = []
         self.frameworks = []
-        self.__analyze_directory(directory, exclude_paths)
+        if not directory is None:
+            self.__analyze_directory(directory, exclude_paths)
 
     # Metrics
 
     def instability_abstractness_data(self):
+        """
+        @return: A tuple to represent instability and abstractness data on a scattered plot
+        """
         return (list(map(lambda f: self.instability(f), self.frameworks)),
                 list(map(lambda f: self.abstractness(f), self.frameworks)),
                 list(map(lambda f: f.name, self.frameworks)))
 
-    def framework_analysis(self, f):
-        fan_in = self.fan_in(f)
-        fan_out = self.fan_out(f)
-        I = self.instability(f)
-        Na = f.number_of_interfaces
-        Nc = f.number_of_concrete_data_structures
-        A = self.abstractness(f)
-        D3 = self.distance_main_sequence(f)
-        ia_analysis = self.ia_analysis(I, A)
+    def framework_analysis(self, framework):
+        """ 
+        @param framework: The framework to analyze
+        @return: The architectural analysis of the framework
+        """
+        fan_in = self.fan_in(framework)
+        fan_out = self.fan_out(framework)
+        i = self.instability(framework)
+        n_a = framework.number_of_interfaces
+        n_c = framework.number_of_concrete_data_structures
+        a = self.abstractness(framework)
+        d_3 = self.distance_main_sequence(framework)
+        ia_analysis = self.ia_analysis(i, a)
         return f'''
-Architectural analysis for {f.name}: \n
+Architectural analysis for {framework.name}: \n
 Fan In = {fan_in}
 Fan Out = {fan_out}
-Instability = {I}\n
-Na = {Na}
-Nc = {Nc}
-A = {A}\n
-D3 = {D3}\n
+Instability = {i}\n
+Na = {n_a}
+Nc = {n_c}
+A = {a}\n
+D3 = {d_3}\n
 {ia_analysis}\n'''
 
-    def ia_analysis(self, I, A):
-        if I <= 0.5 and A <= 0.5:
+    def ia_analysis(self, instability, abstractness):
+        """
+        Verbose qualitative analysis of instability and abstractness.
+        @param instability: The instability value of the framework
+        @param abstractness: The abstractness value of the framework
+        @return: Textual analysis.
+        """
+        if instability <= 0.5 and abstractness <= 0.5:
             return '(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n' \
                    'This component should not be volatile (e.g. a stable foundation library such as Strings).'
-        elif I >= 0.5 and A >= 0.5:
+        elif instability >= 0.5 and abstractness >= 0.5:
             return '(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\n' \
                    'This component is high likely a leftover that should be removed.'
 
@@ -49,33 +63,51 @@ D3 = {D3}\n
         res = ''
 
         # I analysis
-        if I < 0.2:
+        if instability < 0.2:
             res += 'Highly stable component (hard to change, responsible and independent).\n'
-        elif I > 0.8:
+        elif instability > 0.8:
             res += 'Highly unstable component (lack of dependents, easy to change, irresponsible)\n'
 
         # A analysis
 
-        if A < 0.2:
+        if abstractness < 0.2:
             res += 'Low abstract component, few interfaces.\n'
-        elif A > 0.8:
+        elif abstractness > 0.8:
             res += 'High abstract component, few concrete data structures.\n'
 
         return res
 
     def distance_main_sequence(self, framework):
+        """
+        Distance from the main sequence (sweet spot in the A/I ratio)
+        D³ = |A+I-1|
+        D = 0: the component is on the Main Sequence (optimal)
+        D = 1: the component is at the maximum distance from the main sequence (worst case)
+        @param framework:
+        @return:
+        """
         return abs(self.abstractness(framework) + self.instability(framework) - 1)
 
     def instability(self, framework):
-        # Instability: I = fan-out / (fan-in + fan-out)
-        # I = 0: maximally stable component
-        # I = 1: maximally unstable component
+        """
+        Instability: I = fan-out / (fan-in + fan-out)
+        I = 0: maximally stable component
+        I = 1: maximally unstable component
+        @param framework: The framework to analyze
+        @return: the instability value (double)
+        """
         fan_in = self.fan_in(framework)
         fan_out = self.fan_out(framework)
         return fan_out / (fan_in + fan_out)
 
     def abstractness(self, framework):
-        # A = Na / Nc
+        """
+        A = Na / Nc
+        A = 0: maximally abstract component
+        A = 1: maximally concrete component
+        @param framework: The framework to analyze
+        @return: The abstractness value (double)
+        """
         if framework.number_of_concrete_data_structures == 0:
             #  This is an external dependency build as source
             return 0
@@ -83,7 +115,11 @@ D3 = {D3}\n
             return framework.number_of_interfaces / framework.number_of_concrete_data_structures
 
     def fan_in(self, framework):
-        # Fan-In: incoming dependencies (number of classes outside the framework that depend on classes inside it)
+        """
+        Fan-In: incoming dependencies (number of classes outside the framework that depend on classes inside it)
+        @param framework: The framework to analyze
+        @return: The Fan-In value (int)
+        """
         fan_in = 0
         for f in self.__other_frameworks(framework):
             existing = f.imports.get(framework, 0)
@@ -91,14 +127,21 @@ D3 = {D3}\n
         return fan_in
 
     def fan_out(self, framework):
-        # Fan-Out: outgoing dependencies. (number of classes inside this component
-        # that depend on classes outside the component)
+        """
+        Fan-Out: outgoing dependencies. (number of classes inside this component that depend on classes outside it)
+        @param framework: The framework to analyze
+        @return: The Fan-Out value (int)
+        """
         fan_out = 0
         for key, value in framework.imports.items():
             fan_out += value
         return fan_out
 
     def coupled_frameworks(self, framework):
+        """
+        @param framework: The framework to inspect for coupled dependencies
+        @return: List of dependent frameworks
+        """
         couples = []
         for f in self.frameworks:
             if f.imports.get(framework):

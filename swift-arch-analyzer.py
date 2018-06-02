@@ -34,12 +34,12 @@ if __name__ == '__main__':
     directory = args.source[0]
     exclude = args.exclude
 
-    # Initialize container that will analyze the directory
-    container = analyzer.Container(directory, exclude)
+    container = analyzer.Inspector(directory, exclude)
 
+    # Detailed analysis per each framework
     for f in container.frameworks:
-        print(container.framework_analysis(f))
-        print('---')
+        print(container.framework_analysis(f), '----')
 
+    # Distance from the main sequence plot
     data = container.instability_abstractness_data()
     graphics.plot_distance_main_sequence(data)
