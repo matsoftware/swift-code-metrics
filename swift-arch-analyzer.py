@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-import sys
-import Container
-import Graphs
 import argparse
+
+import analyzer
+import graphics
 
 if __name__ == '__main__':
 
@@ -35,11 +35,11 @@ if __name__ == '__main__':
     exclude = args.exclude
 
     # Initialize container that will analyze the directory
-    container = Container.Container(directory, exclude)
+    container = analyzer.Container(directory, exclude)
 
     for f in container.frameworks:
         print(container.framework_analysis(f))
         print('---')
 
     data = container.instability_abstractness_data()
-    Graphs.plot_distance_main_sequence(data)
+    graphics.plot_distance_main_sequence(data)

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+
 def plot_distance_main_sequence(data):
     plt.close('all')
 

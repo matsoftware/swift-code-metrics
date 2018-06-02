@@ -1,6 +1,7 @@
 import os
 
-class SwiftFileParser:
+
+class SwiftFile:
     def __init__(self, file, base_path):
         self.file = file
         self.base_path = base_path
@@ -16,32 +17,34 @@ class SwiftFileParser:
     def framework_name(self):
         # filename: framework_name = os.path.basename(self.file)
         subdir = self.file.replace(self.base_path, '')
-        first_subpath = self.__extract_first_subpath__(subdir)
+        first_subpath = self.__extract_first_subpath(subdir)
         if first_subpath.endswith(".swift"):
             return "AppTarget"
         else:
             return first_subpath
 
     def read_imports(self):
-        return self.__read_prefixed_attribute__('import')
+        return self.__read_prefixed_attribute('import')
 
     def read_protocols(self):
-        return self.__read_prefixed_attribute__('protocol', self.attributes_modifiers)
+        return self.__read_prefixed_attribute('protocol', self.attributes_modifiers)
 
     def read_concrete_data_structures(self):
-        return self.__read_prefixed_attribute__('struct', self.attributes_modifiers) +\
-               self.__read_prefixed_attribute__('class', self.attributes_modifiers)
+        return self.__read_prefixed_attribute('struct', self.attributes_modifiers) + \
+               self.__read_prefixed_attribute('class', self.attributes_modifiers)
 
         # Private
 
-    def __extract_first_subpath__(self, subdir):
+    def __extract_first_subpath(self, subdir):
         subdirs = os.path.split(subdir)
         if len(subdirs[0]) > 1:
-            return self.__extract_first_subpath__(subdirs[0])
+            return self.__extract_first_subpath(subdirs[0])
         else:
             return subdir.replace('/', '')
 
-    def __read_prefixed_attribute__(self, attr_name, attributes=[]):
+    def __read_prefixed_attribute(self, attr_name, attributes=None):
+        if attributes is None:
+            attributes = []
         attrs = []
         with open(self.file) as f:
             for line in f:

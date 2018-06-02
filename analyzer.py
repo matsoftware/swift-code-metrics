@@ -1,11 +1,13 @@
 import os
-import Framework
-import Parser
+import parser
+
 
 class Container:
-    def __init__(self, directory, exclude_paths = []):
+    def __init__(self, directory, exclude_paths=None):
+        if exclude_paths is None:
+            exclude_paths = []
         self.frameworks = []
-        self.__analyze_directory__(directory, exclude_paths)
+        self.__analyze_directory(directory, exclude_paths)
 
     # Metrics
 
@@ -34,12 +36,11 @@ A = {A}\n
 D3 = {D3}\n
 {ia_analysis}\n'''
 
-
     def ia_analysis(self, I, A):
         if I <= 0.5 and A <= 0.5:
-            return "(Zone of Pain). Highly stable and concrete component - rigid, cannot be extended (not abstract).\n" \
+            return "(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n" \
                    "This component should not be volatile (e.g. a stable foundation library such as Strings)."
-        elif I>= 0.5 and A>= 0.5:
+        elif I >= 0.5 and A >= 0.5:
             return "(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\n" \
                    "This component is high likely a leftover that should be removed."
 
@@ -83,15 +84,15 @@ D3 = {D3}\n
 
     def fan_in(self, framework):
         # Fan-In: incoming dependencies (number of classes outside the framework that depend on classes inside it)
-        # Apparently, reduce is discouraged
         fan_in = 0
-        for f in self.__other_frameworks__(framework):
+        for f in self.__other_frameworks(framework):
             existing = f.imports.get(framework, 0)
             fan_in += existing
         return fan_in
 
     def fan_out(self, framework):
-        # Fan-Out: outgoing dependencies. (number of classes inside this component that depend on classes outside the component)
+        # Fan-Out: outgoing dependencies. (number of classes inside this component
+        # that depend on classes outside the component)
         fan_out = 0
         for key, value in framework.imports.items():
             fan_out += value
@@ -106,57 +107,75 @@ D3 = {D3}\n
 
     # Directory inspection
 
-    def __analyze_directory__(self, directory, exclude_paths):
+    def __analyze_directory(self, directory, exclude_paths):
         for subdir, dirs, files in os.walk(directory):
             for file in files:
                 if file.endswith(".swift") and \
                         not 'Test' in file \
-                        and not self.__is_excluded_folder__(subdir, exclude_paths):
+                        and not self.__is_excluded_folder(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
-                    tr = Parser.SwiftFileParser(full_path, directory)
+                    tr = parser.SwiftFile(full_path, directory)
                     framework_name = tr.framework_name()
                     imports = tr.read_imports()
                     interfaces = tr.read_protocols()
                     concretes = tr.read_concrete_data_structures()
-                    self.__append_dependency__(framework_name, imports, interfaces, concretes)
-        self.__cleanup_external_dependencies__()
+                    self.__append_dependency(framework_name, imports, interfaces, concretes)
+        self.__cleanup_external_dependencies()
 
-    def __is_excluded_folder__(self, subdir, exclude_paths):
+    def __is_excluded_folder(self, subdir, exclude_paths):
         for p in exclude_paths:
             if p in subdir:
                 return True
         return False
 
-    def __append_dependency__(self, framework_name, imports, interfaces, concretes):
-        framework = self.__get_or_create_framework__(framework_name)
+    def __append_dependency(self, framework_name, imports, interfaces, concretes):
+        framework = self.__get_or_create_framework(framework_name)
         framework.number_of_files += 1
         framework.number_of_interfaces += len(interfaces)
         framework.number_of_concrete_data_structures += len(concretes)
 
         for f in imports:
-            imported_framework = self.__get_or_create_framework__(f)
+            imported_framework = self.__get_or_create_framework(f)
             if imported_framework is None:
-                imported_framework = Framework.Framework(f)
+                imported_framework = Framework(f)
             framework.append_import(imported_framework)
 
-    def __cleanup_external_dependencies__(self):
+    def __cleanup_external_dependencies(self):
         # It will remove external dependencies built as source
         self.frameworks = list(filter(lambda f: f.number_of_files > 0, self.frameworks))
 
-    def __get_or_create_framework__(self, framework_name):
-        framework = self.__get_framework__(framework_name)
+    def __get_or_create_framework(self, framework_name):
+        framework = self.__get_framework(framework_name)
         if framework is None:
             # not found, create a new one
-            framework = Framework.Framework(framework_name)
+            framework = Framework(framework_name)
             self.frameworks.append(framework)
         return framework
 
-
-    def __get_framework__(self, name):
+    def __get_framework(self, name):
         for f in self.frameworks:
             if f.name == name:
                 return f
         return None
 
-    def __other_frameworks__(self, framework):
+    def __other_frameworks(self, framework):
         return list(filter(lambda f: f is not framework, self.frameworks))
+
+
+class Framework:
+    def __init__(self, name):
+        self.name = name
+        self.number_of_files = 0
+        self.number_of_concrete_data_structures = 0
+        self.number_of_interfaces = 0
+        self.imports = {}
+
+    def __repr__(self):
+        return self.name + '(' + str(self.number_of_files) + ' files)'
+
+    def append_import(self, framework_import):
+        existing_framework = self.imports.get(framework_import)
+        if not existing_framework:
+            self.imports[framework_import] = 1
+        else:
+            self.imports[framework_import] += 1
