@@ -12,13 +12,26 @@ class Inspector:
 
     # Metrics
 
+    def instability_data(self):
+        """
+        @return: A tuple to represent the instability of each framework
+        """
+        sorted_instability = sorted(list(map(lambda f: (self.instability(f),
+                                                        f.compact_name(),
+                                                        f.compact_name_description()), self.frameworks)),
+                                    key=lambda tup: tup[0])
+        return (list(map(lambda f: f[0], sorted_instability)),
+                list(map(lambda f: f[1], sorted_instability)),
+                list(map(lambda f: f[2], sorted_instability)))
+
     def instability_abstractness_data(self):
         """
         @return: A tuple to represent instability and abstractness data on a scattered plot
         """
         return (list(map(lambda f: self.instability(f), self.frameworks)),
                 list(map(lambda f: self.abstractness(f), self.frameworks)),
-                list(map(lambda f: f.name, self.frameworks)))
+                list(map(lambda f: f.compact_name(), self.frameworks)),
+                list(map(lambda f: f.compact_name_description(), self.frameworks)))
 
     def framework_analysis(self, framework):
         """ 
@@ -204,6 +217,8 @@ D3 = {d_3}\n
     def __other_frameworks(self, framework):
         return list(filter(lambda f: f is not framework, self.frameworks))
 
+    def __take_first(elem):
+        return elem[0]
 
 class Framework:
     def __init__(self, name):
@@ -222,3 +237,9 @@ class Framework:
             self.imports[framework_import] = 1
         else:
             self.imports[framework_import] += 1
+
+    def compact_name(self):
+        return ''.join(c for c in self.name if c.isupper())
+
+    def compact_name_description(self):
+        return self.compact_name() + ' = ' + self.name

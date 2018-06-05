@@ -38,7 +38,13 @@ if __name__ == '__main__':
 
     # Detailed analysis per each framework
     for f in container.frameworks:
-        print(container.framework_analysis(f), '----')
+        print(container.framework_analysis(f))
+        print('----')
+
+
+    # Instability
+    instability_data = container.instability_data()
+    graphics.plot_instability(instability_data)
 
     # Distance from the main sequence plot
     data = container.instability_abstractness_data()
