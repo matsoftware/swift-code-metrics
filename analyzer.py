@@ -30,8 +30,7 @@ class Inspector:
         """
         return (list(map(lambda f: self.instability(f), self.frameworks)),
                 list(map(lambda f: self.abstractness(f), self.frameworks)),
-                list(map(lambda f: f.compact_name(), self.frameworks)),
-                list(map(lambda f: f.compact_name_description(), self.frameworks)))
+                list(map(lambda f: f.name, self.frameworks)))
 
     def framework_analysis(self, framework):
         """ 

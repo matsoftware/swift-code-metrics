@@ -40,7 +40,7 @@ if __name__ == '__main__':
     args = CLI.parse_args()
     directory = args.source[0]
     exclude = args.exclude
-    artefacts = args.artefacts
+    artefacts = args.artefacts[0]
 
     container = analyzer.Inspector(directory, exclude)
 
