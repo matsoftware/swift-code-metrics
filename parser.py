@@ -11,11 +11,11 @@ class SwiftFile:
             'fileprivate',
             'internal',
             'public',
-            'final'
+            'final',
+            'open'
         ]
 
     def framework_name(self):
-        # filename: framework_name = os.path.basename(self.file)
         subdir = self.file.replace(self.base_path, '')
         first_subpath = self.__extract_first_subpath(subdir)
         if first_subpath.endswith('.swift'):
