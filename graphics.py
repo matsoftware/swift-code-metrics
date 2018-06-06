@@ -2,7 +2,6 @@ import string
 
 import matplotlib.pyplot as plt
 import os
-import re
 
 class Graph:
     def __init__(self, path=None):
