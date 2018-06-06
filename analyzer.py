@@ -24,6 +24,19 @@ class Inspector:
                 list(map(lambda f: f[1], sorted_instability)),
                 list(map(lambda f: f[2], sorted_instability)))
 
+
+    def abstractness_data(self):
+        """
+        @return: A tuple to represent the abstractness of each framework
+        """
+        sorted_abstractness = sorted(list(map(lambda f: (self.abstractness(f),
+                                                         f.compact_name(),
+                                                         f.compact_name_description()), self.frameworks)),
+                                     key=lambda tup: tup[0])
+        return (list(map(lambda f: f[0], sorted_abstractness)),
+                list(map(lambda f: f[1], sorted_abstractness)),
+                list(map(lambda f: f[2], sorted_abstractness)))
+
     def instability_abstractness_data(self):
         """
         @return: A tuple to represent instability and abstractness data on a scattered plot

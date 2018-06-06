@@ -60,6 +60,10 @@ if __name__ == '__main__':
     instability_data = analyzer.instability_data()
     graph.plot_instability(instability_data)
 
+    # Abstractness
+    abstractness_data = analyzer.abstractness_data()
+    graph.plot_abstractness(abstractness_data)
+
     # Distance from the main sequence plot
     d3_data = analyzer.instability_abstractness_data()
     graph.plot_distance_main_sequence(d3_data)
