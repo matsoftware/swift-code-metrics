@@ -42,20 +42,24 @@ if __name__ == '__main__':
     exclude = args.exclude
     artefacts = args.artefacts[0]
 
-    container = analyzer.Inspector(directory, exclude)
+    analyzer = analyzer.Inspector(directory, exclude)
 
     # Detailed analysis per each framework
-    for f in container.frameworks:
-        print(container.framework_analysis(f))
+    for f in analyzer.frameworks:
+        print(analyzer.framework_analysis(f))
         print('----')
 
 
     graph = graphics.Graph(artefacts)
 
+    # Size
+    size_data = analyzer.components_classes_size_data()
+    graph.plot_size(size_data)
+
     # Instability
-    instability_data = container.instability_data()
+    instability_data = analyzer.instability_data()
     graph.plot_instability(instability_data)
 
     # Distance from the main sequence plot
-    data = container.instability_abstractness_data()
-    graph.plot_distance_main_sequence(data)
+    d3_data = analyzer.instability_abstractness_data()
+    graph.plot_distance_main_sequence(d3_data)

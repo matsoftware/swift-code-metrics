@@ -10,7 +10,7 @@ class Inspector:
         if not directory is None:
             self.__analyze_directory(directory, exclude_paths)
 
-    # Metrics
+    # Graph data
 
     def instability_data(self):
         """
@@ -32,8 +32,22 @@ class Inspector:
                 list(map(lambda f: self.abstractness(f), self.frameworks)),
                 list(map(lambda f: f.name, self.frameworks)))
 
+    def components_classes_size_data(self):
+        """
+        @return: A tuple to represent the number of concrete data structures of of each framework
+        """
+        sorted_size = sorted(list(map(lambda f: (f.number_of_concrete_data_structures,
+                                                 f.compact_name(),
+                                                 f.compact_name_description()), self.frameworks)),
+                             key=lambda tup: tup[0])
+        return (list(map(lambda f: f[0], sorted_size)),
+                list(map(lambda f: f[1], sorted_size)),
+                list(map(lambda f: f[2], sorted_size)))
+
+    # Metrics
+
     def framework_analysis(self, framework):
-        """ 
+        """
         @param framework: The framework to analyze
         @return: The architectural analysis of the framework
         """
@@ -46,7 +60,7 @@ class Inspector:
         d_3 = self.distance_main_sequence(framework)
         ia_analysis = self.ia_analysis(i, a)
         return f'''
-Architectural analysis for {framework.name}: \n
+Architectural analysis for {framework.name} ({framework.compact_name()}): \n
 Fan In = {fan_in}
 Fan Out = {fan_out}
 Instability = {i}\n
@@ -238,7 +252,13 @@ class Framework:
             self.imports[framework_import] += 1
 
     def compact_name(self):
-        return ''.join(c for c in self.name if c.isupper())
+        all_capitals = ''.join(c for c in self.name if c.isupper())
+        if len(all_capitals) > 2:
+            return all_capitals[0] + all_capitals[-1:]
+        elif len(all_capitals) == 0:
+            return self.name[0]
+        else:
+            return all_capitals
 
     def compact_name_description(self):
         return self.compact_name() + ' = ' + self.name
