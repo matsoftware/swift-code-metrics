@@ -1,7 +1,13 @@
 import os
 
-
 class SwiftFile:
+    def __init__(self, framework_name, imports, interfaces, concretes):
+        self.framework_name = framework_name
+        self.imports = imports
+        self.interfaces = interfaces
+        self.concretes = concretes
+
+class SwiftFileParser:
     def __init__(self, file, base_path):
         self.file = file
         self.base_path = base_path
@@ -15,7 +21,17 @@ class SwiftFile:
             'open'
         ]
 
-    def framework_name(self):
+    def parse(self):
+        return SwiftFile(
+            self.__framework_name(),
+            self.__read_imports(),
+            self.__read_protocols(),
+            self.__read_concrete_data_structures()
+        )
+
+    # Properties mapper
+
+    def __framework_name(self):
         subdir = self.file.replace(self.base_path, '')
         first_subpath = self.__extract_first_subpath(subdir)
         if first_subpath.endswith('.swift'):
@@ -23,17 +39,18 @@ class SwiftFile:
         else:
             return first_subpath
 
-    def read_imports(self):
+    def __read_imports(self):
         return self.__read_prefixed_attribute('import')
 
-    def read_protocols(self):
+    def __read_protocols(self):
         return self.__read_prefixed_attribute('protocol', self.attributes_modifiers)
 
-    def read_concrete_data_structures(self):
+    def __read_concrete_data_structures(self):
         return self.__read_prefixed_attribute('struct', self.attributes_modifiers) + \
                self.__read_prefixed_attribute('class', self.attributes_modifiers)
 
-        # Private
+
+    # Private helpers
 
     def __extract_first_subpath(self, subdir):
         subdirs = os.path.split(subdir)

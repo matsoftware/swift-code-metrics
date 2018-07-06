@@ -196,12 +196,8 @@ D3 = {d_3}\n
                         not 'Test' in file \
                         and not self.__is_excluded_folder(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
-                    tr = parser.SwiftFile(full_path, directory)
-                    framework_name = tr.framework_name()
-                    imports = tr.read_imports()
-                    interfaces = tr.read_protocols()
-                    concretes = tr.read_concrete_data_structures()
-                    self.__append_dependency(framework_name, imports, interfaces, concretes)
+                    swift_file = parser.SwiftFileParser(full_path, directory).parse()
+                    self.__append_dependency(swift_file)
         self.__cleanup_external_dependencies()
 
     def __is_excluded_folder(self, subdir, exclude_paths):
@@ -210,13 +206,13 @@ D3 = {d_3}\n
                 return True
         return False
 
-    def __append_dependency(self, framework_name, imports, interfaces, concretes):
-        framework = self.__get_or_create_framework(framework_name)
+    def __append_dependency(self, swift_file):
+        framework = self.__get_or_create_framework(swift_file.framework_name)
         framework.number_of_files += 1
-        framework.number_of_interfaces += len(interfaces)
-        framework.number_of_concrete_data_structures += len(concretes)
+        framework.number_of_interfaces += len(swift_file.interfaces)
+        framework.number_of_concrete_data_structures += len(swift_file.concretes)
 
-        for f in imports:
+        for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)
             if imported_framework is None:
                 imported_framework = Framework(f)
