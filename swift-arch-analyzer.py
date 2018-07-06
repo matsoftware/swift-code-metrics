@@ -56,6 +56,10 @@ if __name__ == '__main__':
     size_data = analyzer.components_classes_size_data()
     graph.plot_size(size_data)
 
+    # Number of methods
+    methods_data = analyzer.methods_size_data()
+    graph.plot_methods(methods_data)
+
     # Instability
     instability_data = analyzer.instability_data()
     graph.plot_instability(instability_data)

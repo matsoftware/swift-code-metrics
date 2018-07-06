@@ -57,6 +57,18 @@ class Inspector:
                 list(map(lambda f: f[1], sorted_size)),
                 list(map(lambda f: f[2], sorted_size)))
 
+    def methods_size_data(self):
+        """
+        @return: A tuple to represent the number of methods of of each framework
+        """
+        sorted_size = sorted(list(map(lambda f: (f.number_of_methods,
+                                                 f.compact_name(),
+                                                 f.compact_name_description()), self.frameworks)),
+                             key=lambda tup: tup[0])
+        return (list(map(lambda f: f[0], sorted_size)),
+                list(map(lambda f: f[1], sorted_size)),
+                list(map(lambda f: f[2], sorted_size)))
+
     # Metrics
 
     def framework_analysis(self, framework):
@@ -71,6 +83,7 @@ class Inspector:
         n_c = framework.number_of_concrete_data_structures
         a = self.abstractness(framework)
         d_3 = self.distance_main_sequence(framework)
+        nbm = framework.number_of_methods
         ia_analysis = self.ia_analysis(i, a)
         return f'''
 Architectural analysis for {framework.name} ({framework.compact_name()}): \n
@@ -81,6 +94,7 @@ Na = {n_a}
 Nc = {n_c}
 A = {a}\n
 D3 = {d_3}\n
+NBM = {nbm}\n
 {ia_analysis}\n'''
 
     def ia_analysis(self, instability, abstractness):
@@ -211,6 +225,7 @@ D3 = {d_3}\n
         framework.number_of_files += 1
         framework.number_of_interfaces += len(swift_file.interfaces)
         framework.number_of_concrete_data_structures += len(swift_file.concretes)
+        framework.number_of_methods += len(swift_file.methods)
 
         for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)
@@ -248,6 +263,7 @@ class Framework:
         self.number_of_files = 0
         self.number_of_concrete_data_structures = 0
         self.number_of_interfaces = 0
+        self.number_of_methods = 0
         self.imports = {}
 
     def __repr__(self):

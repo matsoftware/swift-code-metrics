@@ -10,6 +10,9 @@ class Graph:
     def plot_size(self, data):
         self.__bar_plot('N. of classes and structs', data)
 
+    def plot_methods(self, data):
+        self.__bar_plot('N. of methods (NBM)', data)
+
     def plot_instability(self, data):
         self.__bar_plot('Instability', data)
 
