@@ -20,6 +20,8 @@ class SimpleClass: SimpleProtocol {
         return param1 + param2
     }
     
+    private func privateFunction() {}
+    
 }
 
 final class ComplexClass: SimpleClass {
@@ -33,3 +35,13 @@ final class ComplexClass: SimpleClass {
     }
     
 }
+
+struct GenericStruct<T> {
+    
+}
+
+public final class ComposedAttributedClass {}
+
+final fileprivate class ComposedPrivateClass {}
+
+internal struct InternalStruct {}

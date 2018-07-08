@@ -1,6 +1,7 @@
 import unittest
 import parser
 
+
 class ParserTests(unittest.TestCase):
 
     def setUp(self):
@@ -19,8 +20,11 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(self.example_parsed_file.interfaces, ["SimpleProtocol {}"])
 
     def test_swiftparser_parse_should_return_expected_concretes(self):
-        self.assertEqual(self.example_parsed_file.concretes, ['SimpleClass: SimpleProtocol {',
-                                                              'ComplexClass: SimpleClass {'])
+        self.assertEqual(self.example_parsed_file.concretes, ['GenericStruct<T> {',
+                                                              'InternalStruct {}',
+                                                              'SimpleClass: SimpleProtocol {',
+                                                              'ComplexClass: SimpleClass {',
+                                                              'ComposedAttributedClass {}'])
 
     def test_swiftparser_parse_should_return_expected_methods(self):
         self.assertEqual(self.example_parsed_file.methods, ['methodOne() {',
