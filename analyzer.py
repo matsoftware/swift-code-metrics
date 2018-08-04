@@ -224,7 +224,7 @@ NBM = {nbm}\n
         framework = self.__get_or_create_framework(swift_file.framework_name)
         framework.number_of_files += 1
         framework.number_of_interfaces += len(swift_file.interfaces)
-        framework.number_of_concrete_data_structures += len(swift_file.concretes)
+        framework.number_of_concrete_data_structures += len(swift_file.structs + swift_file.classes)
         framework.number_of_methods += len(swift_file.methods)
 
         for f in swift_file.imports:
