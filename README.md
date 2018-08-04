@@ -1,6 +1,6 @@
-# swift-arch-analyzer
+# swift-code-metrics
 
-Architectural analyzer for Swift projects.
+Code metrics analyzer for Swift projects.
 
 ## Introduction
 
