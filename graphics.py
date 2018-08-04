@@ -7,17 +7,15 @@ class Graph:
     def __init__(self, path=None):
         self.path = path
 
-    def plot_size(self, data):
-        self.__bar_plot('N. of classes and structs', data)
+    def bar_plot(self, title, data):
+        plt.title(title)
+        plt.ylabel(title)
+        bar_width = 0.35
+        opacity = 0.4
+        plotted_data = plt.bar(data[1], data[0], bar_width, alpha=opacity)
+        plt.legend(plotted_data, data[2], loc='upper left')
 
-    def plot_methods(self, data):
-        self.__bar_plot('N. of methods (NBM)', data)
-
-    def plot_instability(self, data):
-        self.__bar_plot('Instability', data)
-
-    def plot_abstractness(self, data):
-        self.__bar_plot('Abstractness', data)
+        self.__render(plt, title)
 
     def plot_distance_main_sequence(self, data):
         plt.title('Deviation from main sequence')
@@ -47,16 +45,6 @@ class Graph:
         self.__render(plt, 'deviation_main_sequence')
 
     # Private
-
-    def __bar_plot(self, title, data):
-        plt.title(title)
-        plt.ylabel(title)
-        bar_width = 0.35
-        opacity = 0.4
-        plotted_data = plt.bar(data[1], data[0], bar_width, alpha=opacity)
-        plt.legend(plotted_data, data[2], loc='upper left')
-
-        self.__render(plt, title)
 
     def __render(self, plt, name):
         if self.path is None:

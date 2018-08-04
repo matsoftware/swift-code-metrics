@@ -54,19 +54,27 @@ if __name__ == '__main__':
 
     # Size
     size_data = analyzer.components_classes_size_data()
-    graph.plot_size(size_data)
+    graph.bar_plot('N. of classes and structs', size_data)
+
+    # LOC
+    loc_data = analyzer.loc_data()
+    graph.bar_plot('Lines Of Code (LOC)', loc_data)
+
+    # NOC
+    noc_data = analyzer.noc_data()
+    graph.bar_plot('Number Of Comments (NOC)', noc_data)
 
     # Number of methods
     methods_data = analyzer.methods_size_data()
-    graph.plot_methods(methods_data)
+    graph.bar_plot('N. of methods (NBM)', methods_data)
 
     # Instability
     instability_data = analyzer.instability_data()
-    graph.plot_instability(instability_data)
+    graph.bar_plot('Instability', instability_data)
 
     # Abstractness
     abstractness_data = analyzer.abstractness_data()
-    graph.plot_abstractness(abstractness_data)
+    graph.bar_plot('Abstractness', abstractness_data)
 
     # Distance from the main sequence plot
     d3_data = analyzer.instability_abstractness_data()

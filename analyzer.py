@@ -59,9 +59,33 @@ class Inspector:
 
     def methods_size_data(self):
         """
-        @return: A tuple to represent the number of methods of of each framework
+        @return: A tuple to represent the number of methods of each framework
         """
         sorted_size = sorted(list(map(lambda f: (f.number_of_methods,
+                                                 f.compact_name(),
+                                                 f.compact_name_description()), self.frameworks)),
+                             key=lambda tup: tup[0])
+        return (list(map(lambda f: f[0], sorted_size)),
+                list(map(lambda f: f[1], sorted_size)),
+                list(map(lambda f: f[2], sorted_size)))
+
+    def loc_data(self):
+        """
+        @return: A tuple to represent the Lines Of Code (LOC) in each framework
+        """
+        sorted_size = sorted(list(map(lambda f: (f.loc,
+                                                 f.compact_name(),
+                                                 f.compact_name_description()), self.frameworks)),
+                             key=lambda tup: tup[0])
+        return (list(map(lambda f: f[0], sorted_size)),
+                list(map(lambda f: f[1], sorted_size)),
+                list(map(lambda f: f[2], sorted_size)))
+
+    def noc_data(self):
+        """
+        @return: A tuple to represent the Numbers Of Comments (NOC) in each framework
+        """
+        sorted_size = sorted(list(map(lambda f: (f.noc,
                                                  f.compact_name(),
                                                  f.compact_name_description()), self.frameworks)),
                              key=lambda tup: tup[0])
@@ -76,6 +100,8 @@ class Inspector:
         @param framework: The framework to analyze
         @return: The architectural analysis of the framework
         """
+        loc = framework.loc
+        noc = framework.noc
         fan_in = self.fan_in(framework)
         fan_out = self.fan_out(framework)
         i = self.instability(framework)
@@ -87,6 +113,8 @@ class Inspector:
         ia_analysis = self.ia_analysis(i, a)
         return f'''
 Architectural analysis for {framework.name} ({framework.compact_name()}): \n
+LOC = {loc}
+NOC = {noc}
 Fan In = {fan_in}
 Fan Out = {fan_out}
 Instability = {i}\n
@@ -223,6 +251,8 @@ NBM = {nbm}\n
     def __append_dependency(self, swift_file):
         framework = self.__get_or_create_framework(swift_file.framework_name)
         framework.number_of_files += 1
+        framework.loc += swift_file.loc
+        framework.noc += swift_file.n_of_comments
         framework.number_of_interfaces += len(swift_file.interfaces)
         framework.number_of_concrete_data_structures += len(swift_file.structs + swift_file.classes)
         framework.number_of_methods += len(swift_file.methods)
@@ -260,6 +290,8 @@ NBM = {nbm}\n
 class Framework:
     def __init__(self, name):
         self.name = name
+        self.loc = 0
+        self.noc = 0
         self.number_of_files = 0
         self.number_of_concrete_data_structures = 0
         self.number_of_interfaces = 0
