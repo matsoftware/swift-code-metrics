@@ -9,6 +9,11 @@ Inspired by the book of Robert C. Martin, _Clean Architecture_, the software wil
 - the overall number of concrete classes and interfaces
 - the _instability_ and _abstractness_ of the framework
 - the _distance from the main sequence_
+In addition, several common code metrics in the software industries are provided as part of the analysis, such as:
+- LOC (Lines Of Code)
+- NOC (Numbers Of Comments)
+- NBM (Number of Methods)
+- Number of concretes (Number of classes and structs)
 
 ## Requirements
 
@@ -18,10 +23,10 @@ This is a _python3_ script that depends on _matplotlib_ (`pip3 install matplotli
 
 The syntax is:
 
-`python3 swift-code-analyzer.py <path-to-swift-project> --exclude <excluded-folders> --artefacts <output-directory>`
+`python3 swift-code-analyzer.py <path-to-swift-project> --exclude <excluded-folders> --artifacts <output-directory>`
 
 - `<path-to-swift-project>` is the path to the folder that contains the main Xcode project or Workspace
-- `<excluded-folders>` (optional) list of subdirectories to exclude from analysis (e.g. `ThirdParty`, `Carthage` checkouts, `Pods` etc..)
+- `<excluded-folders>` (optional) list of subdirectories to exclude from analysis (e.g. `ThirdParty Carthage Pods`)
 - `<output-directory>` (optional) path to the folder that will contain the generated textual analysis and graphs; if empty, the software will show the images to the user
 
 ## Current limitations
@@ -30,9 +35,12 @@ This tool is designed for medium/large codebases composed by different framework
 
 Libraries built with `spm` are not supported.
 
-## Current state
+## TODOs
 
-Work in progress
+- Percentage of comments
+- Output results to external file once the artifacts folder is provided
+- Return the global result for the code (total LOC, NOC, NBM and Number of concretes)
+- Other (open to suggestions)
 
 ## Contact
 
