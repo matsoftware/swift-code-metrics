@@ -116,5 +116,27 @@ class HelpersTests(unittest.TestCase):
         string = 'private class Private{'
         self.assertEqual('Private', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
+    # Funcs
+
+    def test_helpers_funcs_extract_substring_with_pattern_expectFalse(self):
+        regex = helpers.ParsingHelpers.FUNCS
+        string = 'struct Fakefunc: Any '
+        self.assertEqual('', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_funcs_space_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.FUNCS
+        string = 'func myFunction() -> Bool {'
+        self.assertEqual('myFunction', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_funcs_parameters_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.FUNCS
+        string = 'func myFunction(with parameter: String) '
+        self.assertEqual('myFunction', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_funcs_property_modifier_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.FUNCS
+        string = 'private func funzione(){'
+        self.assertEqual('funzione', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
 if __name__ == '__main__':
     unittest.main()

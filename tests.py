@@ -34,6 +34,11 @@ class ParserTests(unittest.TestCase):
                           'ComposedAttributedClass',
                           'ComposedPrivateClass'], self.example_parsed_file.classes)
 
+    def test_swiftparser_parse_should_return_expected_methods(self):
+        self.assertEqual(['methodOne',
+                          'methodTwo',
+                          'privateFunction',
+                          'aStaticMethod'], self.example_parsed_file.methods)
 
 if __name__ == '__main__':
     unittest.main()
