@@ -2,17 +2,29 @@ import re
 
 
 class ParsingHelpers:
-    # constants
+
+    # Constants
+
     BEGIN_COMMENT = '^//*'
     END_COMMENT = '\*/$'
     SINGLE_COMMENT = '^//'
 
+    IMPORTS = '^import (.*?)$'
+    PROTOCOLS = '.*protocol (.*?)[:|\s]'
+
     # Static helpers
 
     @staticmethod
-    def check_existence(regex_pattern, trimming_string):
+    def check_existence(regex_pattern, trimmed_string):
         regex = re.compile(regex_pattern)
-        if re.search(regex, trimming_string.strip()) is not None:
+        if re.search(regex, trimmed_string.strip()) is not None:
             return True
         else:
             return False
+
+    @staticmethod
+    def extract_substring_with_pattern(regex_pattern, trimmed_string):
+        try:
+            return re.search(regex_pattern, trimmed_string).group(1)
+        except AttributeError:
+            return ''

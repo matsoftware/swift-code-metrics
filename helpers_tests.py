@@ -38,6 +38,39 @@ class HelpersTests(unittest.TestCase):
         self.assertTrue(helpers.ParsingHelpers.check_existence(regex, string))
 
 
+    # Imports
+
+    def test_helpers_imports_extract_substring_with_pattern_expectFalse(self):
+        regex = helpers.ParsingHelpers.IMPORTS
+        string = '//import Foundation '
+        self.assertEqual('', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_imports_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.IMPORTS
+        string = 'import Foundation'
+        self.assertEqual('Foundation', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    # Protocols
+
+    def test_helpers_protocols_extract_substring_with_pattern_expectFalse(self):
+        regex = helpers.ParsingHelpers.PROTOCOLS
+        string = 'class Conformstoprotocol: Any '
+        self.assertEqual('', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_protocols_space_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.PROTOCOLS
+        string = 'protocol Any : class'
+        self.assertEqual('Any', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_protocols_colons_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.PROTOCOLS
+        string = 'protocol Any: class'
+        self.assertEqual('Any', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_protocols_property_modifier_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.PROTOCOLS
+        string = 'public protocol Pubblico {}'
+        self.assertEqual('Pubblico', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
 if __name__ == '__main__':
     unittest.main()
