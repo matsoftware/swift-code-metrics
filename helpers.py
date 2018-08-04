@@ -10,7 +10,9 @@ class ParsingHelpers:
     SINGLE_COMMENT = '^//'
 
     IMPORTS = '^import (.*?)$'
-    PROTOCOLS = '.*protocol (.*?)[:|\s]'
+    PROTOCOLS = '.*protocol (.*?)[:|{|\s]'
+    STRUCTS = '.*struct (.*?)[:|{|\s]'
+    CLASSES = '.*class (.*?)[:|{|\s]'
 
     # Static helpers
 

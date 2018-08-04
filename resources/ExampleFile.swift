@@ -11,6 +11,11 @@ import AmazingFramework
 // First protocol SimpleProtocol
 protocol SimpleProtocol {}
 
+// Unused class protocol
+protocol UnusedClassProtocol: class {
+    
+}
+
 // First class SimpleClass
 class SimpleClass: SimpleProtocol {
     

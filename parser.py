@@ -2,12 +2,13 @@ import os
 import helpers
 
 class SwiftFile:
-    def __init__(self, framework_name, loc, imports, interfaces, concretes, methods, n_of_comments):
+    def __init__(self, framework_name, loc, imports, interfaces, structs, classes, methods, n_of_comments):
         self.framework_name = framework_name
         self.loc = loc
         self.imports = imports
         self.interfaces = interfaces
-        self.concretes = concretes
+        self.structs = structs
+        self.classes = classes
         self.methods = methods
         self.n_of_comments = n_of_comments
 
@@ -29,9 +30,14 @@ class SwiftFileParser:
     def parse(self):
         n_of_comments = 0
         loc=0
-        imports=[]
-        interfaces=[]
-        concretes=[]
+
+        attributes_regex_map = {
+            helpers.ParsingHelpers.IMPORTS: [],
+            helpers.ParsingHelpers.PROTOCOLS: [],
+            helpers.ParsingHelpers.STRUCTS: [],
+            helpers.ParsingHelpers.CLASSES: []
+        }
+
         methods=[]
         commented_line = False
         with open(self.file) as f:
@@ -41,7 +47,7 @@ class SwiftFileParser:
                     continue
 
                 # Comments
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.SINGLE_COMMENT, line):
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.SINGLE_COMMENT, trimmed):
                     n_of_comments += 1
                     continue
 
@@ -49,7 +55,7 @@ class SwiftFileParser:
                     commented_line = True
                     n_of_comments += 1
 
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.END_COMMENT, line):
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.END_COMMENT, trimmed):
                     if commented_line == False:
                         n_of_comments += 1
                     commented_line = False
@@ -61,16 +67,20 @@ class SwiftFileParser:
 
                 loc += 1
 
-                
-
+                for key, value in attributes_regex_map.items():
+                    extracted_value = helpers.ParsingHelpers.extract_substring_with_pattern(key, trimmed)
+                    if len(extracted_value) > 0:
+                        value.append(extracted_value)
+                        continue
 
 
         return SwiftFile(
             framework_name=self.__framework_name(),
             loc=loc,
-            imports=imports,
-            interfaces=interfaces,
-            concretes=concretes,
+            imports=attributes_regex_map[helpers.ParsingHelpers.IMPORTS],
+            interfaces=attributes_regex_map[helpers.ParsingHelpers.PROTOCOLS],
+            structs=attributes_regex_map[helpers.ParsingHelpers.STRUCTS],
+            classes=attributes_regex_map[helpers.ParsingHelpers.CLASSES],
             methods=methods,
             n_of_comments=n_of_comments
         )
@@ -84,16 +94,6 @@ class SwiftFileParser:
             return 'AppTarget'
         else:
             return first_subpath
-
-    def __read_imports(self):
-        return self.__read_attribute('import')
-
-    def __read_protocols(self):
-        return self.__read_attribute('protocol', self.attributes_modifiers)
-
-    def __read_concrete_data_structures(self):
-        return self.__read_attribute('struct', self.attributes_modifiers) + \
-               self.__read_attribute('class', self.attributes_modifiers)
 
     def __read_methods(self):
         return self.__read_attribute('func', ['', 'static'])
@@ -127,19 +127,3 @@ class SwiftFileParser:
                     attrs.append(attr)
         return attrs
 
-
-    #   Alt parsing
-
-    def __multiple_attributes_reader(self, attr_regex_map):
-        n_of_comments = 0
-        commented_line = False
-        with open(self.file) as f:
-            for line in f:
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.BEGIN_COMMENT, line):
-                    commented_line = True
-                    n_of_comments += 1
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.SINGLE_COMMENT, line):
-                    commented_line = True
-                    n_of_comments += 1
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.END_COMMENT, line):
-                    commented_line = False

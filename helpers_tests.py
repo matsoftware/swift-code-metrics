@@ -69,8 +69,52 @@ class HelpersTests(unittest.TestCase):
 
     def test_helpers_protocols_property_modifier_extract_substring_with_pattern_expectTrue(self):
         regex = helpers.ParsingHelpers.PROTOCOLS
-        string = 'public protocol Pubblico {}'
+        string = 'public protocol Pubblico{}'
         self.assertEqual('Pubblico', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    # Structs
+
+    def test_helpers_structs_extract_substring_with_pattern_expectFalse(self):
+        regex = helpers.ParsingHelpers.STRUCTS
+        string = 'class Fakestruct: Any '
+        self.assertEqual('', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_structs_space_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.STRUCTS
+        string = 'struct AnyStruct : Protocol {'
+        self.assertEqual('AnyStruct', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_structs_colons_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.STRUCTS
+        string = 'struct AnyStruct {}'
+        self.assertEqual('AnyStruct', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_structs_property_modifier_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.STRUCTS
+        string = 'internal struct Internal{'
+        self.assertEqual('Internal', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    # Class
+
+    def test_helpers_class_extract_substring_with_pattern_expectFalse(self):
+        regex = helpers.ParsingHelpers.CLASSES
+        string = 'struct Fakeclass: Any '
+        self.assertEqual('', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_class_space_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.CLASSES
+        string = 'class MyClass : Protocol {'
+        self.assertEqual('MyClass', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_class_colons_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.CLASSES
+        string = 'class MyClass {}'
+        self.assertEqual('MyClass', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_class_property_modifier_extract_substring_with_pattern_expectTrue(self):
+        regex = helpers.ParsingHelpers.CLASSES
+        string = 'private class Private{'
+        self.assertEqual('Private', helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
 if __name__ == '__main__':
     unittest.main()
