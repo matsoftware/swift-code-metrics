@@ -8,8 +8,10 @@
 import Foundation
 import AmazingFramework
 
+// First protocol SimpleProtocol
 protocol SimpleProtocol {}
 
+// First class SimpleClass
 class SimpleClass: SimpleProtocol {
     
     func methodOne() {
@@ -24,10 +26,13 @@ class SimpleClass: SimpleProtocol {
     
 }
 
+// Second class ComplexClass
 final class ComplexClass: SimpleClass {
     
     /*
      This should contain more important code
+     protocol test
+     class shouldNotBeRecognized
     */
     
     static func aStaticMethod() {
@@ -36,12 +41,20 @@ final class ComplexClass: SimpleClass {
     
 }
 
+// Third element, struct
 struct GenericStruct<T> {
     
 }
 
+// Fourth class
 public final class ComposedAttributedClass {}
 
+// Fifth class
 final fileprivate class ComposedPrivateClass {}
 
-internal struct InternalStruct {}
+// Sixth element, struct
+internal struct InternalStruct {
+    
+}
+
+/* yet another comment, this time is in-line - total 20 lines of comments here */

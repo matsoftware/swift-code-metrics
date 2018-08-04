@@ -1,13 +1,15 @@
 import os
-
+import helpers
 
 class SwiftFile:
-    def __init__(self, framework_name, imports, interfaces, concretes, methods):
+    def __init__(self, framework_name, loc, imports, interfaces, concretes, methods, n_of_comments):
         self.framework_name = framework_name
+        self.loc = loc
         self.imports = imports
         self.interfaces = interfaces
         self.concretes = concretes
         self.methods = methods
+        self.n_of_comments = n_of_comments
 
 
 class SwiftFileParser:
@@ -25,12 +27,52 @@ class SwiftFileParser:
         ]
 
     def parse(self):
+        n_of_comments = 0
+        loc=0
+        imports=[]
+        interfaces=[]
+        concretes=[]
+        methods=[]
+        commented_line = False
+        with open(self.file) as f:
+            for line in f:
+                trimmed = line.strip()
+                if len(trimmed) == 0:
+                    continue
+
+                # Comments
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.SINGLE_COMMENT, line):
+                    n_of_comments += 1
+                    continue
+
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.BEGIN_COMMENT, trimmed):
+                    commented_line = True
+                    n_of_comments += 1
+
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.END_COMMENT, line):
+                    if commented_line == False:
+                        n_of_comments += 1
+                    commented_line = False
+                    continue
+
+                if commented_line == True:
+                    n_of_comments += 1
+                    continue
+
+                loc += 1
+
+                
+
+
+
         return SwiftFile(
             framework_name=self.__framework_name(),
-            imports=self.__read_imports(),
-            interfaces=self.__read_protocols(),
-            concretes=self.__read_concrete_data_structures(),
-            methods=self.__read_methods()
+            loc=loc,
+            imports=imports,
+            interfaces=interfaces,
+            concretes=concretes,
+            methods=methods,
+            n_of_comments=n_of_comments
         )
 
     # Properties mapper
@@ -84,3 +126,20 @@ class SwiftFileParser:
                     attr = trimmed.replace(attr_name, '').strip()
                     attrs.append(attr)
         return attrs
+
+
+    #   Alt parsing
+
+    def __multiple_attributes_reader(self, attr_regex_map):
+        n_of_comments = 0
+        commented_line = False
+        with open(self.file) as f:
+            for line in f:
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.BEGIN_COMMENT, line):
+                    commented_line = True
+                    n_of_comments += 1
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.SINGLE_COMMENT, line):
+                    commented_line = True
+                    n_of_comments += 1
+                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.END_COMMENT, line):
+                    commented_line = False

@@ -32,5 +32,12 @@ class ParserTests(unittest.TestCase):
                                                             'aStaticMethod() {'])
 
 
+    def test_swiftparser_parse_should_return_expected_n_of_comments(self):
+        self.assertEqual(self.example_parsed_file.n_of_comments, 20)
+
+    def test_swiftparser_parse_should_return_expected_loc(self):
+        self.assertEqual(self.example_parsed_file.loc, 21)
+
+
 if __name__ == '__main__':
     unittest.main()
