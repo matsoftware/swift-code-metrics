@@ -18,7 +18,7 @@ This is a _python3_ script that depends on _matplotlib_ (`pip3 install matplotli
 
 The syntax is:
 
-`python3 swift-project-archlint.py <path-to-swift-project> --exclude <excluded-folders> --artefacts <output-directory>`
+`python3 swift-code-analyzer.py <path-to-swift-project> --exclude <excluded-folders> --artefacts <output-directory>`
 
 - `<path-to-swift-project>` is the path to the folder that contains the main Xcode project or Workspace
 - `<excluded-folders>` (optional) list of subdirectories to exclude from analysis (e.g. `ThirdParty`, `Carthage` checkouts, `Pods` etc..)
