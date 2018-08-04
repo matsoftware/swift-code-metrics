@@ -7,9 +7,9 @@ import graphics
 
 if __name__ == '__main__':
 
-    version = '0.1'
+    version = '0.2'
 
-    CLI = argparse.ArgumentParser(description='Analyzes the architectural stability of a Swift project.')
+    CLI = argparse.ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(
         'source',
         metavar='S',
@@ -25,11 +25,11 @@ if __name__ == '__main__':
         help='List of paths to exclude from analysis (e.g. submodules, pods, checkouts)'
     )
     CLI.add_argument(
-        '--artefacts',
+        '--artifacts',
         nargs='*',
         type=str,
         default=None,
-        help='Path to save the graphic artefacts generated'
+        help='Path to save the graphic artifacts generated'
     )
     CLI.add_argument(
         '--version',
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     args = CLI.parse_args()
     directory = args.source[0]
     exclude = args.exclude
-    artefacts = args.artefacts[0]
+    artifacts = args.artifacts[0]
 
     analyzer = analyzer.Inspector(directory, exclude)
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
         print('----')
 
 
-    graph = graphics.Graph(artefacts)
+    graph = graphics.Graph(artifacts)
 
     # Size
     size_data = analyzer.components_classes_size_data()
