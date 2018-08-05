@@ -203,9 +203,7 @@ NBM = {nbm}\n
     def __analyze_directory(self, directory, exclude_paths):
         for subdir, dirs, files in os.walk(directory):
             for file in files:
-                if file.endswith('.swift') and \
-                        not 'Test' in file \
-                        and not self.__is_excluded_folder(subdir, exclude_paths):
+                if file.endswith('.swift') and not self.__is_excluded_folder(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
                     swift_file = parser.SwiftFileParser(full_path, directory).parse()
                     self.__append_dependency(swift_file)

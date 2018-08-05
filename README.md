@@ -27,7 +27,7 @@ The syntax is:
 `python3 swift-code-analyzer.py <path-to-swift-project> --exclude <excluded-folders> --artifacts <output-directory>`
 
 - `<path-to-swift-project>` is the path to the folder that contains the main Xcode project or Workspace
-- `<excluded-folders>` (optional) list of subdirectories to exclude from analysis (e.g. `ThirdParty Carthage Pods`)
+- `<excluded-folders>` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
 - `<output-directory>` (optional) path to the folder that will contain the generated textual analysis and graphs; if empty, the software will show the images to the user and print the report to the console
 
 
@@ -38,8 +38,7 @@ The script will scan the directory and it will identify the frameworks by the na
 
 - Libraries built with `spm` are not supported.
 
-- The framework name is inferred using the directory structure. If the file is in the root dir, the
-          `default_framework_name` will be used. No inspection of the xcodeproj will be made.
+- The framework name is inferred using the directory structure. If the file is in the root dir, the `default_framework_name` will be used. No inspection of the xcodeproj will be made.
 
 - The list of methods currently doesn't support computed vars
 
