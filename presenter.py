@@ -8,6 +8,8 @@ class TextPresenter:
             self.file = None
         else:
             self.output_function = lambda file, txt: file.write(txt)
+            if not os.path.exists(artifacts_path):
+                os.makedirs(artifacts_path)
             self.report_path = os.path.join(artifacts_path, 'reports.txt')
             self.file = open(self.report_path, 'w+')
 

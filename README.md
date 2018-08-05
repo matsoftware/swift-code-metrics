@@ -30,6 +30,9 @@ The syntax is:
 - `<excluded-folders>` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
 - `<output-directory>` (optional) path to the folder that will contain the generated textual analysis and graphs; if empty, the software will show the images to the user and print the report to the console
 
+A sample project is provided in the `resources` folder; example:
+
+`python3 swift-code-analyzer.py resources/ExampleProject/SwiftCodeMetricsExample --exclude Tests xcodeproj --artifacts report`
 
 ## Current limitations
 
