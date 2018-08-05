@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="m7i-Ug-6JZ">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="Mbs-vU-Ar7">
+            <objects>
+                <navigationController id="m7i-Ug-6JZ" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="W6x-dY-TT5">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="meZ-zi-Inv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2GM-Q4-vfw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-799" y="-129"/>
+        </scene>
+        <!--Choose awesomeness-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SwiftCodeMetricsExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I3b-Yf-WgN">
+                                <rect key="frame" x="16" y="384" width="343" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="BHB-jn-fqk"/>
+                                </constraints>
+                                <state key="normal" title="Launch not so Awesome feature"/>
+                                <connections>
+                                    <action selector="btnLaunchNotSoAwesomeAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="f8C-y7-Vro"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bha-FZ-oox">
+                                <rect key="frame" x="37" y="333" width="300" height="1"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="lP5-uJ-fFU"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="xj6-g3-AY9"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6vH-rV-iNn">
+                                <rect key="frame" x="16" y="239" width="343" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="HBp-Zi-zbg"/>
+                                </constraints>
+                                <state key="normal" title="Launch Awesome feature"/>
+                                <connections>
+                                    <action selector="btnLaunchAwesomeAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="E4f-jq-xI0"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="bha-FZ-oox" firstAttribute="top" secondItem="6vH-rV-iNn" secondAttribute="bottom" constant="50" id="0Sm-bP-HmG"/>
+                            <constraint firstItem="bha-FZ-oox" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3fP-gn-qbA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6vH-rV-iNn" secondAttribute="trailing" constant="16" id="8fO-9g-bm4"/>
+                            <constraint firstItem="I3b-Yf-WgN" firstAttribute="top" secondItem="bha-FZ-oox" secondAttribute="bottom" constant="50" id="KNq-lK-1PN"/>
+                            <constraint firstItem="6vH-rV-iNn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="hnA-Dc-H5K"/>
+                            <constraint firstItem="bha-FZ-oox" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jV9-Gn-QPw"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="I3b-Yf-WgN" secondAttribute="trailing" constant="16" id="omg-Y7-3bx"/>
+                            <constraint firstItem="I3b-Yf-WgN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="uGJ-lB-0Nz"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Choose awesomeness" id="rNW-3z-shg"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="76" y="-129"/>
+        </scene>
+    </scenes>
+</document>
