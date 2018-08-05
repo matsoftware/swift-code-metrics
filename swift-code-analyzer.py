@@ -6,7 +6,7 @@ import presenter
 
 if __name__ == '__main__':
 
-    version = '0.3'
+    version = '0.4'
 
     CLI = argparse.ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(

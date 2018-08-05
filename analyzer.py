@@ -154,7 +154,7 @@ NBM = {nbm}\n
         for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)
             if imported_framework is None:
-                imported_framework = Framework(f)
+                imported_framework = metrics.Framework(f)
             framework.append_import(imported_framework)
 
     def __cleanup_external_dependencies(self):
