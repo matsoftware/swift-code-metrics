@@ -10,7 +10,8 @@ class Inspector:
         if directory is not None:
             self.__analyze_directory(directory, exclude_paths)
 
-    # Metrics
+    # Analysis
+
     def global_frameworks_data(self):
         """
         It returns the global aggregated data for LOC, NOC, NA, NC and NBM using the analyzed frameworks.
@@ -44,6 +45,8 @@ NBM = {nbm}
         """
         loc = framework.loc
         noc = framework.noc
+        poc = self.percentage_of_comments(framework)
+        poc_analysis = self.poc_analysis(poc)
         fan_in = self.fan_in(framework)
         fan_out = self.fan_out(framework)
         i = self.instability(framework)
@@ -57,6 +60,7 @@ NBM = {nbm}
 Architectural analysis for {framework.name} ({framework.compact_name()}): \n
 LOC = {loc}
 NOC = {noc}
+POC = {"%.0f" % poc}% {poc_analysis}
 Fan In = {fan_in}
 Fan Out = {fan_out}
 Instability = {i}\n
@@ -70,9 +74,9 @@ NBM = {nbm}\n
     def ia_analysis(self, instability, abstractness):
         """
         Verbose qualitative analysis of instability and abstractness.
-        @param instability: The instability value of the framework
-        @param abstractness: The abstractness value of the framework
-        @return: Textual analysis.
+        :param instability: The instability value of the framework
+        :param abstractness: The abstractness value of the framework
+        :return: Textual analysis.
         """
         if instability <= 0.5 and abstractness <= 0.5:
             return '(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n' \
@@ -100,14 +104,24 @@ NBM = {nbm}\n
 
         return res
 
+    def poc_analysis(self, poc):
+        if poc <= 20:
+            return '(under commented)'
+        if poc >= 40:
+            return '(over commented)'
+
+        return ''
+
+    # Metrics
+
     def distance_main_sequence(self, framework):
         """
         Distance from the main sequence (sweet spot in the A/I ratio)
         D³ = |A+I-1|
         D = 0: the component is on the Main Sequence (optimal)
         D = 1: the component is at the maximum distance from the main sequence (worst case)
-        @param framework:
-        @return:
+        :param framework:
+        :return:
         """
         return abs(self.abstractness(framework) + self.instability(framework) - 1)
 
@@ -116,8 +130,8 @@ NBM = {nbm}\n
         Instability: I = fan-out / (fan-in + fan-out)
         I = 0: maximally stable component
         I = 1: maximally unstable component
-        @param framework: The framework to analyze
-        @return: the instability value (double)
+        :param framework: The framework to analyze
+        :return: the instability value (double)
         """
         fan_in = self.fan_in(framework)
         fan_out = self.fan_out(framework)
@@ -128,8 +142,8 @@ NBM = {nbm}\n
         A = Na / Nc
         A = 0: maximally abstract component
         A = 1: maximally concrete component
-        @param framework: The framework to analyze
-        @return: The abstractness value (double)
+        :param framework: The framework to analyze
+        :return: The abstractness value (double)
         """
         if framework.number_of_concrete_data_structures == 0:
             #  This is an external dependency build as source
@@ -140,8 +154,8 @@ NBM = {nbm}\n
     def fan_in(self, framework):
         """
         Fan-In: incoming dependencies (number of classes outside the framework that depend on classes inside it)
-        @param framework: The framework to analyze
-        @return: The Fan-In value (int)
+        :param framework: The framework to analyze
+        :return: The Fan-In value (int)
         """
         fan_in = 0
         for f in self.__other_frameworks(framework):
@@ -152,13 +166,21 @@ NBM = {nbm}\n
     def fan_out(self, framework):
         """
         Fan-Out: outgoing dependencies. (number of classes inside this component that depend on classes outside it)
-        @param framework: The framework to analyze
-        @return: The Fan-Out value (int)
+        :param framework: The framework to analyze
+        :return: The Fan-Out value (int)
         """
         fan_out = 0
         for key, value in framework.imports.items():
             fan_out += value
         return fan_out
+
+    def percentage_of_comments(self, framework):
+        """
+        Percentage Of Comments (POC) = 100 * NoC / ( NoC + LoC)
+        :param framework: The framework to analyze
+        :return: The POC value (double)
+        """
+        return 100 * framework.noc / (framework.noc + framework.loc)
 
     def coupled_frameworks(self, framework):
         """
