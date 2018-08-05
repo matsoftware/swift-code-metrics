@@ -29,10 +29,14 @@ class Inspector:
             n_c += f.number_of_concrete_data_structures
             nbm += f.number_of_methods
 
+        poc = self.percentage_of_comments(noc, loc)
+        poc_analysis = self.poc_analysis(poc)
+
         return f'''
 Aggregate data:
 LOC = {loc}
 NOC = {noc}
+POC = {"%.0f" % poc}% {poc_analysis}
 Na = {n_a}
 Nc = {n_c}
 NBM = {nbm}
@@ -40,12 +44,12 @@ NBM = {nbm}
 
     def framework_analysis(self, framework):
         """
-        @param framework: The framework to analyze
-        @return: The architectural analysis of the framework
+        :param framework: The framework to analyze
+        :return: The architectural analysis of the framework
         """
         loc = framework.loc
         noc = framework.noc
-        poc = self.percentage_of_comments(framework)
+        poc = self.percentage_of_comments(framework.noc, framework.loc)
         poc_analysis = self.poc_analysis(poc)
         fan_in = self.fan_in(framework)
         fan_out = self.fan_out(framework)
@@ -174,18 +178,19 @@ NBM = {nbm}\n
             fan_out += value
         return fan_out
 
-    def percentage_of_comments(self, framework):
+    def percentage_of_comments(self, noc, loc):
         """
         Percentage Of Comments (POC) = 100 * NoC / ( NoC + LoC)
-        :param framework: The framework to analyze
+        :param noc: The number of lines of comments
+        :param loc: the number of lines of code
         :return: The POC value (double)
         """
-        return 100 * framework.noc / (framework.noc + framework.loc)
+        return 100 * noc / (noc + loc)
 
     def coupled_frameworks(self, framework):
         """
-        @param framework: The framework to inspect for coupled dependencies
-        @return: List of dependent frameworks
+        :param framework: The framework to inspect for coupled dependencies
+        :return: List of dependent frameworks
         """
         couples = []
         for f in self.frameworks:

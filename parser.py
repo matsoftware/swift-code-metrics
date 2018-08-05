@@ -47,7 +47,7 @@ class SwiftFileParser:
         - The framework name is inferred using the directory structure. If the file is in the root dir, the
           `default_framework_name` will be used. No inspection of the xcodeproj will be made.
         - The list of methods currently doesn't support computed vars
-        - Inline comments in code (such as `struct Data: {} //dummy data) are currently not supported
+        - Inline comments in code (such as `struct Data: {} //dummy data`) are currently not supported
         :return: an instance of SwiftFile with the result of the parsing of the provided `file`
         """
         n_of_comments = 0
