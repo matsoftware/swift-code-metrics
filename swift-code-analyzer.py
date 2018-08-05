@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
 import argparse
-
 import analyzer
-import graphics
+import presenter
 
 if __name__ == '__main__':
 
@@ -49,33 +48,22 @@ if __name__ == '__main__':
         print(analyzer.framework_analysis(f))
         print('----')
 
+    graph_presenter = presenter.GraphPresenter(artifacts)
 
-    graph = graphics.Graph(artifacts)
+    # Sorted data plots
+    sorted_data = {
+        'N. of classes and structs': lambda fr: fr.number_of_concrete_data_structures,
+        'Lines Of Code (LOC)': lambda fr: fr.loc,
+        'Number Of Comments (NOC)': lambda fr: fr.noc,
+        'N. of methods (NBM)': lambda fr: fr.number_of_methods,
+        'Instability (I)': lambda fr: analyzer.instability(fr),
+        'Abstractness (A)': lambda fr: analyzer.abstractness(fr),
+    }
 
-    # Size
-    size_data = analyzer.components_classes_size_data()
-    graph.bar_plot('N. of classes and structs', size_data)
+    for title, framework_function in sorted_data.items():
+        graph_presenter.sorted_data_plot(title, analyzer.frameworks, framework_function)
 
-    # LOC
-    loc_data = analyzer.loc_data()
-    graph.bar_plot('Lines Of Code (LOC)', loc_data)
-
-    # NOC
-    noc_data = analyzer.noc_data()
-    graph.bar_plot('Number Of Comments (NOC)', noc_data)
-
-    # Number of methods
-    methods_data = analyzer.methods_size_data()
-    graph.bar_plot('N. of methods (NBM)', methods_data)
-
-    # Instability
-    instability_data = analyzer.instability_data()
-    graph.bar_plot('Instability', instability_data)
-
-    # Abstractness
-    abstractness_data = analyzer.abstractness_data()
-    graph.bar_plot('Abstractness', abstractness_data)
-
-    # Distance from the main sequence plot
-    d3_data = analyzer.instability_abstractness_data()
-    graph.plot_distance_main_sequence(d3_data)
+    # Distance from the main sequence
+    graph_presenter.distance_from_main_sequence_plot(analyzer.frameworks,
+                                                     lambda fr: analyzer.instability(fr),
+                                                     lambda fr: analyzer.abstractness(fr))

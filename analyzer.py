@@ -7,91 +7,8 @@ class Inspector:
         if exclude_paths is None:
             exclude_paths = []
         self.frameworks = []
-        if not directory is None:
+        if directory is not None:
             self.__analyze_directory(directory, exclude_paths)
-
-    # Graph data
-
-    def instability_data(self):
-        """
-        @return: A tuple to represent the instability of each framework
-        """
-        sorted_instability = sorted(list(map(lambda f: (self.instability(f),
-                                                        f.compact_name(),
-                                                        f.compact_name_description()), self.frameworks)),
-                                    key=lambda tup: tup[0])
-        return (list(map(lambda f: f[0], sorted_instability)),
-                list(map(lambda f: f[1], sorted_instability)),
-                list(map(lambda f: f[2], sorted_instability)))
-
-
-    def abstractness_data(self):
-        """
-        @return: A tuple to represent the abstractness of each framework
-        """
-        sorted_abstractness = sorted(list(map(lambda f: (self.abstractness(f),
-                                                         f.compact_name(),
-                                                         f.compact_name_description()), self.frameworks)),
-                                     key=lambda tup: tup[0])
-        return (list(map(lambda f: f[0], sorted_abstractness)),
-                list(map(lambda f: f[1], sorted_abstractness)),
-                list(map(lambda f: f[2], sorted_abstractness)))
-
-    def instability_abstractness_data(self):
-        """
-        @return: A tuple to represent instability and abstractness data on a scattered plot
-        """
-        return (list(map(lambda f: self.instability(f), self.frameworks)),
-                list(map(lambda f: self.abstractness(f), self.frameworks)),
-                list(map(lambda f: f.name, self.frameworks)))
-
-    def components_classes_size_data(self):
-        """
-        @return: A tuple to represent the number of concrete data structures of of each framework
-        """
-        sorted_size = sorted(list(map(lambda f: (f.number_of_concrete_data_structures,
-                                                 f.compact_name(),
-                                                 f.compact_name_description()), self.frameworks)),
-                             key=lambda tup: tup[0])
-        return (list(map(lambda f: f[0], sorted_size)),
-                list(map(lambda f: f[1], sorted_size)),
-                list(map(lambda f: f[2], sorted_size)))
-
-    def methods_size_data(self):
-        """
-        @return: A tuple to represent the number of methods of each framework
-        """
-        sorted_size = sorted(list(map(lambda f: (f.number_of_methods,
-                                                 f.compact_name(),
-                                                 f.compact_name_description()), self.frameworks)),
-                             key=lambda tup: tup[0])
-        return (list(map(lambda f: f[0], sorted_size)),
-                list(map(lambda f: f[1], sorted_size)),
-                list(map(lambda f: f[2], sorted_size)))
-
-    def loc_data(self):
-        """
-        @return: A tuple to represent the Lines Of Code (LOC) in each framework
-        """
-        sorted_size = sorted(list(map(lambda f: (f.loc,
-                                                 f.compact_name(),
-                                                 f.compact_name_description()), self.frameworks)),
-                             key=lambda tup: tup[0])
-        return (list(map(lambda f: f[0], sorted_size)),
-                list(map(lambda f: f[1], sorted_size)),
-                list(map(lambda f: f[2], sorted_size)))
-
-    def noc_data(self):
-        """
-        @return: A tuple to represent the Numbers Of Comments (NOC) in each framework
-        """
-        sorted_size = sorted(list(map(lambda f: (f.noc,
-                                                 f.compact_name(),
-                                                 f.compact_name_description()), self.frameworks)),
-                             key=lambda tup: tup[0])
-        return (list(map(lambda f: f[0], sorted_size)),
-                list(map(lambda f: f[1], sorted_size)),
-                list(map(lambda f: f[2], sorted_size)))
 
     # Metrics
 
@@ -286,6 +203,7 @@ NBM = {nbm}\n
 
     def __take_first(elem):
         return elem[0]
+
 
 class Framework:
     def __init__(self, name):

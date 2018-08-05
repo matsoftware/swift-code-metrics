@@ -1,8 +1,20 @@
 import os
 import helpers
 
+
 class SwiftFile:
     def __init__(self, framework_name, loc, imports, interfaces, structs, classes, methods, n_of_comments):
+        """
+        Creates a SwiftFile instance that represents a parsed swift file.
+        :param framework_name: The framework where the file belongs to.
+        :param loc: Lines Of Code
+        :param imports: List of imported frameworks
+        :param interfaces: List of interfaces (protocols) defined in the file
+        :param structs: List of structs defined in the file
+        :param classes: List of classes defined in the file
+        :param methods: List of functions defined in the file
+        :param n_of_comments: Total number of comments in the file
+        """
         self.framework_name = framework_name
         self.loc = loc
         self.imports = imports
@@ -25,8 +37,19 @@ class SwiftFileParser:
             helpers.ParsingHelpers.CLASSES: [],
             helpers.ParsingHelpers.FUNCS: [],
         }
+        self.default_framework_name = 'AppTarget'
+        self.default_swift_file_ext = '.swift'
 
     def parse(self):
+        """
+        Parses the .swift file to inspect the code inside.
+        Notes:
+        - The framework name is inferred using the directory structure. If the file is in the root dir, the
+          `default_framework_name` will be used. No inspection of the xcodeproj will be made.
+        - The list of methods currently doesn't support computed vars
+        - Inline comments in code (such as `struct Data: {} //dummy data) are currently not supported
+        :return: an instance of SwiftFile with the result of the parsing of the provided `file`
+        """
         n_of_comments = 0
         loc = 0
 
@@ -80,8 +103,8 @@ class SwiftFileParser:
     def __framework_name(self):
         subdir = self.file.replace(self.base_path, '')
         first_subpath = self.__extract_first_subpath(subdir)
-        if first_subpath.endswith('.swift'):
-            return 'AppTarget'
+        if first_subpath.endswith(self.default_swift_file_ext):
+            return self.default_framework_name
         else:
             return first_subpath
 

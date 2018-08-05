@@ -3,6 +3,7 @@ import string
 import matplotlib.pyplot as plt
 import os
 
+
 class Graph:
     def __init__(self, path=None):
         self.path = path
@@ -17,11 +18,11 @@ class Graph:
 
         self.__render(plt, title)
 
-    def plot_distance_main_sequence(self, data):
-        plt.title('Deviation from main sequence')
+    def scattered_plot(self, title, x_label, y_label, data, bands):
+        plt.title(title)
         plt.axis([0, 1, 0, 1])
-        plt.ylabel('A = Abstractness')
-        plt.xlabel('I = Instability')
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
 
         # Data
         x = data[0]
@@ -29,20 +30,15 @@ class Graph:
         labels = data[2]
 
         # Bands
-        plt.plot([1, 0], 'g')
-
-        plt.plot([0.66, -0.34], 'y--')
-        plt.plot([1.34, 0.34], 'y--')
-
-        plt.plot([0.34, -0.66], 'r--')
-        plt.plot([1.66, 0.66], 'r--')
+        for band in bands:
+            plt.plot(band[0], band[1])
 
         # Plot
         for i, label in enumerate(labels):
             plt.plot(x, y, 'ko', label=label)
             plt.annotate(label, (x[i], y[i]))
 
-        self.__render(plt, 'deviation_main_sequence')
+        self.__render(plt, title)
 
     # Private
 
@@ -55,6 +51,7 @@ class Graph:
             plt.savefig(save_file)
             plt.close()
 
+    @staticmethod
     def format_filename(s):
         """Take a string and return a valid filename constructed from the string.
     Uses a whitelist approach: any characters not present in valid_chars are
