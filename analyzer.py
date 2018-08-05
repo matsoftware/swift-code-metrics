@@ -11,6 +11,31 @@ class Inspector:
             self.__analyze_directory(directory, exclude_paths)
 
     # Metrics
+    def global_frameworks_data(self):
+        """
+        It returns the global aggregated data for LOC, NOC, NA, NC and NBM using the analyzed frameworks.
+        :return: A string containing the aggregate data synthesis.
+        """
+        loc = 0
+        noc = 0
+        n_a = 0
+        n_c = 0
+        nbm = 0
+        for f in self.frameworks:
+            loc += f.loc
+            noc += f.noc
+            n_a += f.number_of_interfaces
+            n_c += f.number_of_concrete_data_structures
+            nbm += f.number_of_methods
+
+        return f'''
+Aggregate data:
+LOC = {loc}
+NOC = {noc}
+Na = {n_a}
+Nc = {n_c}
+NBM = {nbm}
+'''
 
     def framework_analysis(self, framework):
         """

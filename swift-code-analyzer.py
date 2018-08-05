@@ -6,7 +6,7 @@ import presenter
 
 if __name__ == '__main__':
 
-    version = '0.2'
+    version = '0.3'
 
     CLI = argparse.ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(
@@ -14,6 +14,7 @@ if __name__ == '__main__':
         metavar='S',
         nargs='*',
         type=str,
+        default='',
         help='The root path of the Swift project.'
     )
     CLI.add_argument(
@@ -39,15 +40,20 @@ if __name__ == '__main__':
     args = CLI.parse_args()
     directory = args.source[0]
     exclude = args.exclude
-    artifacts = args.artifacts[0]
+    artifacts = None if args.artifacts is None else args.artifacts[0]
 
+    # Inspects the provided directory
     analyzer = analyzer.Inspector(directory, exclude)
 
-    # Detailed analysis per each framework
+    # Prints out the detailed analysis
+    text_presenter = presenter.TextPresenter(artifacts)
     for f in analyzer.frameworks:
-        print(analyzer.framework_analysis(f))
-        print('----')
+        text_presenter.render(analyzer.framework_analysis(f))
+        text_presenter.render('----')
+    text_presenter.render(analyzer.global_frameworks_data())
+    text_presenter.close()
 
+    # Creates graphs
     graph_presenter = presenter.GraphPresenter(artifacts)
 
     # Sorted data plots
