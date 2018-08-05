@@ -1,6 +1,6 @@
 import os
 import parser
-
+import metrics
 
 class Inspector:
     def __init__(self, directory, exclude_paths=None):
@@ -29,7 +29,7 @@ class Inspector:
             n_c += f.number_of_concrete_data_structures
             nbm += f.number_of_methods
 
-        poc = self.percentage_of_comments(noc, loc)
+        poc = metrics.Metrics.percentage_of_comments(noc, loc)
         poc_analysis = self.poc_analysis(poc)
 
         return f'''
@@ -49,10 +49,10 @@ NBM = {nbm}
         """
         loc = framework.loc
         noc = framework.noc
-        poc = self.percentage_of_comments(framework.noc, framework.loc)
+        poc = metrics.Metrics.percentage_of_comments(framework.noc, framework.loc)
         poc_analysis = self.poc_analysis(poc)
-        fan_in = self.fan_in(framework)
-        fan_out = self.fan_out(framework)
+        fan_in = metrics.Metrics.fan_in(framework, self.frameworks)
+        fan_out = metrics.Metrics.fan_out(framework)
         i = self.instability(framework)
         n_a = framework.number_of_interfaces
         n_c = framework.number_of_concrete_data_structures
@@ -116,87 +116,14 @@ NBM = {nbm}\n
 
         return ''
 
-    # Metrics
-
-    def distance_main_sequence(self, framework):
-        """
-        Distance from the main sequence (sweet spot in the A/I ratio)
-        D³ = |A+I-1|
-        D = 0: the component is on the Main Sequence (optimal)
-        D = 1: the component is at the maximum distance from the main sequence (worst case)
-        :param framework:
-        :return:
-        """
-        return abs(self.abstractness(framework) + self.instability(framework) - 1)
-
     def instability(self, framework):
-        """
-        Instability: I = fan-out / (fan-in + fan-out)
-        I = 0: maximally stable component
-        I = 1: maximally unstable component
-        :param framework: The framework to analyze
-        :return: the instability value (double)
-        """
-        fan_in = self.fan_in(framework)
-        fan_out = self.fan_out(framework)
-        return fan_out / (fan_in + fan_out)
+        return metrics.Metrics.instability(framework, self.frameworks)
 
     def abstractness(self, framework):
-        """
-        A = Na / Nc
-        A = 0: maximally abstract component
-        A = 1: maximally concrete component
-        :param framework: The framework to analyze
-        :return: The abstractness value (double)
-        """
-        if framework.number_of_concrete_data_structures == 0:
-            #  This is an external dependency build as source
-            return 0
-        else:
-            return framework.number_of_interfaces / framework.number_of_concrete_data_structures
+        return metrics.Metrics.abstractness(framework)
 
-    def fan_in(self, framework):
-        """
-        Fan-In: incoming dependencies (number of classes outside the framework that depend on classes inside it)
-        :param framework: The framework to analyze
-        :return: The Fan-In value (int)
-        """
-        fan_in = 0
-        for f in self.__other_frameworks(framework):
-            existing = f.imports.get(framework, 0)
-            fan_in += existing
-        return fan_in
-
-    def fan_out(self, framework):
-        """
-        Fan-Out: outgoing dependencies. (number of classes inside this component that depend on classes outside it)
-        :param framework: The framework to analyze
-        :return: The Fan-Out value (int)
-        """
-        fan_out = 0
-        for key, value in framework.imports.items():
-            fan_out += value
-        return fan_out
-
-    def percentage_of_comments(self, noc, loc):
-        """
-        Percentage Of Comments (POC) = 100 * NoC / ( NoC + LoC)
-        :param noc: The number of lines of comments
-        :param loc: the number of lines of code
-        :return: The POC value (double)
-        """
-        return 100 * noc / (noc + loc)
-
-    def coupled_frameworks(self, framework):
-        """
-        :param framework: The framework to inspect for coupled dependencies
-        :return: List of dependent frameworks
-        """
-        couples = []
-        for f in self.frameworks:
-            if f.imports.get(framework):
-                couples.append((framework.name, f.name))
-        return couples
+    def distance_main_sequence(self, framework):
+        return metrics.Metrics.distance_main_sequence(framework, self.frameworks)
 
     # Directory inspection
 
@@ -238,7 +165,7 @@ NBM = {nbm}\n
         framework = self.__get_framework(framework_name)
         if framework is None:
             # not found, create a new one
-            framework = Framework(framework_name)
+            framework = metrics.Framework(framework_name)
             self.frameworks.append(framework)
         return framework
 
@@ -248,42 +175,5 @@ NBM = {nbm}\n
                 return f
         return None
 
-    def __other_frameworks(self, framework):
-        return list(filter(lambda f: f is not framework, self.frameworks))
-
     def __take_first(elem):
         return elem[0]
-
-
-class Framework:
-    def __init__(self, name):
-        self.name = name
-        self.loc = 0
-        self.noc = 0
-        self.number_of_files = 0
-        self.number_of_concrete_data_structures = 0
-        self.number_of_interfaces = 0
-        self.number_of_methods = 0
-        self.imports = {}
-
-    def __repr__(self):
-        return self.name + '(' + str(self.number_of_files) + ' files)'
-
-    def append_import(self, framework_import):
-        existing_framework = self.imports.get(framework_import)
-        if not existing_framework:
-            self.imports[framework_import] = 1
-        else:
-            self.imports[framework_import] += 1
-
-    def compact_name(self):
-        all_capitals = ''.join(c for c in self.name if c.isupper())
-        if len(all_capitals) > 2:
-            return all_capitals[0] + all_capitals[-1:]
-        elif len(all_capitals) == 0:
-            return self.name[0]
-        else:
-            return all_capitals
-
-    def compact_name_description(self):
-        return self.compact_name() + ' = ' + self.name
