@@ -1,6 +1,7 @@
 import graphics
 import os
 
+
 class TextPresenter:
     def __init__(self, artifacts_path):
         if artifacts_path is None:

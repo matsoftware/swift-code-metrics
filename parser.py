@@ -1,5 +1,5 @@
 import os
-import helpers
+from helpers import ParsingHelpers
 
 
 class SwiftFile:
@@ -31,11 +31,11 @@ class SwiftFileParser:
         self.base_path = base_path
         self.imports = []
         self.attributes_regex_map = {
-            helpers.ParsingHelpers.IMPORTS: [],
-            helpers.ParsingHelpers.PROTOCOLS: [],
-            helpers.ParsingHelpers.STRUCTS: [],
-            helpers.ParsingHelpers.CLASSES: [],
-            helpers.ParsingHelpers.FUNCS: [],
+            ParsingHelpers.IMPORTS: [],
+            ParsingHelpers.PROTOCOLS: [],
+            ParsingHelpers.STRUCTS: [],
+            ParsingHelpers.CLASSES: [],
+            ParsingHelpers.FUNCS: [],
         }
         self.default_framework_name = 'AppTarget'
         self.default_swift_file_ext = '.swift'
@@ -61,15 +61,15 @@ class SwiftFileParser:
                     continue
 
                 # Comments
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.SINGLE_COMMENT, trimmed):
+                if ParsingHelpers.check_existence(ParsingHelpers.SINGLE_COMMENT, trimmed):
                     n_of_comments += 1
                     continue
 
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.BEGIN_COMMENT, trimmed):
+                if ParsingHelpers.check_existence(ParsingHelpers.BEGIN_COMMENT, trimmed):
                     commented_line = True
                     n_of_comments += 1
 
-                if helpers.ParsingHelpers.check_existence(helpers.ParsingHelpers.END_COMMENT, trimmed):
+                if ParsingHelpers.check_existence(ParsingHelpers.END_COMMENT, trimmed):
                     if not commented_line:
                         n_of_comments += 1
                     commented_line = False
@@ -82,7 +82,7 @@ class SwiftFileParser:
                 loc += 1
 
                 for key, value in self.attributes_regex_map.items():
-                    extracted_value = helpers.ParsingHelpers.extract_substring_with_pattern(key, trimmed)
+                    extracted_value = ParsingHelpers.extract_substring_with_pattern(key, trimmed)
                     if len(extracted_value) > 0:
                         value.append(extracted_value)
                         continue
@@ -90,11 +90,11 @@ class SwiftFileParser:
         return SwiftFile(
             framework_name=self.__framework_name(),
             loc=loc,
-            imports=self.attributes_regex_map[helpers.ParsingHelpers.IMPORTS],
-            interfaces=self.attributes_regex_map[helpers.ParsingHelpers.PROTOCOLS],
-            structs=self.attributes_regex_map[helpers.ParsingHelpers.STRUCTS],
-            classes=self.attributes_regex_map[helpers.ParsingHelpers.CLASSES],
-            methods=self.attributes_regex_map[helpers.ParsingHelpers.FUNCS],
+            imports=self.attributes_regex_map[ParsingHelpers.IMPORTS],
+            interfaces=self.attributes_regex_map[ParsingHelpers.PROTOCOLS],
+            structs=self.attributes_regex_map[ParsingHelpers.STRUCTS],
+            classes=self.attributes_regex_map[ParsingHelpers.CLASSES],
+            methods=self.attributes_regex_map[ParsingHelpers.FUNCS],
             n_of_comments=n_of_comments
         )
 

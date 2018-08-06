@@ -10,6 +10,7 @@ class Metrics:
         D = 0: the component is on the Main Sequence (optimal)
         D = 1: the component is at the maximum distance from the main sequence (worst case)
         :param framework: The framework to analyze
+        :param frameworks: The other frameworks in the project
         :return: the D³ value (from 0 to 1)
         """
         return abs(Metrics.abstractness(framework) + Metrics.instability(framework, frameworks) - 1)
@@ -21,6 +22,7 @@ class Metrics:
         I = 0: maximally stable component
         I = 1: maximally unstable component
         :param framework: The framework to analyze
+        :param frameworks: The other frameworks in the project
         :return: the instability value (double)
         """
         fan_in = Metrics.fan_in(framework, frameworks)

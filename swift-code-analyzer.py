@@ -1,14 +1,14 @@
 #!/usr/bin/python
 
-import argparse
-import analyzer
-import presenter
+from argparse import ArgumentParser
+from analyzer import Inspector
+from presenter import GraphPresenter, TextPresenter
 
 if __name__ == '__main__':
 
-    version = '0.4'
+    version = '0.5'
 
-    CLI = argparse.ArgumentParser(description='Analyzes the code metrics of a Swift project.')
+    CLI = ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(
         'source',
         metavar='S',
@@ -43,10 +43,10 @@ if __name__ == '__main__':
     artifacts = None if args.artifacts is None else args.artifacts[0]
 
     # Inspects the provided directory
-    analyzer = analyzer.Inspector(directory, exclude)
+    analyzer = Inspector(directory, exclude)
 
     # Prints out the detailed analysis
-    text_presenter = presenter.TextPresenter(artifacts)
+    text_presenter = TextPresenter(artifacts)
     for f in analyzer.frameworks:
         text_presenter.render(analyzer.framework_analysis(f))
         text_presenter.render('----')
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     text_presenter.close()
 
     # Creates graphs
-    graph_presenter = presenter.GraphPresenter(artifacts)
+    graph_presenter = GraphPresenter(artifacts)
 
     # Sorted data plots
     sorted_data = {

@@ -1,6 +1,5 @@
 import unittest
 import analyzer
-import os
 
 class AnalyzerTest(unittest.TestCase):
 

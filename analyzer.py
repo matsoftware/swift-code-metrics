@@ -1,6 +1,7 @@
 import os
-import parser
-import metrics
+from parser import SwiftFileParser
+from metrics import Framework, Metrics
+
 
 class Inspector:
     def __init__(self, directory, exclude_paths=None):
@@ -29,7 +30,7 @@ class Inspector:
             n_c += f.number_of_concrete_data_structures
             nbm += f.number_of_methods
 
-        poc = metrics.Metrics.percentage_of_comments(noc, loc)
+        poc = Metrics.percentage_of_comments(noc, loc)
         poc_analysis = self.poc_analysis(poc)
 
         return f'''
@@ -49,10 +50,10 @@ NBM = {nbm}
         """
         loc = framework.loc
         noc = framework.noc
-        poc = metrics.Metrics.percentage_of_comments(framework.noc, framework.loc)
+        poc = Metrics.percentage_of_comments(framework.noc, framework.loc)
         poc_analysis = self.poc_analysis(poc)
-        fan_in = metrics.Metrics.fan_in(framework, self.frameworks)
-        fan_out = metrics.Metrics.fan_out(framework)
+        fan_in = Metrics.fan_in(framework, self.frameworks)
+        fan_out = Metrics.fan_out(framework)
         i = self.instability(framework)
         n_a = framework.number_of_interfaces
         n_c = framework.number_of_concrete_data_structures
@@ -117,13 +118,13 @@ NBM = {nbm}\n
         return ''
 
     def instability(self, framework):
-        return metrics.Metrics.instability(framework, self.frameworks)
+        return Metrics.instability(framework, self.frameworks)
 
     def abstractness(self, framework):
-        return metrics.Metrics.abstractness(framework)
+        return Metrics.abstractness(framework)
 
     def distance_main_sequence(self, framework):
-        return metrics.Metrics.distance_main_sequence(framework, self.frameworks)
+        return Metrics.distance_main_sequence(framework, self.frameworks)
 
     # Directory inspection
 
@@ -132,7 +133,7 @@ NBM = {nbm}\n
             for file in files:
                 if file.endswith('.swift') and not self.__is_excluded_folder(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
-                    swift_file = parser.SwiftFileParser(full_path, directory).parse()
+                    swift_file = SwiftFileParser(full_path, directory).parse()
                     self.__append_dependency(swift_file)
         self.__cleanup_external_dependencies()
 
@@ -154,7 +155,7 @@ NBM = {nbm}\n
         for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)
             if imported_framework is None:
-                imported_framework = metrics.Framework(f)
+                imported_framework = Framework(f)
             framework.append_import(imported_framework)
 
     def __cleanup_external_dependencies(self):
@@ -165,7 +166,7 @@ NBM = {nbm}\n
         framework = self.__get_framework(framework_name)
         if framework is None:
             # not found, create a new one
-            framework = metrics.Framework(framework_name)
+            framework = Framework(framework_name)
             self.frameworks.append(framework)
         return framework
 
