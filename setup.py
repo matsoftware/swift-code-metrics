@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="swift-code-analyzer",
+    name="swift-code-metrics",
     version="0.5",
     author="Mattia Campolese",
     author_email="matsoftware@gmail.com",

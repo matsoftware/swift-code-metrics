@@ -1,1 +1,1 @@
-name = "swift-code-analyzer"
+name = "swift-code-metrics"
