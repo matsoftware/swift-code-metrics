@@ -1,28 +1,4 @@
 import graphics
-import os
-
-
-class TextPresenter:
-    def __init__(self, artifacts_path):
-        if artifacts_path is None:
-            self.output_function = lambda file, txt: print(txt)
-            self.file = None
-        else:
-            self.output_function = lambda file, txt: file.write(txt)
-            if not os.path.exists(artifacts_path):
-                os.makedirs(artifacts_path)
-            self.report_path = os.path.join(artifacts_path, 'reports.txt')
-            self.file = open(self.report_path, 'w+')
-
-    def __del__(self):
-        self.close()
-
-    def render(self, txt):
-        self.output_function(self.file, txt)
-
-    def close(self):
-        if self.file is not None:
-            self.file.close()
 
 
 class GraphPresenter:

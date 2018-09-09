@@ -57,10 +57,6 @@ if __name__ == '__main__':
     if not should_generate_reports:
         sys.exit(0)
 
-    # Prints out the detailed analysis
-    # text_presenter = TextPresenter(artifacts)
-    # text_presenter.render(analyzer.report)
-
     # Creates graphs
     graph_presenter = GraphPresenter(artifacts)
 
