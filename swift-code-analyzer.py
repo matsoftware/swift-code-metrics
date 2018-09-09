@@ -11,12 +11,21 @@ if __name__ == '__main__':
 
     CLI = ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(
-        'source',
+        '--source',
         metavar='S',
         nargs='*',
         type=str,
         default='',
+        required=True,
         help='The root path of the Swift project.'
+    )
+    CLI.add_argument(
+        '--artifacts',
+        nargs='*',
+        type=str,
+        default='',
+        required=True,
+        help='Path to save the artifacts generated'
     )
     CLI.add_argument(
         '--exclude',
@@ -26,18 +35,12 @@ if __name__ == '__main__':
         help='List of paths to exclude from analysis (e.g. submodules, pods, checkouts)'
     )
     CLI.add_argument(
-        '--artifacts',
-        nargs='*',
-        type=str,
-        default=None,
-        help='Path to save the artifacts generated'
-    )
-    CLI.add_argument(
-        '--generate-reports',
-        nargs='*',
+        '--generate-graphs',
+        nargs='?',
         type=bool,
+        const=True,
         default=False,
-        help='Output the reports to the artifacts path.'
+        help='Generates the graphic reports and saves them in the artifacts path.'
     )
     CLI.add_argument(
         '--version',
@@ -48,13 +51,13 @@ if __name__ == '__main__':
     args = CLI.parse_args()
     directory = args.source[0]
     exclude = args.exclude
-    artifacts = None if args.artifacts is None else args.artifacts[0]
-    should_generate_reports = False if args.generate_reports is None else True
+    artifacts = args.artifacts[0]
+    should_generate_graphs = args.generate_graphs
 
     # Inspects the provided directory
     analyzer = Inspector(directory, artifacts, exclude)
 
-    if not should_generate_reports:
+    if not should_generate_graphs:
         sys.exit(0)
 
     # Creates graphs
