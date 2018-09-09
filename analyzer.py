@@ -1,49 +1,49 @@
 import os
+import json
 from parser import SwiftFileParser
 from metrics import Framework, Metrics
 
 
 class Inspector:
-    def __init__(self, directory, exclude_paths=None):
+    def __init__(self, directory, artifacts, exclude_paths=None):
         if exclude_paths is None:
             exclude_paths = []
         self.frameworks = []
         if directory is not None:
-            self.__analyze_directory(directory, exclude_paths)
+            self._analyze_directory(directory, exclude_paths)
+            self.report = self._generate_report()
+            self._save_report(artifacts)
+
+    def _generate_report(self):
+        report = {
+            "frameworks": list(),
+            "global": {
+                "loc": 0,
+                "noc": 0,
+                "n_a": 0,
+                "n_c": 0,
+                "nbm": 0
+            }
+        }
+        for f in self.frameworks:
+            report["frameworks"].append(self.__framework_analysis(f))
+            report["global"]["loc"] += f.loc
+            report["global"]["noc"] += f.noc
+            report["global"]["n_a"] += f.number_of_interfaces
+            report["global"]["n_c"] += f.number_of_concrete_data_structures
+            report["global"]["nbm"] += f.number_of_methods
+
+        report["global"]["poc"] = Metrics.percentage_of_comments(report["global"]["noc"], report["global"]["loc"])
+
+        return report
+
+    def _save_report(self, directory):
+        with open(os.path.join(directory, 'output.json'), 'w') as fp:
+            json.dump(self.report, fp, indent=4)
 
     # Analysis
 
-    def global_frameworks_data(self):
-        """
-        It returns the global aggregated data for LOC, NOC, NA, NC and NBM using the analyzed frameworks.
-        :return: A string containing the aggregate data synthesis.
-        """
-        loc = 0
-        noc = 0
-        n_a = 0
-        n_c = 0
-        nbm = 0
-        for f in self.frameworks:
-            loc += f.loc
-            noc += f.noc
-            n_a += f.number_of_interfaces
-            n_c += f.number_of_concrete_data_structures
-            nbm += f.number_of_methods
-
-        poc = Metrics.percentage_of_comments(noc, loc)
-        poc_analysis = self.poc_analysis(poc)
-
-        return f'''
-Aggregate data:
-LOC = {loc}
-NOC = {noc}
-POC = {"%.0f" % poc}% {poc_analysis}
-Na = {n_a}
-Nc = {n_c}
-NBM = {nbm}
-'''
-
-    def framework_analysis(self, framework):
+    def __framework_analysis(self, framework):
         """
         :param framework: The framework to analyze
         :return: The architectural analysis of the framework
@@ -51,71 +51,32 @@ NBM = {nbm}
         loc = framework.loc
         noc = framework.noc
         poc = Metrics.percentage_of_comments(framework.noc, framework.loc)
-        poc_analysis = self.poc_analysis(poc)
+        poc_analysis = Metrics.poc_analysis(poc)
         fan_in = Metrics.fan_in(framework, self.frameworks)
         fan_out = Metrics.fan_out(framework)
-        i = self.instability(framework)
+        i = Metrics.instability(framework, self.frameworks)
         n_a = framework.number_of_interfaces
         n_c = framework.number_of_concrete_data_structures
-        a = self.abstractness(framework)
-        d_3 = self.distance_main_sequence(framework)
+        a = Metrics.abstractness(framework)
+        d_3 = Metrics.distance_main_sequence(framework, self.frameworks)
         nbm = framework.number_of_methods
-        ia_analysis = self.ia_analysis(i, a)
-        return f'''
-Architectural analysis for {framework.name} ({framework.compact_name()}): \n
-LOC = {loc}
-NOC = {noc}
-POC = {"%.0f" % poc}% {poc_analysis}
-Fan In = {fan_in}
-Fan Out = {fan_out}
-Instability = {i}\n
-Na = {n_a}
-Nc = {n_c}
-A = {a}\n
-D3 = {d_3}\n
-NBM = {nbm}\n
-{ia_analysis}\n'''
-
-    def ia_analysis(self, instability, abstractness):
-        """
-        Verbose qualitative analysis of instability and abstractness.
-        :param instability: The instability value of the framework
-        :param abstractness: The abstractness value of the framework
-        :return: Textual analysis.
-        """
-        if instability <= 0.5 and abstractness <= 0.5:
-            return '(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n' \
-                   'This component should not be volatile (e.g. a stable foundation library such as Strings).'
-        elif instability >= 0.5 and abstractness >= 0.5:
-            return '(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\n' \
-                   'This component is high likely a leftover that should be removed.'
-
-        # Standard components
-
-        res = ''
-
-        # I analysis
-        if instability < 0.2:
-            res += 'Highly stable component (hard to change, responsible and independent).\n'
-        elif instability > 0.8:
-            res += 'Highly unstable component (lack of dependents, easy to change, irresponsible)\n'
-
-        # A analysis
-
-        if abstractness < 0.2:
-            res += 'Low abstract component, few interfaces.\n'
-        elif abstractness > 0.8:
-            res += 'High abstract component, few concrete data structures.\n'
-
-        return res
-
-    def poc_analysis(self, poc):
-        if poc <= 20:
-            return '(under commented)'
-        if poc >= 40:
-            return '(over commented)'
-
-        return ''
+        ia_analysis = Metrics.ia_analysis(i, a)
+        return {
+            framework.name: {
+                "loc": loc,
+                "noc": noc,
+                "poc": poc,
+                "fan_in": fan_in,
+                "fan_out": fan_out,
+                "i": i,
+                "n_a": n_a,
+                "n_c": n_c,
+                "a": a,
+                "d_3": d_3,
+                "nbm": nbm,
+                "analysis": poc_analysis + "\n" + ia_analysis
+            }
+        }
 
     def instability(self, framework):
         return Metrics.instability(framework, self.frameworks)
@@ -123,12 +84,9 @@ NBM = {nbm}\n
     def abstractness(self, framework):
         return Metrics.abstractness(framework)
 
-    def distance_main_sequence(self, framework):
-        return Metrics.distance_main_sequence(framework, self.frameworks)
-
     # Directory inspection
 
-    def __analyze_directory(self, directory, exclude_paths):
+    def _analyze_directory(self, directory, exclude_paths):
         for subdir, dirs, files in os.walk(directory):
             for file in files:
                 if file.endswith('.swift') and not self.__is_excluded_folder(subdir, exclude_paths):
@@ -176,5 +134,3 @@ NBM = {nbm}\n
                 return f
         return None
 
-    def __take_first(elem):
-        return elem[0]

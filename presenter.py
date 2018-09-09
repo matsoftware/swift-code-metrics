@@ -24,6 +24,7 @@ class TextPresenter:
         if self.file is not None:
             self.file.close()
 
+
 class GraphPresenter:
     def __init__(self, artifacts_path):
         self.graph = graphics.Graph(artifacts_path)

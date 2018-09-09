@@ -3,6 +3,7 @@
 from argparse import ArgumentParser
 from analyzer import Inspector
 from presenter import GraphPresenter, TextPresenter
+import sys
 
 if __name__ == '__main__':
 
@@ -29,7 +30,14 @@ if __name__ == '__main__':
         nargs='*',
         type=str,
         default=None,
-        help='Path to save the graphic artifacts generated'
+        help='Path to save the artifacts generated'
+    )
+    CLI.add_argument(
+        '--generate-reports',
+        nargs='*',
+        type=bool,
+        default=False,
+        help='Output the reports to the artifacts path.'
     )
     CLI.add_argument(
         '--version',
@@ -41,17 +49,17 @@ if __name__ == '__main__':
     directory = args.source[0]
     exclude = args.exclude
     artifacts = None if args.artifacts is None else args.artifacts[0]
+    should_generate_reports = False if args.generate_reports is None else True
 
     # Inspects the provided directory
-    analyzer = Inspector(directory, exclude)
+    analyzer = Inspector(directory, artifacts, exclude)
+
+    if not should_generate_reports:
+        sys.exit(0)
 
     # Prints out the detailed analysis
-    text_presenter = TextPresenter(artifacts)
-    for f in analyzer.frameworks:
-        text_presenter.render(analyzer.framework_analysis(f))
-        text_presenter.render('----')
-    text_presenter.render(analyzer.global_frameworks_data())
-    text_presenter.close()
+    # text_presenter = TextPresenter(artifacts)
+    # text_presenter.render(analyzer.report)
 
     # Creates graphs
     graph_presenter = GraphPresenter(artifacts)

@@ -97,6 +97,51 @@ class Metrics:
     def __other_frameworks(framework, frameworks):
         return list(filter(lambda f: f is not framework, frameworks))
 
+    # Analysis
+
+    @staticmethod
+    def ia_analysis(instability, abstractness):
+        """
+        Verbose qualitative analysis of instability and abstractness.
+        :param instability: The instability value of the framework
+        :param abstractness: The abstractness value of the framework
+        :return: Textual analysis.
+        """
+        if instability <= 0.5 and abstractness <= 0.5:
+            return '(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n' \
+                   'This component should not be volatile (e.g. a stable foundation library such as Strings).'
+        elif instability >= 0.5 and abstractness >= 0.5:
+            return '(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\n' \
+                   'This component is high likely a leftover that should be removed.'
+
+        # Standard components
+
+        res = ''
+
+        # I analysis
+        if instability < 0.2:
+            res += 'Highly stable component (hard to change, responsible and independent).\n'
+        elif instability > 0.8:
+            res += 'Highly unstable component (lack of dependents, easy to change, irresponsible)\n'
+
+        # A analysis
+
+        if abstractness < 0.2:
+            res += 'Low abstract component, few interfaces.\n'
+        elif abstractness > 0.8:
+            res += 'High abstract component, few concrete data structures.\n'
+
+        return res
+
+    @staticmethod
+    def poc_analysis(poc):
+        if poc <= 20:
+            return '(under commented)'
+        if poc >= 40:
+            return '(over commented)'
+
+        return ''
+
 
 class Framework:
     def __init__(self, name):
