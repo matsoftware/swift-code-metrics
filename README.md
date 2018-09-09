@@ -24,15 +24,16 @@ This is a _python3_ script that depends on _matplotlib_ (`pip3 install matplotli
 
 The syntax is:
 
-`python3 swift-code-analyzer.py <path-to-swift-project> --exclude <excluded-folders> --artifacts <output-directory>`
+`python3 swift-code-analyzer.py --source <path-to-swift-project> --artifacts <output-directory> --exclude <excluded-folders> --generate-graphs`
 
-- `<path-to-swift-project>` is the path to the folder that contains the main Xcode project or Workspace
-- `<excluded-folders>` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
-- `<output-directory>` (optional) path to the folder that will contain the generated textual analysis and graphs; if empty, the software will show the images to the user and print the report to the console
+- `--source` is the path to the folder that contains the main Xcode project or Workspace
+- `--artifacts` path to the folder that will contain the generated `output.json` report
+- `--excluded` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
+- `--generate-graphs` (optional) if passed, it will generate the graphs related to the analysis and save them in the artifacts folder
 
 A sample project is provided in the `resources` folder; example:
 
-`python3 swift-code-analyzer.py resources/ExampleProject/SwiftCodeMetricsExample --exclude Tests xcodeproj --artifacts report`
+`python3 swift-code-analyzer.py --source resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --exclude Tests xcodeproj --generate-graphs`
 
 ## Current limitations
 
