@@ -2,7 +2,7 @@
 
 from argparse import ArgumentParser
 from analyzer import Inspector
-from presenter import GraphPresenter, TextPresenter
+from presenter import GraphPresenter
 import sys
 
 if __name__ == '__main__':

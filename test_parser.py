@@ -6,12 +6,12 @@ class ParserTests(unittest.TestCase):
 
     def setUp(self):
         self.example_parsed_file = parser.SwiftFileParser(
-            file="resources/ExampleFile.swift",
+            file="test_resources/ExampleFile.swift",
             base_path=""
         ).parse()
 
     def test_swiftparser_parse_should_return_expected_framework_name(self):
-        self.assertEqual(self.example_parsed_file.framework_name, "resources")
+        self.assertEqual(self.example_parsed_file.framework_name, "test_resources")
 
     def test_swiftparser_parse_should_return_expected_n_of_comments(self):
         self.assertEqual(21, self.example_parsed_file.n_of_comments)
