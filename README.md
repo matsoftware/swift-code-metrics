@@ -22,9 +22,11 @@ This is a _Python 3_ script that depends on _matplotlib_.
 
 ## Usage
 
+The package is available on `pip` with `pip3 install swift-code-metrics`.
+
 The syntax is:
 
-`python3 swift-code-metrics.py --source <path-to-swift-project> --artifacts <output-directory> --exclude <excluded-folders> --generate-graphs`
+`swift-code-metrics --source <path-to-swift-project> --artifacts <output-directory> --exclude <excluded-folders> --generate-graphs`
 
 - `--source` is the path to the folder that contains the main Xcode project or Workspace
 - `--artifacts` path to the folder that will contain the generated `output.json` report
