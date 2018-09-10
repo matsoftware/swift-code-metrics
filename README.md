@@ -40,7 +40,7 @@ A sample project is provided in the `resources` folder; example:
 The `output.json` file will contain the metrics related to all `frameworks` 
 and an aggregate result for the project in the `global` section. 
 
-The example below is available [here](test_resources/expected_output.json).
+The example below is available [here](tests/test_resources/expected_output.json).
 
 ```json
 {

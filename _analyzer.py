@@ -1,7 +1,7 @@
 import os
 import json
-from parser import SwiftFileParser
-from metrics import Framework, Metrics
+from _parser import SwiftFileParser
+from _metrics import Framework, Metrics
 
 
 class Inspector:

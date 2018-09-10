@@ -1,5 +1,5 @@
 import os
-from helpers import ParsingHelpers
+from _helpers import ParsingHelpers
 
 
 class SwiftFile:

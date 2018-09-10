@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
 from argparse import ArgumentParser
-from analyzer import Inspector
-from presenter import GraphPresenter
-from version import VERSION
+from _analyzer import Inspector
+from _presenter import GraphPresenter
+from _version import VERSION
 import sys
 
 if __name__ == '__main__':

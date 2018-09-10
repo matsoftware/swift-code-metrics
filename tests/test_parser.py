@@ -1,11 +1,11 @@
 import unittest
-import parser
+import _parser
 
 
 class ParserTests(unittest.TestCase):
 
     def setUp(self):
-        self.example_parsed_file = parser.SwiftFileParser(
+        self.example_parsed_file = _parser.SwiftFileParser(
             file="test_resources/ExampleFile.swift",
             base_path=""
         ).parse()
