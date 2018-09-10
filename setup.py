@@ -1,11 +1,12 @@
 import setuptools
+from version import VERSION
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="swift-code-metrics",
-    version="0.5",
+    version=VERSION,
     author="Mattia Campolese",
     author_email="matsoftware@gmail.com",
     description="Code metrics analyzer for Swift projects.",
@@ -19,3 +20,4 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ),
 )
+

@@ -3,11 +3,10 @@
 from argparse import ArgumentParser
 from analyzer import Inspector
 from presenter import GraphPresenter
+from version import VERSION
 import sys
 
 if __name__ == '__main__':
-
-    version = '0.5'
 
     CLI = ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(
@@ -45,7 +44,7 @@ if __name__ == '__main__':
     CLI.add_argument(
         '--version',
         action='version',
-        version='%(prog)s ' + version
+        version='%(prog)s ' + VERSION
     )
 
     args = CLI.parse_args()
