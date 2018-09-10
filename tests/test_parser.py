@@ -1,5 +1,5 @@
 import unittest
-import _parser
+from swift_code_metrics import _parser
 
 
 class ParserTests(unittest.TestCase):

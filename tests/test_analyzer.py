@@ -1,5 +1,5 @@
 import unittest
-import _analyzer
+from swift_code_metrics import _analyzer
 import filecmp
 import os
 
@@ -10,7 +10,7 @@ class AnalyzerTest(unittest.TestCase):
         self.analyzer = _analyzer.Inspector(
             directory="test_resources/ExampleProject/SwiftCodeMetricsExample",
             exclude_paths=["Test"],
-            artifacts=""
+            artifacts="."
         )
 
     def test_inspector_generated_output(self):

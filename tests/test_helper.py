@@ -1,5 +1,5 @@
 import unittest
-import _helpers
+from swift_code_metrics import _helpers
 
 
 class HelpersTests(unittest.TestCase):
