@@ -66,11 +66,11 @@ def main():
     # Sorted data plots
     sorted_data = {
         'N. of classes and structs': lambda fr: fr.number_of_concrete_data_structures,
-        'Lines Of Code (LOC)': lambda fr: fr.loc,
-        'Number Of Comments (NOC)': lambda fr: fr.noc,
-        'N. of methods (NBM)': lambda fr: fr.number_of_methods,
-        'Instability (I)': lambda fr: analyzer.instability(fr),
-        'Abstractness (A)': lambda fr: analyzer.abstractness(fr),
+        'Lines Of Code - LOC': lambda fr: fr.loc,
+        'Number Of Comments - NOC': lambda fr: fr.noc,
+        'N. of methods - NBM': lambda fr: fr.number_of_methods,
+        'Instability - I': lambda fr: analyzer.instability(fr),
+        'Abstractness - A': lambda fr: analyzer.abstractness(fr),
     }
 
     for title, framework_function in sorted_data.items():
