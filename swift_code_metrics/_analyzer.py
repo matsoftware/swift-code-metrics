@@ -38,6 +38,8 @@ class Inspector:
         return report
 
     def _save_report(self, directory):
+        if not os.path.exists(directory):
+            os.makedirs(directory)
         with open(os.path.join(directory, 'output.json'), 'w') as fp:
             json.dump(self.report, fp, indent=4)
 
