@@ -35,7 +35,7 @@ The syntax is:
 
 A sample project is provided in the `resources` folder; example:
 
-`python3 swift-code-analyzer.py --source resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --exclude Tests xcodeproj --generate-graphs`
+`python3 swift-code-metrics-runner.py --source tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --exclude Tests xcodeproj --generate-graphs`
 
 ### Output format
 
