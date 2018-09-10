@@ -108,6 +108,7 @@ The script will scan the directory and it will identify the frameworks by the na
 ## TODOs
 
 - Code improvements
+- Setting up CI
 - Other (open to suggestions)
 
 ## Contact
