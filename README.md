@@ -35,6 +35,61 @@ A sample project is provided in the `resources` folder; example:
 
 `python3 swift-code-analyzer.py --source resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --exclude Tests xcodeproj --generate-graphs`
 
+### Output format
+
+The `output.json` file will contain the metrics related to all `frameworks` 
+and an aggregate result for the project in the `global` section. 
+
+The example below is available [here](test_resources/expected_output.json).
+
+```json
+{
+    "frameworks": [
+        {
+            "FoundationFramework": {
+                "loc": 26,
+                "noc": 14,
+                "poc": 35.0,
+                "fan_in": 1,
+                "fan_out": 2,
+                "i": 0.6666666666666666,
+                "n_a": 1,
+                "n_c": 2,
+                "a": 0.5,
+                "d_3": 0.16666666666666652,
+                "nbm": 3,
+                "analysis": "\n(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\nThis component is high likely a leftover that should be removed."
+            }
+        },
+        { ... }
+    ],
+    "global": {
+        "loc": 97,
+        "noc": 35,
+        "n_a": 1,
+        "n_c": 7,
+        "nbm": 10,
+        "poc": 26.515151515151516
+    }
+ }
+```
+
+Legend:
+
+|    Key    |              Metric              |                                             Description                                             |
+|:---------:|:--------------------------------:|:---------------------------------------------------------------------------------------------------:|
+|    loc    |           Lines Of Code          |                            Number of lines of code (empty lines excluded)                           |
+|    noc    |        Number of Comments        |                                          Number of comments                                         |
+|    poc    |      Percentage of Comments      |                                       100 * noc / ( noc + loc)                                      |
+| fan_in    |              Fan-In              | Incoming dependencies: number of classes  outside the framework that depend on classes  inside it.  |
+| `fan_out` |              Fan-Out             | Outgoing dependencies: number of classes  inside this component that depend on classes  outside it. |
+|    `i`    |            Instability           |                                   I = fan_out / (fan_in + fan_out)                                  |
+|   `n_a`   |        Number of abstracts       |                                 Number of protocols in the framework                                |
+|   `n_c`   |        Number of concretes       |                            Number of struct and classes in the framework                            |
+|    `a`    |           Abstractness           |                                            A = n_a / n_c                                            |
+|   `d_3`   | Distance from  the main sequence |                                             D³ = |A+I-1|                                            |
+|   `nbm`   |         Number of methods        |                              Number of `func` (computed `var` excluded)                             |
+
 ## Current limitations
 
 - This tool is designed for medium/large codebases composed by different frameworks. 
