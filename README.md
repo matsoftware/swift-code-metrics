@@ -18,7 +18,7 @@ In addition, several common code metrics in the software industries are provided
 
 ## Requirements
 
-This is a _python3_ script that depends on _matplotlib_ (`pip3 install matplotlib`).
+This is a _Python 3_ script that depends on _matplotlib_.
 
 ## Usage
 
