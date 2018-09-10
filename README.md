@@ -24,7 +24,7 @@ This is a _python3_ script that depends on _matplotlib_ (`pip3 install matplotli
 
 The syntax is:
 
-`python3 swift-code-analyzer.py --source <path-to-swift-project> --artifacts <output-directory> --exclude <excluded-folders> --generate-graphs`
+`python3 swift-code-metrics.py --source <path-to-swift-project> --artifacts <output-directory> --exclude <excluded-folders> --generate-graphs`
 
 - `--source` is the path to the folder that contains the main Xcode project or Workspace
 - `--artifacts` path to the folder that will contain the generated `output.json` report
