@@ -1,9 +1,9 @@
-import _graphics
+from ._graphics import Graph
 
 
 class GraphPresenter:
     def __init__(self, artifacts_path):
-        self.graph = _graphics.Graph(artifacts_path)
+        self.graph = Graph(artifacts_path)
 
     def sorted_data_plot(self, title, list_of_frameworks, f_of_framework):
         """

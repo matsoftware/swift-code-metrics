@@ -1,1 +1,0 @@
-name = "swift-code-metrics"

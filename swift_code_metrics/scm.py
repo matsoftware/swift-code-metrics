@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
 from argparse import ArgumentParser
-from _analyzer import Inspector
-from _presenter import GraphPresenter
-from _version import VERSION
+from ._analyzer import Inspector
+from ._presenter import GraphPresenter
+from .version import VERSION
 import sys
 
-if __name__ == '__main__':
+
+def main():
 
     CLI = ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(
