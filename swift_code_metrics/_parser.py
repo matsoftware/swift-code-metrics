@@ -54,7 +54,7 @@ class SwiftFileParser:
         loc = 0
 
         commented_line = False
-        with open(self.file) as f:
+        with open(self.file, encoding='utf-8') as f:
             for line in f:
                 trimmed = line.strip()
                 if len(trimmed) == 0:

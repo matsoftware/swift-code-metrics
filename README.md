@@ -89,7 +89,7 @@ Legend:
 |   `n_a`   |        Number of abstracts       |                                 Number of protocols in the framework                                |
 |   `n_c`   |        Number of concretes       |                            Number of struct and classes in the framework                            |
 |    `a`    |           Abstractness           |                                            A = n_a / n_c                                            |
-|   `d_3`   | Distance from  the main sequence |                                             D³ = |A+I-1|                                            |
+|   `d_3`   | Distance from  the main sequence |                                             D³ = abs( A + I - 1 )                                   |
 |   `nbm`   |         Number of methods        |                              Number of `func` (computed `var` excluded)                             |
 
 ## Current limitations
