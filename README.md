@@ -1,4 +1,4 @@
-# swift-code-metrics
+# swift-code-metrics [![Build Status](https://travis-ci.org/matsoftware/swift-code-metrics.svg?branch=master)](https://travis-ci.org/matsoftware/swift-code-metrics)
 
 Code metrics analyzer for Swift projects.
 
