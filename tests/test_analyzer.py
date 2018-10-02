@@ -9,7 +9,7 @@ class AnalyzerTest(unittest.TestCase):
     def setUp(self):
         self.analyzer = _analyzer.Inspector(
             directory="test_resources/ExampleProject/SwiftCodeMetricsExample",
-            exclude_paths=["Test"],
+            exclude_paths=["Tests"],
             artifacts="."
         )
 

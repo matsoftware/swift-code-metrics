@@ -18,6 +18,9 @@ class IntegrationTest(unittest.TestCase):
         sys.argv.append("Tests")
         sys.argv.append("--generate-graphs")
 
+    def tearDown(self):
+        sys.argv.clear()
+
     def test_sample_app(self):
         output_file = "report/output.json"
         scm.main()
