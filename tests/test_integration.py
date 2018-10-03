@@ -1,8 +1,8 @@
 import unittest
 import os
-import filecmp
 import sys
 from swift_code_metrics import scm
+import json
 
 
 class IntegrationTest(unittest.TestCase):
@@ -23,9 +23,17 @@ class IntegrationTest(unittest.TestCase):
 
     def test_sample_app(self):
         output_file = "report/output.json"
-        scm.main()
+        scm.main() # generate report
         expected_file = os.path.join("test_resources", "expected_output.json")
-        self.assertTrue(filecmp.cmp(expected_file, output_file, shallow=False))
+        expected_json = IntegrationTest.read_json_file(expected_file)
+        generated_json = IntegrationTest.read_json_file(output_file)
+        self.assertEqual(generated_json, expected_json)
+
+
+    @staticmethod
+    def read_json_file(path):
+        with open(path, 'r') as fp:
+            return json.load(fp)
 
 
 if __name__ == '__main__':
