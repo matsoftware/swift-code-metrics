@@ -11,6 +11,7 @@
 		E57696422117671600CADE76 /* FoundationFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57696412117671600CADE76 /* FoundationFrameworkTests.swift */; };
 		E576964E2117672A00CADE76 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964D2117672A00CADE76 /* Networking.swift */; };
 		E57696502117673500CADE76 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964F2117673500CADE76 /* Helpers.swift */; };
+		E5C30E9321711B35009CD6C4 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C30E9221711B35009CD6C4 /* NetworkingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		E57696432117671600CADE76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E576964D2117672A00CADE76 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		E576964F2117673500CADE76 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		E5C30E9221711B35009CD6C4 /* NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 			children = (
 				E57696412117671600CADE76 /* FoundationFrameworkTests.swift */,
 				E57696432117671600CADE76 /* Info.plist */,
+				E5C30E9221711B35009CD6C4 /* NetworkingTests.swift */,
 			);
 			path = FoundationFrameworkTests;
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 					};
 					E576963B2117671600CADE76 = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -207,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E57696422117671600CADE76 /* FoundationFrameworkTests.swift in Sources */,
+				E5C30E9321711B35009CD6C4 /* NetworkingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +410,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.easyfutureltd.FoundationFrameworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -423,7 +428,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.easyfutureltd.FoundationFrameworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

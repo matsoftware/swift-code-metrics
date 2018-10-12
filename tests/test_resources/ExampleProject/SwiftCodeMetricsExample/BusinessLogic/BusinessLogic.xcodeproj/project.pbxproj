@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E576966E21176D6600CADE76 /* BusinessLogic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E576966421176D6600CADE76 /* BusinessLogic.framework */; };
-		E576967321176D6600CADE76 /* BusinessLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576967221176D6600CADE76 /* BusinessLogicTests.swift */; };
+		E576967321176D6600CADE76 /* AwesomeFeatureViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576967221176D6600CADE76 /* AwesomeFeatureViewControllerTests.swift */; };
 		E576967F21176DB400CADE76 /* AwesomeFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576967E21176DB400CADE76 /* AwesomeFeature.swift */; };
 		E576968E21176EBF00CADE76 /* FoundationFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E576968D21176EBF00CADE76 /* FoundationFramework.framework */; };
 /* End PBXBuildFile section */
@@ -27,7 +27,7 @@
 		E576966421176D6600CADE76 /* BusinessLogic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BusinessLogic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E576966821176D6600CADE76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E576966D21176D6600CADE76 /* BusinessLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusinessLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E576967221176D6600CADE76 /* BusinessLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessLogicTests.swift; sourceTree = "<group>"; };
+		E576967221176D6600CADE76 /* AwesomeFeatureViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwesomeFeatureViewControllerTests.swift; sourceTree = "<group>"; };
 		E576967421176D6600CADE76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E576967E21176DB400CADE76 /* AwesomeFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwesomeFeature.swift; sourceTree = "<group>"; };
 		E576968D21176EBF00CADE76 /* FoundationFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FoundationFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,7 +84,7 @@
 		E576967121176D6600CADE76 /* BusinessLogicTests */ = {
 			isa = PBXGroup;
 			children = (
-				E576967221176D6600CADE76 /* BusinessLogicTests.swift */,
+				E576967221176D6600CADE76 /* AwesomeFeatureViewControllerTests.swift */,
 				E576967421176D6600CADE76 /* Info.plist */,
 			);
 			path = BusinessLogicTests;
@@ -163,6 +163,7 @@
 					};
 					E576966C21176D6600CADE76 = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -214,7 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E576967321176D6600CADE76 /* BusinessLogicTests.swift in Sources */,
+				E576967321176D6600CADE76 /* AwesomeFeatureViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,7 +414,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.easyfutureltd.BusinessLogicTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -431,7 +432,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = uk.easyfutureltd.BusinessLogicTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

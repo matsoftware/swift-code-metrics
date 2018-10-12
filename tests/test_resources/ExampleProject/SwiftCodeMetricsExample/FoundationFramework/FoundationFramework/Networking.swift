@@ -9,11 +9,13 @@
 import Foundation
 
 public enum Result {
+    
     case success(data: Data)
     case error(error: Error)
+    
 }
 
-public enum NetworkingError: Error {
+public enum NetworkingError: Error, Equatable {
     case dummyError
 }
 
