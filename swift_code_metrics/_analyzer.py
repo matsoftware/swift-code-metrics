@@ -1,17 +1,17 @@
 import os
 import json
-from ._helpers import ReportingHelpers
+from ._helpers import AnalyzerHelpers, ReportingHelpers
 from ._parser import SwiftFileParser
 from ._metrics import Framework, Metrics
 
 
 class Inspector:
-    def __init__(self, directory, artifacts, exclude_paths=None):
+    def __init__(self, directory, artifacts, tests_default_suffixes, exclude_paths=None):
         if exclude_paths is None:
             exclude_paths = []
         self.frameworks = []
         if directory is not None:
-            self._analyze_directory(directory, exclude_paths)
+            self._analyze_directory(directory, exclude_paths, tests_default_suffixes)
             self.report = self._generate_report()
             self._save_report(artifacts)
 
@@ -91,20 +91,16 @@ class Inspector:
 
     # Directory inspection
 
-    def _analyze_directory(self, directory, exclude_paths):
+    def _analyze_directory(self, directory, exclude_paths, tests_default_paths):
         for subdir, dirs, files in os.walk(directory):
             for file in files:
-                if file.endswith('.swift') and not self.__is_excluded_folder(subdir, exclude_paths):
+                if file.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION) and \
+                        not AnalyzerHelpers.is_path_in_list(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
-                    swift_file = SwiftFileParser(full_path, directory).parse()
+                    is_in_test_path = AnalyzerHelpers.is_path_in_list(subdir, tests_default_paths)
+                    swift_file = SwiftFileParser(file=full_path, base_path=directory, is_test=is_in_test_path).parse()
                     self.__append_dependency(swift_file)
         self.__cleanup_external_dependencies()
-
-    def __is_excluded_folder(self, subdir, exclude_paths):
-        for p in exclude_paths:
-            if p in subdir:
-                return True
-        return False
 
     def __append_dependency(self, swift_file):
         framework = self.__get_or_create_framework(swift_file.framework_name)

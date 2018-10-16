@@ -35,6 +35,13 @@ def main():
         help='List of paths to exclude from analysis (e.g. submodules, pods, checkouts)'
     )
     CLI.add_argument(
+        '--tests-paths',
+        nargs='*',
+        type=str,
+        default=['Test', 'Tests'],
+        help='List of paths that contains test classes and mocks.'
+    )
+    CLI.add_argument(
         '--generate-graphs',
         nargs='?',
         type=bool,
@@ -52,10 +59,11 @@ def main():
     directory = args.source[0]
     exclude = args.exclude
     artifacts = args.artifacts[0]
+    default_tests_paths = args.tests_paths
     should_generate_graphs = args.generate_graphs
 
     # Inspects the provided directory
-    analyzer = Inspector(directory, artifacts, exclude)
+    analyzer = Inspector(directory, artifacts, default_tests_paths, exclude)
 
     if not should_generate_graphs:
         sys.exit(0)

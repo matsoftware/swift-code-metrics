@@ -1,5 +1,5 @@
 import os
-from ._helpers import ParsingHelpers
+from ._helpers import AnalyzerHelpers, ParsingHelpers
 
 
 class SwiftFile:
@@ -26,9 +26,10 @@ class SwiftFile:
 
 
 class SwiftFileParser:
-    def __init__(self, file, base_path):
+    def __init__(self, file, base_path, is_test=False):
         self.file = file
         self.base_path = base_path
+        self.is_test = is_test
         self.imports = []
         self.attributes_regex_map = {
             ParsingHelpers.IMPORTS: [],
@@ -37,8 +38,6 @@ class SwiftFileParser:
             ParsingHelpers.CLASSES: [],
             ParsingHelpers.FUNCS: [],
         }
-        self.default_framework_name = 'AppTarget'
-        self.default_swift_file_ext = '.swift'
 
     def parse(self):
         """
@@ -101,10 +100,14 @@ class SwiftFileParser:
     # Private helpers
 
     def __framework_name(self):
+        suffix = ParsingHelpers.DEFAULT_TEST_FRAMEWORK_SUFFIX if self.is_test else ''
+        return self.__extracted_framework_name() + suffix
+
+    def __extracted_framework_name(self):
         subdir = self.file.replace(self.base_path, '')
         first_subpath = self.__extract_first_subpath(subdir)
-        if first_subpath.endswith(self.default_swift_file_ext):
-            return self.default_framework_name
+        if first_subpath.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION):
+            return ParsingHelpers.DEFAULT_FRAMEWORK_NAME
         else:
             return first_subpath
 

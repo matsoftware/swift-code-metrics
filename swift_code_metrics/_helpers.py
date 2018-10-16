@@ -1,9 +1,28 @@
 import re
 
 
+class AnalyzerHelpers:
+
+    # Constants
+
+    SWIFT_FILE_EXTENSION = '.swift'
+
+    @staticmethod
+    def is_path_in_list(subdir, exclude_paths):
+        for p in exclude_paths:
+            if p in subdir:
+                return True
+        return False
+
+
 class ParsingHelpers:
 
     # Constants
+
+    DEFAULT_FRAMEWORK_NAME = 'AppTarget'
+    DEFAULT_TEST_FRAMEWORK_SUFFIX = '_Test'
+
+    # Constants - Regex patterns
 
     BEGIN_COMMENT = '^//*'
     END_COMMENT = '\*/$'

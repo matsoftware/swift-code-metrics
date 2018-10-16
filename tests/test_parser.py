@@ -4,11 +4,22 @@ from swift_code_metrics import _parser
 
 class ParserTests(unittest.TestCase):
 
-    def setUp(self):
+    def __init__(self, *args, **kwargs):
+        super(ParserTests, self).__init__(*args, **kwargs)
+        self._generate_mocks()
+
+    def _generate_mocks(self):
         self.example_parsed_file = _parser.SwiftFileParser(
             file="test_resources/ExampleFile.swift",
             base_path=""
         ).parse()
+        self.example_test_file = _parser.SwiftFileParser(
+            file="test_resources/ExampleTest.swift",
+            base_path="",
+            is_test=True
+        ).parse()
+
+    # Non-test file
 
     def test_swiftparser_parse_should_return_expected_framework_name(self):
         self.assertEqual(self.example_parsed_file.framework_name, "test_resources")
@@ -39,6 +50,12 @@ class ParserTests(unittest.TestCase):
                           'methodTwo',
                           'privateFunction',
                           'aStaticMethod'], self.example_parsed_file.methods)
+
+    # Test file
+
+    def test_swiftparser_parse_test_file_shouldAppendSuffixFrameworkName(self):
+        self.assertEqual(self.example_test_file.framework_name, "test_resources_Test")
+
 
 if __name__ == '__main__':
     unittest.main()
