@@ -9,3 +9,4 @@ script: tests/run_test.sh
 branches:
   only:
     - master
+os: osx
