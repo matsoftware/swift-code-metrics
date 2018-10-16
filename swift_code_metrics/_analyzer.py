@@ -1,5 +1,6 @@
 import os
 import json
+from ._helpers import ReportingHelpers
 from ._parser import SwiftFileParser
 from ._metrics import Framework, Metrics
 
@@ -33,7 +34,9 @@ class Inspector:
             report["global"]["n_c"] += f.number_of_concrete_data_structures
             report["global"]["nbm"] += f.number_of_methods
 
-        report["global"]["poc"] = Metrics.percentage_of_comments(report["global"]["noc"], report["global"]["loc"])
+        report["global"]["poc"] = \
+            ReportingHelpers.decimal_format(Metrics.percentage_of_comments(report["global"]["noc"],
+                                                                           report["global"]["loc"]))
 
         return report
 
@@ -67,14 +70,14 @@ class Inspector:
             framework.name: {
                 "loc": loc,
                 "noc": noc,
-                "poc": poc,
+                "poc": ReportingHelpers.decimal_format(poc),
                 "fan_in": fan_in,
                 "fan_out": fan_out,
-                "i": i,
+                "i": ReportingHelpers.decimal_format(i),
                 "n_a": n_a,
                 "n_c": n_c,
-                "a": a,
-                "d_3": d_3,
+                "a": ReportingHelpers.decimal_format(a),
+                "d_3": ReportingHelpers.decimal_format(d_3),
                 "nbm": nbm,
                 "analysis": poc_analysis + "\n" + ia_analysis
             }

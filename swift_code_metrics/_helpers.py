@@ -32,3 +32,11 @@ class ParsingHelpers:
             return re.search(regex_pattern, trimmed_string).group(1)
         except AttributeError:
             return ''
+
+
+class ReportingHelpers:
+
+    @staticmethod
+    def decimal_format(number, decimal_places=3):
+        format_string = "{:." + str(decimal_places) + "f}"
+        return float(format_string.format(number))
