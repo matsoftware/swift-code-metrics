@@ -10,8 +10,8 @@ class GraphPresenter:
         Renders framework related data to a bar plot.
         """
         sorted_data = sorted(list(map(lambda f: (f_of_framework(f),
-                                                 f.compact_name(),
-                                                 f.compact_name_description()), list_of_frameworks)),
+                                                 f.compact_name,
+                                                 f.compact_name_description), list_of_frameworks)),
                              key=lambda tup: tup[0])
         plot_data = (list(map(lambda f: f[0], sorted_data)),
                      list(map(lambda f: f[1], sorted_data)),

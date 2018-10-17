@@ -152,6 +152,7 @@ class Framework:
         self.number_of_concrete_data_structures = 0
         self.number_of_interfaces = 0
         self.number_of_methods = 0
+        self.number_of_tests = 0
         self.imports = {}
 
     def __repr__(self):
@@ -164,6 +165,7 @@ class Framework:
         else:
             self.imports[framework_import] += 1
 
+    @property
     def compact_name(self):
         all_capitals = ''.join(c for c in self.name if c.isupper())
         if len(all_capitals) > 2:
@@ -173,5 +175,10 @@ class Framework:
         else:
             return all_capitals
 
+    @property
     def compact_name_description(self):
-        return self.compact_name() + ' = ' + self.name
+        return self.compact_name + ' = ' + self.name
+
+    @property
+    def is_test_framework(self):
+        return self.number_of_tests > 0
