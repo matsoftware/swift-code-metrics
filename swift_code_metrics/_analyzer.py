@@ -79,7 +79,7 @@ class Inspector:
                 "a": ReportingHelpers.decimal_format(a),
                 "d_3": ReportingHelpers.decimal_format(d_3),
                 "nbm": nbm,
-                "analysis": poc_analysis + "\n" + ia_analysis
+                "analysis": poc_analysis + ia_analysis
             }
         }
 

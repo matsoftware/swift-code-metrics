@@ -108,10 +108,10 @@ class Metrics:
         :return: Textual analysis.
         """
         if instability <= 0.5 and abstractness <= 0.5:
-            return '(Zone of Pain). Highly stable and concrete component - rigid, hard to extend (not abstract).\n' \
+            return 'Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). ' \
                    'This component should not be volatile (e.g. a stable foundation library such as Strings).'
         elif instability >= 0.5 and abstractness >= 0.5:
-            return '(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\n' \
+            return 'Zone of Uselessness. Maximally abstract with few or no dependents - potentially useless. ' \
                    'This component is high likely a leftover that should be removed.'
 
         # Standard components
@@ -120,25 +120,25 @@ class Metrics:
 
         # I analysis
         if instability < 0.2:
-            res += 'Highly stable component (hard to change, responsible and independent).\n'
+            res += 'Highly stable component (hard to change, responsible and independent). '
         elif instability > 0.8:
-            res += 'Highly unstable component (lack of dependents, easy to change, irresponsible)\n'
+            res += 'Highly unstable component (lack of dependents, easy to change, irresponsible) '
 
         # A analysis
 
         if abstractness < 0.2:
-            res += 'Low abstract component, few interfaces.\n'
+            res += 'Low abstract component, few interfaces. '
         elif abstractness > 0.8:
-            res += 'High abstract component, few concrete data structures.\n'
+            res += 'High abstract component, few concrete data structures. '
 
         return res
 
     @staticmethod
     def poc_analysis(poc):
         if poc <= 20:
-            return '(under commented)'
+            return 'The code is under commented. '
         if poc >= 40:
-            return '(over commented)'
+            return 'The code is over commented. '
 
         return ''
 

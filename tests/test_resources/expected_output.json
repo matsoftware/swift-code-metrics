@@ -13,7 +13,7 @@
                 "a": 0.5,
                 "d_3": 0.167,
                 "nbm": 3,
-                "analysis": "\n(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\nThis component is high likely a leftover that should be removed."
+                "analysis": "Zone of Uselessness. Maximally abstract with few or no dependents - potentially useless. This component is high likely a leftover that should be removed."
             }
         },
         {
@@ -29,7 +29,7 @@
                 "a": 0.0,
                 "d_3": 0.0,
                 "nbm": 4,
-                "analysis": "\nHighly unstable component (lack of dependents, easy to change, irresponsible)\nLow abstract component, few interfaces.\n"
+                "analysis": "Highly unstable component (lack of dependents, easy to change, irresponsible) Low abstract component, few interfaces. "
             }
         },
         {
@@ -45,7 +45,7 @@
                 "a": 0.0,
                 "d_3": 0.333,
                 "nbm": 3,
-                "analysis": "(under commented)\nLow abstract component, few interfaces.\n"
+                "analysis": "The code is under commented. Low abstract component, few interfaces. "
             }
         }
     ],
