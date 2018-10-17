@@ -26,7 +26,7 @@ class Inspector:
                 "nbm": 0
             }
         }
-        for f in self.frameworks:
+        for f in sorted(self.frameworks, key=lambda fr: fr.name, reverse=False):
             report["frameworks"].append(self.__framework_analysis(f))
             report["global"]["loc"] += f.loc
             report["global"]["noc"] += f.noc

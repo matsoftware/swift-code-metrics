@@ -1,6 +1,22 @@
 {
     "frameworks": [
         {
+            "BusinessLogic": {
+                "loc": 49,
+                "noc": 7,
+                "poc": 12.5,
+                "fan_in": 1,
+                "fan_out": 2,
+                "i": 0.667,
+                "n_a": 0,
+                "n_c": 3,
+                "a": 0.0,
+                "d_3": 0.333,
+                "nbm": 3,
+                "analysis": "The code is under commented. Low abstract component, few interfaces. "
+            }
+        },
+        {
             "FoundationFramework": {
                 "loc": 26,
                 "noc": 14,
@@ -30,22 +46,6 @@
                 "d_3": 0.0,
                 "nbm": 4,
                 "analysis": "Highly unstable component (lack of dependents, easy to change, irresponsible) Low abstract component, few interfaces. "
-            }
-        },
-        {
-            "BusinessLogic": {
-                "loc": 49,
-                "noc": 7,
-                "poc": 12.5,
-                "fan_in": 1,
-                "fan_out": 2,
-                "i": 0.667,
-                "n_a": 0,
-                "n_c": 3,
-                "a": 0.0,
-                "d_3": 0.333,
-                "nbm": 3,
-                "analysis": "The code is under commented. Low abstract component, few interfaces. "
             }
         }
     ],
