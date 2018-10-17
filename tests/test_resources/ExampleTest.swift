@@ -7,7 +7,12 @@ final class ExampleTest: XCTestCase {
     }
     
     func testAnotherExample() {
+        mockHelperFunctionInTest()
         XCTAssertEqual(2,2)
+    }
+    
+    private func mockHelperFunctionInTest() {
+        
     }
     
 }

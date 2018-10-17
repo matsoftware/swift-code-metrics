@@ -21,6 +21,7 @@ class ParsingHelpers:
 
     DEFAULT_FRAMEWORK_NAME = 'AppTarget'
     DEFAULT_TEST_FRAMEWORK_SUFFIX = '_Test'
+    TEST_METHOD_PREFIX = 'test'
 
     # Constants - Regex patterns
 

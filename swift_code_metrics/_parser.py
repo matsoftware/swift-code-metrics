@@ -24,6 +24,15 @@ class SwiftFile:
         self.methods = methods
         self.n_of_comments = n_of_comments
 
+    @property
+    def tests(self):
+        """
+        List of test extracted from the parsed methods.
+        :return: array of strings
+        """
+        return list(filter(lambda method: method.startswith(ParsingHelpers.TEST_METHOD_PREFIX),
+                           self.methods))
+
 
 class SwiftFileParser:
     def __init__(self, file, base_path, is_test=False):

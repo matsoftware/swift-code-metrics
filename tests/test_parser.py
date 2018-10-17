@@ -56,6 +56,14 @@ class ParserTests(unittest.TestCase):
     def test_swiftparser_parse_test_file_shouldAppendSuffixFrameworkName(self):
         self.assertEqual(self.example_test_file.framework_name, "test_resources_Test")
 
+    def test_swiftfile_noTestClass_numberOfTests_shouldReturnExpectedNumber(self):
+        self.assertEqual(len(self.example_parsed_file.tests), 0)
+
+    def test_swiftfile_testClass_numberOfTests_shouldReturnExpectedNumber(self):
+        self.assertEqual(len(self.example_test_file.methods), 3)
+        self.assertEqual(['test_example_assertion',
+                          'testAnotherExample'], self.example_test_file.tests)
+
 
 if __name__ == '__main__':
     unittest.main()
