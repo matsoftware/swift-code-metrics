@@ -15,10 +15,11 @@ In addition, several common code metrics in the software industries are provided
 - POC (Percentage Of Comments)
 - NBM (Number of Methods)
 - Number of concretes (Number of classes and structs)
+- NOT (Number Of Tests)
 
 ## Requirements
 
-This is a _Python 3_ script that depends on _matplotlib_.
+This is a _Python 3_ script that depends on _matplotlib_ and _adjustText_.
 
 ## Usage
 
@@ -31,59 +32,102 @@ The syntax is:
 - `--source` is the path to the folder that contains the main Xcode project or Workspace
 - `--artifacts` path to the folder that will contain the generated `output.json` report
 - `--excluded` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
+- `--tests-paths` (default: `Test Tests`) space separated list of path substrings matching test classes
 - `--generate-graphs` (optional) if passed, it will generate the graphs related to the analysis and save them in the artifacts folder
 
 A sample project is provided in the `resources` folder; example:
 
-`python3 swift-code-metrics-runner.py --source tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --exclude Tests xcodeproj --generate-graphs`
+`python3 swift-code-metrics-runner.py --source tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs`
 
 ### Output format
 
-The `output.json` file will contain the metrics related to all `frameworks` 
-and an aggregate result for the project in the `global` section. 
+The `output.json` file will contain the metrics related to all frameworks 
+and an _aggregate_ result for the project. 
 
 The example below is available [here](tests/test_resources/expected_output.json).
 
 ```json
 {
-    "frameworks": [
+    "non-test-frameworks": [
         {
-            "FoundationFramework": {
-                "loc": 26,
-                "noc": 14,
-                "poc": 35.0,
+            "BusinessLogic": {
+                "loc": 49,
+                "noc": 7,
+                "poc": 12.5,
+                "n_a": 0,
+                "n_c": 3,
+                "nbm": 3,
+                "analysis": "The code is under commented. Low abstract component, few interfaces. ",
+                "not": 0,
                 "fan_in": 1,
                 "fan_out": 2,
-                "i": 0.6666666666666666,
-                "n_a": 1,
-                "n_c": 2,
-                "a": 0.5,
-                "d_3": 0.16666666666666652,
-                "nbm": 3,
-                "analysis": "\n(Zone of Uselessness). Maximally abstract with few or no dependents - potentially useless.\nThis component is high likely a leftover that should be removed."
+                "i": 0.667,
+                "a": 0.0,
+                "d_3": 0.333
             }
         },
-        { ... }
+        
+        ...
+        
     ],
-    "global": {
-        "loc": 97,
-        "noc": 35,
-        "n_a": 1,
-        "n_c": 7,
-        "nbm": 10,
-        "poc": 26.515151515151516
+    "tests-frameworks": [
+        {
+            "BusinessLogic_Test": {
+                "loc": 7,
+                "noc": 7,
+                "poc": 50.0,
+                "n_a": 0,
+                "n_c": 1,
+                "nbm": 1,
+                "analysis": "The code is over commented. ",
+                "not": 1
+            }
+        },
+        
+        ...
+        
+        
+    ],
+    "aggregate": {
+        "non-test-frameworks": {
+            "loc": 97,
+            "noc": 35,
+            "n_a": 1,
+            "n_c": 7,
+            "nbm": 10,
+            "not": 0,
+            "poc": 26.515
+        },
+        "tests-frameworks": {
+            "loc": 53,
+            "noc": 28,
+            "n_a": 0,
+            "n_c": 4,
+            "nbm": 7,
+            "not": 5,
+            "poc": 34.568
+        },
+        "total": {
+            "loc": 150,
+            "noc": 63,
+            "n_a": 1,
+            "n_c": 11,
+            "nbm": 17,
+            "not": 5,
+            "poc": 29.577
+        }
     }
- }
+}
 ```
 
 Legend:
 
 |    Key    |              Metric              |                                             Description                                             |
 |:---------:|:--------------------------------:|:---------------------------------------------------------------------------------------------------:|
-|    loc    |           Lines Of Code          |                            Number of lines of code (empty lines excluded)                           |
-|    noc    |        Number of Comments        |                                          Number of comments                                         |
-|    poc    |      Percentage of Comments      |                                       100 * noc / ( noc + loc)                                      |
-| fan_in    |              Fan-In              | Incoming dependencies: number of classes  outside the framework that depend on classes  inside it.  |
+|   `loc`   |           Lines Of Code          |                            Number of lines of code (empty lines excluded)                           |
+|   `noc`   |        Number of Comments        |                                          Number of comments                                         |
+|   `poc`   |      Percentage of Comments      |                                       100 * noc / ( noc + loc)                                      |
+|  `fan_in` |              Fan-In              | Incoming dependencies: number of classes  outside the framework that depend on classes  inside it.  |
 | `fan_out` |              Fan-Out             | Outgoing dependencies: number of classes  inside this component that depend on classes  outside it. |
 |    `i`    |            Instability           |                                   I = fan_out / (fan_in + fan_out)                                  |
 |   `n_a`   |        Number of abstracts       |                                 Number of protocols in the framework                                |
@@ -91,6 +135,7 @@ Legend:
 |    `a`    |           Abstractness           |                                            A = n_a / n_c                                            |
 |   `d_3`   | Distance from  the main sequence |                                             D³ = abs( A + I - 1 )                                   |
 |   `nbm`   |         Number of methods        |                              Number of `func` (computed `var` excluded)                             |
+|   `not`   |          Number of tests         |                      Number of methods in test frameworks starting with `test`                      |
 
 ## Current limitations
 
@@ -105,10 +150,11 @@ The script will scan the directory and it will identify the frameworks by the na
 
 - Inline comments in code (such as `struct Data: {} //dummy data`) are currently not supported
 
+- Only `XCTest` test frameworks are currently supported
+
 ## TODOs
 
 - Code improvements
-- Setting up CI
 - Other (open to suggestions)
 
 ## Contact
