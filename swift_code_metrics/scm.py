@@ -68,6 +68,8 @@ def main():
     if not should_generate_graphs:
         sys.exit(0)
 
+    non_test_frameworks = analyzer.non_test_frameworks
+
     # Creates graphs
     graph_presenter = GraphPresenter(artifacts)
 
@@ -82,9 +84,9 @@ def main():
     }
 
     for title, framework_function in sorted_data.items():
-        graph_presenter.sorted_data_plot(title, analyzer.frameworks, framework_function)
+        graph_presenter.sorted_data_plot(title, non_test_frameworks, framework_function)
 
     # Distance from the main sequence
-    graph_presenter.distance_from_main_sequence_plot(analyzer.frameworks,
+    graph_presenter.distance_from_main_sequence_plot(non_test_frameworks,
                                                      lambda fr: analyzer.instability(fr),
                                                      lambda fr: analyzer.abstractness(fr))

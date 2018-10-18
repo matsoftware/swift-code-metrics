@@ -16,6 +16,10 @@ class Inspector:
             self.report = self._generate_report()
             self._save_report(artifacts)
 
+    @property
+    def non_test_frameworks(self):
+        return list(filter(lambda f: not f.is_test_framework, self.frameworks))
+
     def _generate_report(self):
         report = _Report()
 
@@ -96,10 +100,10 @@ class Inspector:
                     full_path = os.path.join(subdir, file)
                     is_in_test_path = AnalyzerHelpers.is_path_in_list(subdir, tests_default_paths)
                     swift_file = SwiftFileParser(file=full_path, base_path=directory, is_test=is_in_test_path).parse()
-                    self.__append_dependency(swift_file)
+                    self.__append_dependency(swift_file, is_in_test_path)
         self.__cleanup_external_dependencies()
 
-    def __append_dependency(self, swift_file):
+    def __append_dependency(self, swift_file, is_in_test_path):
         framework = self.__get_or_create_framework(swift_file.framework_name)
         framework.number_of_files += 1
         framework.loc += swift_file.loc
@@ -108,6 +112,7 @@ class Inspector:
         framework.number_of_concrete_data_structures += len(swift_file.structs + swift_file.classes)
         framework.number_of_methods += len(swift_file.methods)
         framework.number_of_tests += len(swift_file.tests)
+        framework.is_test_framework = is_in_test_path # This cover the scenario where a test framework might contain no tests
 
         for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)

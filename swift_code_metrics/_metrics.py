@@ -154,6 +154,7 @@ class Framework:
         self.number_of_methods = 0
         self.number_of_tests = 0
         self.imports = {}
+        self.is_test_framework = False
 
     def __repr__(self):
         return self.name + '(' + str(self.number_of_files) + ' files)'
@@ -179,6 +180,3 @@ class Framework:
     def compact_name_description(self):
         return self.compact_name + ' = ' + self.name
 
-    @property
-    def is_test_framework(self):
-        return self.number_of_tests > 0
