@@ -68,13 +68,11 @@ def main():
     if not should_generate_graphs:
         sys.exit(0)
 
-    non_test_frameworks = analyzer.non_test_frameworks
-
     # Creates graphs
     graph_presenter = GraphPresenter(artifacts)
 
     # Sorted data plots
-    sorted_data = {
+    non_test_reports_sorted_data = {
         'N. of classes and structs': lambda fr: fr.number_of_concrete_data_structures,
         'Lines Of Code - LOC': lambda fr: fr.loc,
         'Number Of Comments - NOC': lambda fr: fr.noc,
@@ -83,10 +81,20 @@ def main():
         'Abstractness - A': lambda fr: analyzer.abstractness(fr),
     }
 
-    for title, framework_function in sorted_data.items():
-        graph_presenter.sorted_data_plot(title, non_test_frameworks, framework_function)
+    tests_reports_sorted_data = {
+        'Number of tests - NOT': lambda fr: fr.number_of_tests
+    }
+
+    # Non-test graphs
+    for title, framework_function in non_test_reports_sorted_data.items():
+        graph_presenter.sorted_data_plot(title, analyzer.filtered_frameworks(is_test=False), framework_function)
 
     # Distance from the main sequence
-    graph_presenter.distance_from_main_sequence_plot(non_test_frameworks,
+    graph_presenter.distance_from_main_sequence_plot(analyzer.filtered_frameworks(is_test=False),
                                                      lambda fr: analyzer.instability(fr),
                                                      lambda fr: analyzer.abstractness(fr))
+
+    # Test graphs
+    for title, framework_function in tests_reports_sorted_data.items():
+        graph_presenter.sorted_data_plot(title, analyzer.filtered_frameworks(is_test=True), framework_function)
+

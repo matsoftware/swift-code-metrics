@@ -16,9 +16,8 @@ class Inspector:
             self.report = self._generate_report()
             self._save_report(artifacts)
 
-    @property
-    def non_test_frameworks(self):
-        return list(filter(lambda f: not f.is_test_framework, self.frameworks))
+    def filtered_frameworks(self, is_test=False):
+        return list(filter(lambda f: f.is_test_framework == is_test, self.frameworks))
 
     def _generate_report(self):
         report = _Report()
