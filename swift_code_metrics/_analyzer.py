@@ -31,13 +31,13 @@ class Inspector:
                 report.non_test_framework.append(analysis)
                 report.non_test_framework_aggregate.append_framework(f)
 
-        return report.as_dict
+        return report
 
     def _save_report(self, directory):
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(os.path.join(directory, 'output.json'), 'w') as fp:
-            json.dump(self.report, fp, indent=4)
+            json.dump(self.report.as_dict, fp, indent=4)
 
     # Analysis
 
@@ -138,6 +138,7 @@ class Inspector:
         return None
 
 # Report generation
+
 
 class _AggregateData:
     def __init__(self, loc=0, noc=0, n_a=0, n_c=0, nbm=0, n_o_t=0):

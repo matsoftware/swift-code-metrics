@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 from argparse import ArgumentParser
+
+from ._helpers import ReportingHelpers
 from ._analyzer import Inspector
 from ._presenter import GraphPresenter
 from .version import VERSION
@@ -94,7 +96,10 @@ def main():
                                                      lambda fr: analyzer.instability(fr),
                                                      lambda fr: analyzer.abstractness(fr))
 
+    # Code distribution
+    graph_presenter.pie_plot('Code distribution', analyzer.filtered_frameworks(is_test=False),
+                             lambda fr: ReportingHelpers.decimal_format(fr.loc / analyzer.report.non_test_framework_aggregate.loc))
+
     # Test graphs
     for title, framework_function in tests_reports_sorted_data.items():
         graph_presenter.sorted_data_plot(title, analyzer.filtered_frameworks(is_test=True), framework_function)
-

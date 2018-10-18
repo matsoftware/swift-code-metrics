@@ -18,6 +18,13 @@ class Graph:
 
         self.__render(plt, title)
 
+    def pie_plot(self, title, labels, sizes):
+        plt.title(title)
+        plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+        plt.axis('equal')
+
+        self.__render(plt, title)
+
     def scattered_plot(self, title, x_label, y_label, data, bands):
         plt.title(title)
         plt.axis([0, 1, 0, 1])
