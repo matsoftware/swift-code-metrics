@@ -11,34 +11,24 @@ class Inspector:
             exclude_paths = []
         self.frameworks = []
         if directory is not None:
-            self._analyze_directory(directory, exclude_paths, tests_default_suffixes)
+            # Initialize report
+            self.__analyze_directory(directory, exclude_paths, tests_default_suffixes)
             self.report = self._generate_report()
             self._save_report(artifacts)
 
     def _generate_report(self):
-        report = {
-            "frameworks": list(),
-            "global": {
-                "loc": 0,
-                "noc": 0,
-                "n_a": 0,
-                "n_c": 0,
-                "nbm": 0
-            }
-        }
+        report = _Report()
+
         for f in sorted(self.frameworks, key=lambda fr: fr.name, reverse=False):
-            report["frameworks"].append(self.__framework_analysis(f))
-            report["global"]["loc"] += f.loc
-            report["global"]["noc"] += f.noc
-            report["global"]["n_a"] += f.number_of_interfaces
-            report["global"]["n_c"] += f.number_of_concrete_data_structures
-            report["global"]["nbm"] += f.number_of_methods
+            analysis = self.__framework_analysis(f)
+            if f.is_test_framework:
+                report.tests_framework.append(analysis)
+                report.test_framework_aggregate.append_framework(f)
+            else:
+                report.non_test_framework.append(analysis)
+                report.non_test_framework_aggregate.append_framework(f)
 
-        report["global"]["poc"] = \
-            ReportingHelpers.decimal_format(Metrics.percentage_of_comments(report["global"]["noc"],
-                                                                           report["global"]["loc"]))
-
-        return report
+        return report.as_dict
 
     def _save_report(self, directory):
         if not os.path.exists(directory):
@@ -56,31 +46,38 @@ class Inspector:
         loc = framework.loc
         noc = framework.noc
         poc = Metrics.percentage_of_comments(framework.noc, framework.loc)
-        poc_analysis = Metrics.poc_analysis(poc)
-        fan_in = Metrics.fan_in(framework, self.frameworks)
-        fan_out = Metrics.fan_out(framework)
-        i = Metrics.instability(framework, self.frameworks)
+        analysis = Metrics.poc_analysis(poc)
         n_a = framework.number_of_interfaces
         n_c = framework.number_of_concrete_data_structures
-        a = Metrics.abstractness(framework)
-        d_3 = Metrics.distance_main_sequence(framework, self.frameworks)
         nbm = framework.number_of_methods
-        ia_analysis = Metrics.ia_analysis(i, a)
+        n_of_tests = framework.number_of_tests
+
+        # Non-test framework analysis
+        non_test_analysis = {}
+        if not framework.is_test_framework:
+            non_test_analysis["fan_in"] = Metrics.fan_in(framework, self.frameworks)
+            non_test_analysis["fan_out"] = Metrics.fan_out(framework)
+            i = Metrics.instability(framework, self.frameworks)
+            a = Metrics.abstractness(framework)
+            non_test_analysis["i"] = ReportingHelpers.decimal_format(i)
+            non_test_analysis["a"] = ReportingHelpers.decimal_format(a)
+            non_test_analysis["d_3"] = ReportingHelpers.decimal_format(
+                Metrics.distance_main_sequence(framework, self.frameworks))
+            analysis += Metrics.ia_analysis(i, a)
+
+        base_analysis = {
+            "loc": loc,
+            "noc": noc,
+            "poc": ReportingHelpers.decimal_format(poc),
+            "n_a": n_a,
+            "n_c": n_c,
+            "nbm": nbm,
+            "analysis": analysis,
+            "not": n_of_tests
+        }
+
         return {
-            framework.name: {
-                "loc": loc,
-                "noc": noc,
-                "poc": ReportingHelpers.decimal_format(poc),
-                "fan_in": fan_in,
-                "fan_out": fan_out,
-                "i": ReportingHelpers.decimal_format(i),
-                "n_a": n_a,
-                "n_c": n_c,
-                "a": ReportingHelpers.decimal_format(a),
-                "d_3": ReportingHelpers.decimal_format(d_3),
-                "nbm": nbm,
-                "analysis": poc_analysis + ia_analysis
-            }
+            framework.name: {**base_analysis, **non_test_analysis}
         }
 
     def instability(self, framework):
@@ -91,7 +88,7 @@ class Inspector:
 
     # Directory inspection
 
-    def _analyze_directory(self, directory, exclude_paths, tests_default_paths):
+    def __analyze_directory(self, directory, exclude_paths, tests_default_paths):
         for subdir, dirs, files in os.walk(directory):
             for file in files:
                 if file.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION) and \
@@ -110,6 +107,7 @@ class Inspector:
         framework.number_of_interfaces += len(swift_file.interfaces)
         framework.number_of_concrete_data_structures += len(swift_file.structs + swift_file.classes)
         framework.number_of_methods += len(swift_file.methods)
+        framework.number_of_tests += len(swift_file.tests)
 
         for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)
@@ -135,3 +133,71 @@ class Inspector:
                 return f
         return None
 
+# Report generation
+
+class _AggregateData:
+    def __init__(self, loc=0, noc=0, n_a=0, n_c=0, nbm=0, n_o_t=0):
+        self.loc = loc
+        self.noc = noc
+        self.n_a = n_a
+        self.n_c = n_c
+        self.nbm = nbm
+        self.n_o_t = n_o_t
+
+    def append_framework(self, f):
+        self.loc += f.loc
+        self.noc += f.noc
+        self.n_a += f.number_of_interfaces
+        self.n_c += f.number_of_concrete_data_structures
+        self.nbm += f.number_of_methods
+        self.n_o_t += f.number_of_tests
+
+    @property
+    def poc(self):
+        return Metrics.percentage_of_comments(self.noc, self.loc)
+
+    @property
+    def as_dict(self):
+        return {
+            "loc": self.loc,
+            "noc": self.noc,
+            "n_a": self.n_a,
+            "n_c": self.n_c,
+            "nbm": self.nbm,
+            "not": self.n_o_t,
+            "poc": ReportingHelpers.decimal_format(self.poc)
+        }
+
+    @staticmethod
+    def merged_data(first, second):
+        return _AggregateData(loc=first.loc + second.loc,
+                              noc=first.noc + second.noc,
+                              n_a=first.n_a + second.n_a,
+                              n_c=first.n_c + second.n_c,
+                              nbm=first.nbm + second.nbm,
+                              n_o_t=first.n_o_t + second.n_o_t)
+
+
+class _Report:
+    def __init__(self):
+        self.non_test_framework = list()
+        self.tests_framework = list()
+        self.non_test_framework_aggregate = _AggregateData()
+        self.test_framework_aggregate = _AggregateData()
+        # Constants for report
+        self.non_test_frameworks_key = "non-test-frameworks"
+        self.tests_frameworks_key = "tests-frameworks"
+        self.aggregate_key = "aggregate"
+
+    @property
+    def as_dict(self):
+        return {
+            self.non_test_frameworks_key: self.non_test_framework,
+            self.tests_frameworks_key: self.tests_framework,
+            self.aggregate_key: {
+                self.non_test_frameworks_key: self.non_test_framework_aggregate.as_dict,
+                self.tests_frameworks_key: self.test_framework_aggregate.as_dict,
+                "total": _AggregateData.merged_data(self.non_test_framework_aggregate,
+                                                    self.test_framework_aggregate).as_dict
+            }
+        }

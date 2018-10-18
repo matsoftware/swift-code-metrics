@@ -14,8 +14,6 @@ class IntegrationTest(unittest.TestCase):
         sys.argv.append("test_resources/ExampleProject/SwiftCodeMetricsExample")
         sys.argv.append("--artifacts")
         sys.argv.append("report")
-        sys.argv.append("--exclude")
-        sys.argv.append("Tests")
         sys.argv.append("--generate-graphs")
 
     def tearDown(self):

@@ -1,19 +1,20 @@
 {
-    "frameworks": [
+    "non-test-frameworks": [
         {
             "BusinessLogic": {
                 "loc": 49,
                 "noc": 7,
                 "poc": 12.5,
+                "n_a": 0,
+                "n_c": 3,
+                "nbm": 3,
+                "analysis": "The code is under commented. Low abstract component, few interfaces. ",
+                "not": 0,
                 "fan_in": 1,
                 "fan_out": 2,
                 "i": 0.667,
-                "n_a": 0,
-                "n_c": 3,
                 "a": 0.0,
-                "d_3": 0.333,
-                "nbm": 3,
-                "analysis": "The code is under commented. Low abstract component, few interfaces. "
+                "d_3": 0.333
             }
         },
         {
@@ -21,15 +22,16 @@
                 "loc": 26,
                 "noc": 14,
                 "poc": 35.0,
+                "n_a": 1,
+                "n_c": 2,
+                "nbm": 3,
+                "analysis": "Zone of Uselessness. Maximally abstract with few or no dependents - potentially useless. This component is high likely a leftover that should be removed.",
+                "not": 0,
                 "fan_in": 1,
                 "fan_out": 2,
                 "i": 0.667,
-                "n_a": 1,
-                "n_c": 2,
                 "a": 0.5,
-                "d_3": 0.167,
-                "nbm": 3,
-                "analysis": "Zone of Uselessness. Maximally abstract with few or no dependents - potentially useless. This component is high likely a leftover that should be removed."
+                "d_3": 0.167
             }
         },
         {
@@ -37,24 +39,84 @@
                 "loc": 22,
                 "noc": 14,
                 "poc": 38.889,
+                "n_a": 0,
+                "n_c": 2,
+                "nbm": 4,
+                "analysis": "Highly unstable component (lack of dependents, easy to change, irresponsible) Low abstract component, few interfaces. ",
+                "not": 0,
                 "fan_in": 0,
                 "fan_out": 3,
                 "i": 1.0,
-                "n_a": 0,
-                "n_c": 2,
                 "a": 0.0,
-                "d_3": 0.0,
-                "nbm": 4,
-                "analysis": "Highly unstable component (lack of dependents, easy to change, irresponsible) Low abstract component, few interfaces. "
+                "d_3": 0.0
             }
         }
     ],
-    "global": {
-        "loc": 97,
-        "noc": 35,
-        "n_a": 1,
-        "n_c": 7,
-        "nbm": 10,
-        "poc": 26.515
+    "tests-frameworks": [
+        {
+            "BusinessLogic_Test": {
+                "loc": 7,
+                "noc": 7,
+                "poc": 50.0,
+                "n_a": 0,
+                "n_c": 1,
+                "nbm": 1,
+                "analysis": "The code is over commented. ",
+                "not": 1
+            }
+        },
+        {
+            "FoundationFramework_Test": {
+                "loc": 41,
+                "noc": 14,
+                "poc": 25.455,
+                "n_a": 0,
+                "n_c": 2,
+                "nbm": 5,
+                "analysis": "",
+                "not": 3
+            }
+        },
+        {
+            "SwiftCodeMetricsExampleTests_Test": {
+                "loc": 5,
+                "noc": 7,
+                "poc": 58.333,
+                "n_a": 0,
+                "n_c": 1,
+                "nbm": 1,
+                "analysis": "The code is over commented. ",
+                "not": 1
+            }
+        }
+    ],
+    "aggregate": {
+        "non-test-frameworks": {
+            "loc": 97,
+            "noc": 35,
+            "n_a": 1,
+            "n_c": 7,
+            "nbm": 10,
+            "not": 0,
+            "poc": 26.515
+        },
+        "tests-frameworks": {
+            "loc": 53,
+            "noc": 28,
+            "n_a": 0,
+            "n_c": 4,
+            "nbm": 7,
+            "not": 5,
+            "poc": 34.568
+        },
+        "total": {
+            "loc": 150,
+            "noc": 63,
+            "n_a": 1,
+            "n_c": 11,
+            "nbm": 17,
+            "not": 5,
+            "poc": 29.577
+        }
     }
 }
