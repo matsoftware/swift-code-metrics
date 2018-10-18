@@ -3,6 +3,8 @@ import string
 import matplotlib.pyplot as plt
 import os
 
+from adjustText import adjust_text
+
 
 class Graph:
     def __init__(self, path=None):
@@ -41,9 +43,12 @@ class Graph:
             plt.plot(band[0], band[1])
 
         # Plot
+        texts = []
         for i, label in enumerate(labels):
             plt.plot(x, y, 'ko', label=label)
-            plt.annotate(label, (x[i], y[i]))
+            texts.append(plt.text(x[i], y[i], label, size=8))
+
+        adjust_text(texts, arrowprops=dict(arrowstyle="-", color='k', lw=0.5))
 
         self.__render(plt, title)
 
