@@ -1,7 +1,6 @@
 import unittest
-from swift_code_metrics._metrics import Framework
+from swift_code_metrics._metrics import Framework, Dependency
 from swift_code_metrics._metrics import Metrics
-from tests import dummies
 
 
 class FrameworkTests(unittest.TestCase):
@@ -32,21 +31,26 @@ class MetricsTests(unittest.TestCase):
         ]
 
     def test_external_dependencies(self):
-        for sf in dummies.dummy_external_frameworks():
+        for sf in MetricsTests.__dummy_external_frameworks():
             self.foundation_kit.append_import(sf)
 
         foundation_external_deps = Metrics.external_dependencies(self.foundation_kit, self.frameworks)
+        expected_external_deps = list(map(lambda f: Dependency(f.name, number_of_imports=1),
+                                          MetricsTests.__dummy_external_frameworks()))
+
         design_external_deps = Metrics.external_dependencies(self.design_kit, self.frameworks)
 
-        self.assertEqual(MetricsTests.__extract_names(foundation_external_deps),
-                         MetricsTests.__extract_names(dummies.dummy_external_frameworks()))
-        self.assertEqual(MetricsTests.__extract_names(design_external_deps), [])
-
+        self.assertEqual(expected_external_deps, foundation_external_deps)
+        self.assertEqual(design_external_deps, [])
 
 
     @staticmethod
-    def __extract_names(frameworks):
-        return list(map(lambda f: f.name, frameworks))
+    def __dummy_external_frameworks():
+        return [
+            Framework('Foundation'),
+            Framework('UIKit'),
+            Framework('RxSwift'),
+        ]
 
 
 if __name__ == '__main__':

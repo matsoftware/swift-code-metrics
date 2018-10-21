@@ -77,20 +77,8 @@ class Metrics:
         :param frameworks: The other frameworks in the project
         :return: List of imported frameworks that are external to the project (e.g. system or third party libraries)
         """
-        return list(filter(lambda f: f not in frameworks, framework.imports))
-
-    @staticmethod
-    def coupled_frameworks(framework, frameworks):
-        """
-        :param framework: The framework to inspect for coupled dependencies
-        :param frameworks: The other frameworks in the project
-        :return: List of dependent frameworks
-        """
-        couples = []
-        for f in frameworks:
-            if f.imports.get(framework):
-                couples.append((framework.name, f.name))
-        return couples
+        filtered_imports = Metrics.__filtered_imports(framework, frameworks, is_internal=False)
+        return list(map(lambda imp: Dependency(imp[0].name, imp[1]),filtered_imports.items()))
 
     @staticmethod
     def percentage_of_comments(noc, loc):
@@ -153,6 +141,10 @@ class Metrics:
     def __other_frameworks(framework, frameworks):
         return list(filter(lambda f: f is not framework, frameworks))
 
+    @staticmethod
+    def __filtered_imports(framework, frameworks, is_internal):
+        return dict(filter(lambda f: (f in frameworks) == is_internal, framework.imports.items()))
+
 
 class Framework:
     def __init__(self, name):
@@ -193,3 +185,15 @@ class Framework:
     def compact_name_description(self):
         return self.compact_name + ' = ' + self.name
 
+
+class Dependency:
+    def __init__(self, framework, number_of_imports=0):
+        self.framework = framework
+        self.number_of_imports = number_of_imports
+
+    def __eq__(self, other):
+        return (self.framework == other.framework) and \
+               (self.number_of_imports == other.number_of_imports)
+
+    def __repr__(self):
+        return self.framework + '(' + str(self.number_of_imports) + ' imports)'
