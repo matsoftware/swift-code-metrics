@@ -71,14 +71,13 @@ class Metrics:
         return fan_out
 
     @staticmethod
-    def percentage_of_comments(noc, loc):
+    def external_dependencies(framework, frameworks):
         """
-        Percentage Of Comments (POC) = 100 * NoC / ( NoC + LoC)
-        :param noc: The number of lines of comments
-        :param loc: the number of lines of code
-        :return: The POC value (double)
+        :param framework: The framework to inspect for imports
+        :param frameworks: The other frameworks in the project
+        :return: List of imported frameworks that are external to the project (e.g. system or third party libraries)
         """
-        return 100 * noc / (noc + loc)
+        return list(filter(lambda f: f not in frameworks, framework.imports))
 
     @staticmethod
     def coupled_frameworks(framework, frameworks):
@@ -94,8 +93,14 @@ class Metrics:
         return couples
 
     @staticmethod
-    def __other_frameworks(framework, frameworks):
-        return list(filter(lambda f: f is not framework, frameworks))
+    def percentage_of_comments(noc, loc):
+        """
+        Percentage Of Comments (POC) = 100 * NoC / ( NoC + LoC)
+        :param noc: The number of lines of comments
+        :param loc: the number of lines of code
+        :return: The POC value (double)
+        """
+        return 100 * noc / (noc + loc)
 
     # Analysis
 
@@ -141,6 +146,12 @@ class Metrics:
             return 'The code is over commented. '
 
         return ''
+
+    # Internal
+
+    @staticmethod
+    def __other_frameworks(framework, frameworks):
+        return list(filter(lambda f: f is not framework, frameworks))
 
 
 class Framework:
