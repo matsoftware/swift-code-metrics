@@ -5,7 +5,9 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 install_requires = [
-    "matplotlib >= 2"
+    "matplotlib",
+    "adjustText",
+    "pygraphviz"
 ]
 
 setuptools.setup(
