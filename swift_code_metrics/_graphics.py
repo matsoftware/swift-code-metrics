@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 from adjustText import adjust_text
+import pygraphviz as pgv
 
 
 class Graph:
@@ -52,16 +53,29 @@ class Graph:
 
         self.__render(plt, title)
 
+    def directed_graph(self, title, list_of_edges):
+        dir_graph = pgv.AGraph(directed=True, strict=True, rankdir='TD', name=title)
+        dir_graph.node_attr['shape'] = 'rectangle'
+        dir_graph.node_attr['size'] = '10'
+        for e in list_of_edges:
+            dir_graph.add_edge(e[0], e[1], label=e[2])
+
+        dir_graph.layout('dot')
+        dir_graph.draw(self.__file_path(title))
+
     # Private
 
     def __render(self, plt, name):
         if self.path is None:
             plt.show()
         else:
-            filename = Graph.format_filename(name) + '.pdf'
-            save_file = os.path.join(self.path, filename)
+            save_file = self.__file_path(name)
             plt.savefig(save_file)
             plt.close()
+
+    def __file_path(self, name):
+        filename = Graph.format_filename(name) + '.pdf'
+        return os.path.join(self.path, filename)
 
     @staticmethod
     def format_filename(s):

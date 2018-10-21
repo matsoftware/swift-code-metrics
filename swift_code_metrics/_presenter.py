@@ -1,5 +1,5 @@
+from swift_code_metrics._metrics import Metrics
 from ._graphics import Graph
-
 
 class GraphPresenter:
     def __init__(self, artifacts_path):
@@ -57,3 +57,16 @@ class GraphPresenter:
                                   'A = Abstractness',
                                   scattered_data,
                                   bands)
+
+    def dependency_graph(self, list_of_frameworks):
+        """
+        Renders the Frameworks dependency graph.
+
+        """
+        edges = list()
+        for f in list_of_frameworks:
+            external_dep = Metrics.internal_dependencies(f, list_of_frameworks)
+            for d in external_dep:
+                edges.append((f.name, d.framework, d.number_of_imports))
+
+        self.graph.directed_graph('Dependency graph', edges)

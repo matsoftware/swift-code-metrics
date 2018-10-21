@@ -98,6 +98,9 @@ def main():
                                                      lambda fr: analyzer.instability(fr),
                                                      lambda fr: analyzer.abstractness(fr))
 
+    # Dependency graph
+    graph_presenter.dependency_graph(non_test_frameworks)
+
     # Code distribution
     graph_presenter.pie_plot('Code distribution', non_test_frameworks,
                              lambda fr:
