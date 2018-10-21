@@ -69,4 +69,8 @@ class GraphPresenter:
             for d in external_dep:
                 edges.append((f.name, d.framework, d.number_of_imports))
 
-        self.graph.directed_graph('Dependency graph', edges)
+        try:
+            self.graph.directed_graph('Dependency graph', edges)
+        except ValueError:
+            print('Please ensure that you have Graphviz (https://www.graphviz.org/download) installed.')
+

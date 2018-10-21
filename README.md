@@ -19,7 +19,7 @@ In addition, several common code metrics in the software industries are provided
 
 ## Requirements
 
-This is a _Python 3_ script that depends on _matplotlib_ and _adjustText_.
+This is a _Python 3_ script that depends on _matplotlib_, _adjustText_ and _pygraphviz_. This latest package depends on the [Graphviz](https://www.graphviz.org/download/) binary that must be installed.
 
 ## Usage
 
