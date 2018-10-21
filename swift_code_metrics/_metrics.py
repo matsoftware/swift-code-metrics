@@ -77,8 +77,16 @@ class Metrics:
         :param frameworks: The other frameworks in the project
         :return: List of imported frameworks that are external to the project (e.g. system or third party libraries)
         """
-        filtered_imports = Metrics.__filtered_imports(framework, frameworks, is_internal=False)
-        return list(map(lambda imp: Dependency(imp[0].name, imp[1]),filtered_imports.items()))
+        return Metrics.__filtered_imports(framework, frameworks, is_internal=False)
+
+    @staticmethod
+    def internal_dependencies(framework, frameworks):
+        """
+        :param framework: The framework to inspect for imports
+        :param frameworks: The other frameworks in the project
+        :return: List of imported frameworks that are internal to the project
+        """
+        return Metrics.__filtered_imports(framework, frameworks, is_internal=True)
 
     @staticmethod
     def percentage_of_comments(noc, loc):
@@ -143,7 +151,18 @@ class Metrics:
 
     @staticmethod
     def __filtered_imports(framework, frameworks, is_internal):
-        return dict(filter(lambda f: (f in frameworks) == is_internal, framework.imports.items()))
+        return list(
+            map(lambda imp: Dependency(imp[0].name, imp[1]),
+                dict(filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal,
+                            framework.imports.items())).items()
+            )
+        )
+
+    @staticmethod
+    def __is_name_contained_in_list(framework, frameworks):
+        return len(list(
+            filter(lambda f: f.name == framework.name, frameworks)
+        )) > 0
 
 
 class Framework:

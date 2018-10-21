@@ -43,6 +43,22 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(expected_external_deps, foundation_external_deps)
         self.assertEqual(design_external_deps, [])
 
+    def test_internal_dependencies(self):
+        self.app_layer.append_import(self.design_kit)
+        self.app_layer.append_import(self.design_kit)
+        self.app_layer.append_import(self.foundation_kit)
+        self.design_kit.append_import(self.foundation_kit)
+
+        expected_foundation_internal_deps = []
+        expected_design_internal_deps = [Dependency('FoundationKit', 1)]
+        expected_app_layer_internal_deps = [Dependency('DesignKit', 2), Dependency('FoundationKit', 1)]
+
+        self.assertEqual(expected_foundation_internal_deps,
+                         Metrics.internal_dependencies(self.foundation_kit, self.frameworks))
+        self.assertEqual(expected_design_internal_deps,
+                         Metrics.internal_dependencies(self.design_kit, self.frameworks))
+        self.assertEqual(expected_app_layer_internal_deps,
+                         Metrics.internal_dependencies(self.app_layer, self.frameworks))
 
     @staticmethod
     def __dummy_external_frameworks():
