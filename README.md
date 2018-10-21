@@ -5,17 +5,17 @@ Code metrics analyzer for Swift projects.
 ## Introduction
 
 The goal of this software is to provide an insight of the architectural state of a software written in `Swift` that consists in several modules. 
-Inspired by the book of Robert C. Martin, _Clean Architecture_, the software will scan the project to identify the different components in order to assess:
+Inspired by the book of Robert C. Martin, _Clean Architecture_, the software will scan the project to identify the different components in order to assess several common code metrics in the software industry:
 - the overall number of concrete classes and interfaces
 - the _instability_ and _abstractness_ of the framework
 - the _distance from the main sequence_
-In addition, several common code metrics in the software industries are provided as part of the analysis, such as:
 - LOC (Lines Of Code)
 - NOC (Numbers Of Comments)
 - POC (Percentage Of Comments)
 - NBM (Number of Methods)
 - Number of concretes (Number of classes and structs)
 - NOT (Number Of Tests)
+- Frameworks dependency graph (number of internal and external dependencies)
 
 ## Requirements
 
@@ -34,10 +34,6 @@ The syntax is:
 - `--excluded` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
 - `--tests-paths` (default: `Test Tests`) space separated list of path substrings matching test classes
 - `--generate-graphs` (optional) if passed, it will generate the graphs related to the analysis and save them in the artifacts folder
-
-A sample project is provided in the `resources` folder; example:
-
-`python3 swift-code-metrics-runner.py --source tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs`
 
 ### Output format
 
@@ -136,6 +132,24 @@ Legend:
 |   `d_3`   | Distance from  the main sequence |                                             D³ = abs( A + I - 1 )                                   |
 |   `nbm`   |         Number of methods        |                              Number of `func` (computed `var` excluded)                             |
 |   `not`   |          Number of tests         |                      Number of methods in test frameworks starting with `test`                      |
+
+## Example
+
+A sample project is provided in the `resources` folder:
+
+`python3 swift-code-metrics-runner.py --source tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs`
+
+The graphs that will be generated are the following:
+
+| Code distribution |
+|:-----------:|
+|![LOC](docs/assets/lines_of_code_-_loc.jpg) ![NOC](docs/assets/number_of_comments_-_noc.jpg) ![Nc](docs/assets/n._of_classes_and_structs.jpg) ![Nbm](docs/assets/n._of_methods_-_nbm.jpg) ![NOT](docs/assets/number_of_tests_-_not.jpg) ![Abstractness](docs/assets/abstractness_-_a.jpg) ![Instability](docs/assets/instability_-_i.jpg) ![Code distribution](docs/assets/code_distribution.jpg) |
+
+| Component coupling |
+|:-----------:|
+| ![Distance from main sequence](docs/assets/deviation_from_the_main_sequence.jpg) 
+| ![Dependency graph](docs/assets/dependency_graph.jpg) 
+| Dependency graph
 
 ## Current limitations
 
