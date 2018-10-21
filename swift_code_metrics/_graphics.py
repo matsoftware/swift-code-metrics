@@ -21,9 +21,11 @@ class Graph:
 
         self.__render(plt, title)
 
-    def pie_plot(self, title, labels, sizes):
+    def pie_plot(self, title, sizes, labels, legend):
         plt.title(title)
-        plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+        patches, texts, _ = plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+        plt.legend(patches, legend, loc="best")
+        plt.tight_layout()
         plt.axis('equal')
 
         self.__render(plt, title)

@@ -27,14 +27,17 @@ class GraphPresenter:
         :param f_of_framework: function on the Framework object
         :return:
         """
-        sorted_data = sorted(list(map(lambda f: (f.compact_name_description,
-                                                 f_of_framework(f)),
+        sorted_data = sorted(list(map(lambda f: (f_of_framework(f),
+                                                 f.compact_name,
+                                                 f.compact_name_description),
                                       list_of_frameworks)),
                              key=lambda tup: tup[0])
         plot_data = (list(map(lambda f: f[0], sorted_data)),
-                     list(map(lambda f: f[1], sorted_data)))
+                     list(map(lambda f: f[1], sorted_data)),
+                     list(map(lambda f: f[2], sorted_data)),
+                     )
 
-        self.graph.pie_plot(title, plot_data[0], plot_data[1])
+        self.graph.pie_plot(title, plot_data[0], plot_data[1], plot_data[2])
 
     def distance_from_main_sequence_plot(self, list_of_frameworks, x_ax_f_framework, y_ax_f_framework):
         """
