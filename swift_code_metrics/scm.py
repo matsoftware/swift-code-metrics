@@ -72,6 +72,8 @@ def main():
 
     # Creates graphs
     graph_presenter = GraphPresenter(artifacts)
+    non_test_frameworks = analyzer.filtered_frameworks(is_test=False)
+    test_frameworks = analyzer.filtered_frameworks(is_test=True)
 
     # Sorted data plots
     non_test_reports_sorted_data = {
@@ -89,17 +91,18 @@ def main():
 
     # Non-test graphs
     for title, framework_function in non_test_reports_sorted_data.items():
-        graph_presenter.sorted_data_plot(title, analyzer.filtered_frameworks(is_test=False), framework_function)
+        graph_presenter.sorted_data_plot(title, non_test_frameworks, framework_function)
 
     # Distance from the main sequence
-    graph_presenter.distance_from_main_sequence_plot(analyzer.filtered_frameworks(is_test=False),
+    graph_presenter.distance_from_main_sequence_plot(non_test_frameworks,
                                                      lambda fr: analyzer.instability(fr),
                                                      lambda fr: analyzer.abstractness(fr))
 
     # Code distribution
-    graph_presenter.pie_plot('Code distribution', analyzer.filtered_frameworks(is_test=False),
-                             lambda fr: ReportingHelpers.decimal_format(fr.loc / analyzer.report.non_test_framework_aggregate.loc))
+    graph_presenter.pie_plot('Code distribution', non_test_frameworks,
+                             lambda fr:
+                             ReportingHelpers.decimal_format(fr.loc / analyzer.report.non_test_framework_aggregate.loc))
 
     # Test graphs
     for title, framework_function in tests_reports_sorted_data.items():
-        graph_presenter.sorted_data_plot(title, analyzer.filtered_frameworks(is_test=True), framework_function)
+        graph_presenter.sorted_data_plot(title, test_frameworks, framework_function)
