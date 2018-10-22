@@ -63,7 +63,11 @@ class Graph:
             dir_graph.add_edge(e[0], e[1], label=e[2])
 
         dir_graph.layout('dot')
-        dir_graph.draw(self.__file_path(title))
+        try:
+            dir_graph.draw(self.__file_path(title))
+        except OSError:
+            # Fallback for minimal graphviz setup
+            dir_graph.draw(self.__file_path(title, extension='.svg'))
 
     # Private
 
@@ -75,8 +79,8 @@ class Graph:
             plt.savefig(save_file)
             plt.close()
 
-    def __file_path(self, name):
-        filename = Graph.format_filename(name) + '.pdf'
+    def __file_path(self, name, extension='.pdf'):
+        filename = Graph.format_filename(name) + extension
         return os.path.join(self.path, filename)
 
     @staticmethod
