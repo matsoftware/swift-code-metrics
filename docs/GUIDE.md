@@ -110,12 +110,12 @@ Legend:
 
 The `--generate-graphs` option will output the following reports:
 
+| Components coupling |
+|:-----------:|
+| ![Dependency graph](assets/dependency_graph.jpg) |
+| Dependency graph |
+| ![Distance from main sequence](assets/deviation_from_the_main_sequence.jpg) |
+
 | Code distribution |
 |:-----------:|
 |![LOC](assets/lines_of_code_-_loc.jpg) ![NOC](assets/number_of_comments_-_noc.jpg) ![Nc](assets/n._of_classes_and_structs.jpg) ![Nbm](assets/n._of_methods_-_nbm.jpg) ![NOT](assets/number_of_tests_-_not.jpg) ![Abstractness](assets/abstractness_-_a.jpg) ![Instability](assets/instability_-_i.jpg) ![Code distribution](assets/code_distribution.jpg) |
-
-| Component coupling |
-|:-----------:|
-| ![Distance from main sequence](assets/deviation_from_the_main_sequence.jpg) |
-| ![Dependency graph](assets/dependency_graph.jpg) |
-| Dependency graph |
