@@ -53,6 +53,7 @@ class Inspector:
         n_a = framework.number_of_interfaces
         n_c = framework.number_of_concrete_data_structures
         nbm = framework.number_of_methods
+        dependencies = list(map(lambda f: f[0].name + '(' + str(f[1]) + ')', framework.imports.items()))
         n_of_tests = framework.number_of_tests
 
         # Non-test framework analysis
@@ -76,6 +77,7 @@ class Inspector:
             "n_c": n_c,
             "nbm": nbm,
             "analysis": analysis,
+            "dependencies": dependencies,
             "not": n_of_tests
         }
 
@@ -111,7 +113,8 @@ class Inspector:
         framework.number_of_concrete_data_structures += len(swift_file.structs + swift_file.classes)
         framework.number_of_methods += len(swift_file.methods)
         framework.number_of_tests += len(swift_file.tests)
-        framework.is_test_framework = is_in_test_path # This cover the scenario where a test framework might contain no tests
+        # This cover the scenario where a test framework might contain no tests
+        framework.is_test_framework = is_in_test_path
 
         for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)

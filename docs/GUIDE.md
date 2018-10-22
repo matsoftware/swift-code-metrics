@@ -27,6 +27,10 @@ The example below is available [here](../tests/test_resources/expected_output.js
                 "n_c": 3,
                 "nbm": 3,
                 "analysis": "The code is under commented. Low abstract component, few interfaces. ",
+                "dependencies": [
+                    "UIKit(1)",
+                    "FoundationFramework(1)"
+                ],
                 "not": 0,
                 "fan_in": 1,
                 "fan_out": 2,
@@ -49,6 +53,9 @@ The example below is available [here](../tests/test_resources/expected_output.js
                 "n_c": 1,
                 "nbm": 1,
                 "analysis": "The code is over commented. ",
+                "dependencies": [
+                    "XCTest(1)"
+                ],
                 "not": 1
             }
         },
@@ -89,7 +96,7 @@ The example below is available [here](../tests/test_resources/expected_output.js
 }
 ```
 
-Legend:
+KPIs legend:
 
 |    Key    |              Metric              |                                             Description                                             |
 |:---------:|:--------------------------------:|:---------------------------------------------------------------------------------------------------:|
@@ -106,6 +113,14 @@ Legend:
 |   `nbm`   |         Number of methods        |                              Number of `func` (computed `var` excluded)                             |
 |   `not`   |          Number of tests         |                      Number of methods in test frameworks starting with `test`                      |
 
+In addition:
+
+|      Key       |     Description      |
+|:--------------:|:--------------------:|
+|   `analysis`   | Code metrics analysis on the code regarding percentage of comments and components coupling |
+| `dependencies` | List of internal and external dependencies, with number of imports |
+
+
 ## Graphs
 
 The `--generate-graphs` option will output the following reports:
@@ -113,8 +128,9 @@ The `--generate-graphs` option will output the following reports:
 | Components coupling |
 |:-----------:|
 | ![Dependency graph](assets/dependency_graph.jpg) |
-| Dependency graph |
+| Dependency graph, with number of imports of _destination_ from _origin_ . |
 | ![Distance from main sequence](assets/deviation_from_the_main_sequence.jpg) |
+| Distance of a library from the ideal domain. |
 
 | Code distribution |
 |:-----------:|

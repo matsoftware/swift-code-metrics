@@ -9,6 +9,10 @@
                 "n_c": 3,
                 "nbm": 3,
                 "analysis": "The code is under commented. Low abstract component, few interfaces. ",
+                "dependencies": [
+                    "UIKit(1)",
+                    "FoundationFramework(1)"
+                ],
                 "not": 0,
                 "fan_in": 1,
                 "fan_out": 2,
@@ -26,6 +30,9 @@
                 "n_c": 2,
                 "nbm": 3,
                 "analysis": "Zone of Uselessness. Maximally abstract with few or no dependents - potentially useless. This component is high likely a leftover that should be removed.",
+                "dependencies": [
+                    "Foundation(2)"
+                ],
                 "not": 0,
                 "fan_in": 1,
                 "fan_out": 2,
@@ -43,6 +50,10 @@
                 "n_c": 2,
                 "nbm": 4,
                 "analysis": "Highly unstable component (lack of dependents, easy to change, irresponsible) Low abstract component, few interfaces. ",
+                "dependencies": [
+                    "UIKit(2)",
+                    "BusinessLogic(1)"
+                ],
                 "not": 0,
                 "fan_in": 0,
                 "fan_out": 3,
@@ -62,6 +73,9 @@
                 "n_c": 1,
                 "nbm": 1,
                 "analysis": "The code is over commented. ",
+                "dependencies": [
+                    "XCTest(1)"
+                ],
                 "not": 1
             }
         },
@@ -74,6 +88,10 @@
                 "n_c": 2,
                 "nbm": 5,
                 "analysis": "",
+                "dependencies": [
+                    "XCTest(2)",
+                    "Foundation(1)"
+                ],
                 "not": 3
             }
         },
@@ -86,6 +104,9 @@
                 "n_c": 1,
                 "nbm": 1,
                 "analysis": "The code is over commented. ",
+                "dependencies": [
+                    "XCTest(1)"
+                ],
                 "not": 1
             }
         }
