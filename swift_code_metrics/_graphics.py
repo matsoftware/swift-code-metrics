@@ -60,7 +60,7 @@ class Graph:
         dir_graph.node_attr['shape'] = 'rectangle'
         dir_graph.node_attr['size'] = '10'
         for e in list_of_edges:
-            dir_graph.add_edge(e[0], e[1], label=e[2])
+            dir_graph.add_edge(e[0], e[1], label=e[2], color=e[3], fontcolor=e[3])
 
         dir_graph.layout('dot')
         try:

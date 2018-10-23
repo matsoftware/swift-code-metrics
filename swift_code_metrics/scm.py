@@ -98,7 +98,7 @@ def main():
                                                      lambda fr: analyzer.instability(fr),
                                                      lambda fr: analyzer.abstractness(fr))
 
-    # Dependency graph
+    # Internal dependency graph
     graph_presenter.dependency_graph(non_test_frameworks)
 
     # Code distribution
