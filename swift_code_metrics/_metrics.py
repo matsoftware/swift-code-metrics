@@ -1,4 +1,4 @@
-
+from ._helpers import AnalyzerHelpers
 
 class Metrics:
 
@@ -75,9 +75,13 @@ class Metrics:
         """
         :param framework: The framework to inspect for imports
         :param frameworks: The other frameworks in the project
-        :return: List of imported frameworks that are external to the project (e.g. system or third party libraries)
+        :return: List of imported frameworks that are external to the project (e.g third party libraries).
+        System libraries excluded.
         """
-        return Metrics.__filtered_imports(framework, frameworks, is_internal=False)
+        return sorted(list(
+            filter(lambda f: f.framework not in AnalyzerHelpers.APPLE_FRAMEWORKS,
+                   Metrics.__filtered_imports(framework, frameworks, is_internal=False))
+        ), key=lambda f: f.framework)
 
     @staticmethod
     def internal_dependencies(framework, frameworks):
@@ -87,6 +91,7 @@ class Metrics:
         :return: List of imported frameworks that are internal to the project
         """
         return Metrics.__filtered_imports(framework, frameworks, is_internal=True)
+
 
     @staticmethod
     def percentage_of_comments(noc, loc):

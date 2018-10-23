@@ -35,8 +35,7 @@ class MetricsTests(unittest.TestCase):
             self.foundation_kit.append_import(sf)
 
         foundation_external_deps = Metrics.external_dependencies(self.foundation_kit, self.frameworks)
-        expected_external_deps = list(map(lambda f: Dependency(f.name, number_of_imports=1),
-                                          MetricsTests.__dummy_external_frameworks()))
+        expected_external_deps = [Dependency('AwesomeDependency', 1), Dependency('RxSwift', 1)]
 
         design_external_deps = Metrics.external_dependencies(self.design_kit, self.frameworks)
 
@@ -66,6 +65,7 @@ class MetricsTests(unittest.TestCase):
             Framework('Foundation'),
             Framework('UIKit'),
             Framework('RxSwift'),
+            Framework('AwesomeDependency')
         ]
 
 
