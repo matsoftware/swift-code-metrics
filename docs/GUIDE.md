@@ -10,8 +10,8 @@ A sample project is provided in the `resources` folder:
 
 ### Output format
 
-The `output.json` file will contain the metrics related to all frameworks 
-and an _aggregate_ result for the project. 
+The `output.json` file will contain the metrics related to all frameworks
+and an _aggregate_ result for the project.
 
 The example below is available [here](../tests/test_resources/expected_output.json).
 
@@ -39,9 +39,9 @@ The example below is available [here](../tests/test_resources/expected_output.js
                 "d_3": 0.333
             }
         },
-        
+
         ...
-        
+
     ],
     "tests-frameworks": [
         {
@@ -59,10 +59,10 @@ The example below is available [here](../tests/test_resources/expected_output.js
                 "not": 1
             }
         },
-        
+
         ...
-        
-        
+
+
     ],
     "aggregate": {
         "non-test-frameworks": {
@@ -115,23 +115,23 @@ KPIs legend:
 
 In addition:
 
-|      Key       |     Description      |
-|:--------------:|:--------------------:|
+|      Key       |                                        Description                                         |
+|:--------------:|:------------------------------------------------------------------------------------------:|
 |   `analysis`   | Code metrics analysis on the code regarding percentage of comments and components coupling |
-| `dependencies` | List of internal and external dependencies, with number of imports |
+| `dependencies` |             List of internal and external dependencies, with number of imports             |
 
 
 ## Graphs
 
 The `--generate-graphs` option will output the following reports:
 
-| Components coupling |
-|:-----------:|
-| ![Dependency graph](assets/dependency_graph.jpg) |
-| Dependency graph, with number of imports of _destination_ from _origin_ . |
+|                             Components coupling                             |
+|:---------------------------------------------------------------------------:|
+|              ![Dependency graph](assets/dependency_graph.jpg)               |
+|  Dependency graph, with number of imports of _destination_ from _origin_ .  |
 | ![Distance from main sequence](assets/deviation_from_the_main_sequence.jpg) |
-| Distance of a library from the ideal domain. |
+|                Distance of a library from the ideal domain.                 |
 
-| Code distribution |
-|:-----------:|
-|![LOC](assets/lines_of_code_-_loc.jpg) ![NOC](assets/number_of_comments_-_noc.jpg) ![Nc](assets/n._of_classes_and_structs.jpg) ![Nbm](assets/n._of_methods_-_nbm.jpg) ![NOT](assets/number_of_tests_-_not.jpg) ![Abstractness](assets/abstractness_-_a.jpg) ![Instability](assets/instability_-_i.jpg) ![Code distribution](assets/code_distribution.jpg) |
+|                                                                                                                                                                     Code distribution                                                                                                                                                                     |
+|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| ![LOC](assets/lines_of_code_-_loc.jpg) ![NOC](assets/number_of_comments_-_noc.jpg) ![Nc](assets/n._of_classes_and_structs.jpg) ![Nbm](assets/n._of_methods_-_nbm.jpg) ![NOT](assets/number_of_tests_-_not.jpg) ![Abstractness](assets/abstractness_-_a.jpg) ![Instability](assets/instability_-_i.jpg) ![Code distribution](assets/code_distribution.jpg) |
