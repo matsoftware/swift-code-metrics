@@ -66,7 +66,7 @@ class Metrics:
         :return: The Fan-Out value (int)
         """
         fan_out = 0
-        for key, value in framework.imports.items():
+        for _, value in framework.imports.items():
             fan_out += value
         return fan_out
 

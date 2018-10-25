@@ -97,7 +97,7 @@ class Inspector:
     # Directory inspection
 
     def __analyze_directory(self, directory, exclude_paths, tests_default_paths):
-        for subdir, dirs, files in os.walk(directory):
+        for subdir, _, files in os.walk(directory):
             for file in files:
                 if file.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION) and \
                         not AnalyzerHelpers.is_path_in_list(subdir, exclude_paths):
