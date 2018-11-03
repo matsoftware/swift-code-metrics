@@ -49,6 +49,16 @@ class HelpersTests(unittest.TestCase):
         string = 'import Foundation'
         self.assertEqual('Foundation', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
+    def test_helpers_imports_submodule_expectTrue(self):
+        regex = _helpers.ParsingHelpers.IMPORTS
+        string = 'import Foundation.KeyChain'
+        self.assertEqual('Foundation', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_imports_subcomponent_expectTrue(self):
+        regex = _helpers.ParsingHelpers.IMPORTS
+        string = 'import struct Foundation.KeyChain'
+        self.assertEqual('Foundation', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
     # Protocols
 
     def test_helpers_protocols_extract_substring_with_pattern_expectFalse(self):
