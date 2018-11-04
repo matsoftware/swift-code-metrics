@@ -81,8 +81,6 @@ def main():
         'Lines Of Code - LOC': lambda fr: fr.loc,
         'Number Of Comments - NOC': lambda fr: fr.noc,
         'N. of methods - NBM': lambda fr: fr.number_of_methods,
-        'Instability - I': lambda fr: analyzer.instability(fr),
-        'Abstractness - A': lambda fr: analyzer.abstractness(fr),
     }
 
     tests_reports_sorted_data = {

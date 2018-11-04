@@ -93,8 +93,11 @@ class Metrics:
 
     @staticmethod
     def total_dependencies(framework):
+        """
+        :param framework: The framework to inspect
+        :return: The list of imported frameworks description
+        """
         return seq(framework.imports.items()) \
-            .filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS) \
             .map(lambda f: f[0].compact_description) \
             .list()
 
