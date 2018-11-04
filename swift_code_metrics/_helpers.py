@@ -2,7 +2,6 @@ import re
 
 
 class AnalyzerHelpers:
-
     # Constants
 
     SWIFT_FILE_EXTENSION = '.swift'
@@ -161,7 +160,6 @@ class AnalyzerHelpers:
 
 
 class ParsingHelpers:
-
     # Constants
 
     DEFAULT_FRAMEWORK_NAME = 'AppTarget'
@@ -174,7 +172,7 @@ class ParsingHelpers:
     END_COMMENT = '\*/$'
     SINGLE_COMMENT = '^//'
 
-    IMPORTS = '(?<=^import)(?:[^.]+)\\b(\w+)'
+    IMPORTS = '(?<=^import )(?:\\b\w+\s|)([^.; ]+)'
 
     PROTOCOLS = '.*protocol (.*?)[:|{|\s]'
     STRUCTS = '.*struct (.*?)[:|{|\s]'

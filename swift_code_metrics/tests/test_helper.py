@@ -36,7 +36,6 @@ class HelpersTests(unittest.TestCase):
         string = '// True single line comment'
         self.assertTrue(_helpers.ParsingHelpers.check_existence(regex, string))
 
-
     # Imports
 
     def test_helpers_imports_extract_substring_with_pattern_expectFalse(self):
@@ -44,9 +43,14 @@ class HelpersTests(unittest.TestCase):
         string = '//import Foundation '
         self.assertEqual('', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
+    def test_helpers_imports_leading_semicolon_expectFalse(self):
+        regex = _helpers.ParsingHelpers.IMPORTS
+        string = 'import Foundation;'
+        self.assertEqual('Foundation', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
     def test_helpers_imports_extract_substring_with_pattern_expectTrue(self):
         regex = _helpers.ParsingHelpers.IMPORTS
-        string = 'import Foundation'
+        string = 'import Foundation '
         self.assertEqual('Foundation', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
     def test_helpers_imports_submodule_expectTrue(self):
@@ -58,6 +62,11 @@ class HelpersTests(unittest.TestCase):
         regex = _helpers.ParsingHelpers.IMPORTS
         string = 'import struct Foundation.KeyChain'
         self.assertEqual('Foundation', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
+    def test_helpers_imports_specialwords_expectFalse(self):
+        regex = _helpers.ParsingHelpers.IMPORTS
+        string = 'importedMigratedComponents: AnyImportedComponent'
+        self.assertEqual('', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
     # Protocols
 
@@ -146,6 +155,7 @@ class HelpersTests(unittest.TestCase):
         regex = _helpers.ParsingHelpers.FUNCS
         string = 'private func funzione(){'
         self.assertEqual('funzione', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
 
 if __name__ == '__main__':
     unittest.main()
