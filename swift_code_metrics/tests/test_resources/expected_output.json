@@ -12,7 +12,7 @@
                 "noi": 1,
                 "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
                 "dependencies": [
-                    "FoundationFramework(2)"
+                    "FoundationFramework(1)"
                 ],
                 "fan_in": 1,
                 "fan_out": 1,

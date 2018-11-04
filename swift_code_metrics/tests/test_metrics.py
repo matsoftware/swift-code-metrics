@@ -29,9 +29,6 @@ class FrameworkTests(unittest.TestCase):
     def test_compact_name_description(self):
         self.assertEqual(self.framework.compact_name_description, 'AN = AwesomeName')
 
-    def test_compact_description(self):
-        self.assertEqual(self.framework.compact_description, 'AwesomeName(0)')
-
     def test_imports(self):
         expected_imports = {self.frameworks[0]: 1,
                             self.frameworks[2]: 1}
@@ -109,7 +106,7 @@ class MetricsTests(unittest.TestCase):
             self.foundation_kit.append_import(sf)
         self.foundation_kit.append_import(self.design_kit)
 
-        expected_deps = ['RxSwift(0)', 'AwesomeDependency(0)', 'DesignKit(0)']
+        expected_deps = ['RxSwift(1)', 'AwesomeDependency(1)', 'DesignKit(1)']
 
         self.assertEqual(expected_deps,
                          Metrics.total_dependencies(self.foundation_kit))

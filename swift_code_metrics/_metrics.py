@@ -2,6 +2,7 @@ from ._helpers import AnalyzerHelpers
 from functional import seq
 from warnings import warn
 
+
 class Metrics:
 
     @staticmethod
@@ -102,7 +103,7 @@ class Metrics:
         :return: The list of imported frameworks description
         """
         return seq(framework.imports.items()) \
-            .map(lambda f: f[0].compact_description) \
+            .map(lambda f: f'{f[0].name}({str(f[1])})') \
             .list()
 
     @staticmethod
@@ -240,10 +241,6 @@ class Framework:
     @property
     def compact_name_description(self) -> str:
         return f'{self.compact_name} = {self.name}'
-
-    @property
-    def compact_description(self) -> str:
-        return f'{self.name}({str(self.number_of_files)})'
 
 
 class Dependency:
