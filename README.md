@@ -5,6 +5,10 @@
 
 Code metrics analyzer for Swift projects.
 
+![Example internal distribution](docs/assets/example_internal_deps_graph.jpeg)
+
+![Example code distribution](docs/assets/code_distribution.jpeg) ![Example deviation main sequence](docs/assets/example_deviation_main_sequence.jpeg)
+
 ## Introduction
 
 The goal of this software is to provide an insight of the architectural state of a software written in `Swift` that consists in several modules.
@@ -23,7 +27,7 @@ Inspired by the book of Robert C. Martin, _Clean Architecture_, the software wil
 
 ## Requirements
 
-This is a _Python 3_ script that depends on _matplotlib_, _adjustText_, __pyfunctional__ and _pygraphviz_.
+This is a _Python 3_ script that depends on _matplotlib_, _adjustText_, _pyfunctional_ and _pygraphviz_.
 
 This latest package depends on the [Graphviz](https://www.graphviz.org/download/) binary that must be installed.
 
