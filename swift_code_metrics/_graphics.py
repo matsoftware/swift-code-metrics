@@ -1,10 +1,10 @@
 import string
 
 import matplotlib.pyplot as plt
-from math import ceil
 import os
-
+from functional import seq
 from adjustText import adjust_text
+from math import ceil
 import pygraphviz as pgv
 
 
@@ -63,12 +63,14 @@ class Graph:
 
         self.__render(plt, title)
 
-    def directed_graph(self, title, list_of_edges):
+    def directed_graph(self, title, list_of_nodes, list_of_edges):
         dir_graph = pgv.AGraph(directed=True, strict=True, rankdir='TD', name=title)
         dir_graph.node_attr['shape'] = 'rectangle'
-        dir_graph.node_attr['size'] = '10'
-        for e in list_of_edges:
-            dir_graph.add_edge(e[0], e[1], label=e[2], color=e[3], fontcolor=e[3])
+
+        seq(list_of_nodes).for_each(lambda n: dir_graph.add_node(n[0],
+                                                                 penwidth=ceil((n[1] + 1) / 2), width=(n[1] + 1)))
+        seq(list_of_edges).for_each(
+            lambda e: dir_graph.add_edge(e[0], e[1], label=e[2], penwidth=e[3], color=e[4], fontcolor=e[4]))
 
         dir_graph.layout('dot')
         try:

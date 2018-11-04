@@ -10,7 +10,6 @@ import sys
 
 
 def main():
-
     CLI = ArgumentParser(description='Analyzes the code metrics of a Swift project.')
     CLI.add_argument(
         '--source',
@@ -80,7 +79,7 @@ def main():
         'N. of classes and structs': lambda fr: fr.number_of_concrete_data_structures,
         'Lines Of Code - LOC': lambda fr: fr.loc,
         'Number Of Comments - NOC': lambda fr: fr.noc,
-        'N. of methods - NBM': lambda fr: fr.number_of_methods,
+        'N. of imports - NOI': lambda fr: fr.number_of_imports
     }
 
     tests_reports_sorted_data = {
@@ -96,8 +95,10 @@ def main():
                                                      lambda fr: analyzer.instability(fr),
                                                      lambda fr: analyzer.abstractness(fr))
 
-    # Internal dependency graph
-    graph_presenter.dependency_graph(non_test_frameworks)
+    # Dependency graph
+    graph_presenter.dependency_graph(non_test_frameworks,
+                                     analyzer.report.non_test_framework_aggregate.loc,
+                                     analyzer.report.non_test_framework_aggregate.n_o_i)
 
     # Code distribution
     graph_presenter.pie_plot('Code distribution', non_test_frameworks,

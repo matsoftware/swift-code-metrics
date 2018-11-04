@@ -1,5 +1,9 @@
+from swift_code_metrics._helpers import ReportingHelpers
 from swift_code_metrics._metrics import Metrics
 from ._graphics import Graph
+from functional import seq
+from math import ceil
+
 
 class GraphPresenter:
     def __init__(self, artifacts_path):
@@ -61,33 +65,34 @@ class GraphPresenter:
                                   scattered_data,
                                   bands)
 
-    def dependency_graph(self, list_of_frameworks):
+    def dependency_graph(self, list_of_frameworks, total_code, total_imports):
         """
         Renders the Frameworks dependency graph.
         """
 
-        internal_edges = list()
-        external_edges = list()
+        nodes = seq(list_of_frameworks).map(lambda fr: (fr.name, ceil(10 * fr.loc / total_code))).list()
 
-        for f in list_of_frameworks:
-            # Internal dependencies graph
-            internal_dep = Metrics.internal_dependencies(f, list_of_frameworks)
-            for ind in internal_dep:
-                internal_edges.append((ind.name, ind.dependent_framework, ind.number_of_imports, 'forestgreen'))
+        internal_edges = seq(list_of_frameworks) \
+            .flat_map(lambda fr: Metrics.internal_dependencies(fr, list_of_frameworks)) \
+            .map(lambda ind: GraphPresenter.__make_edge(ind, total_imports, 'forestgreen'))
 
-            # External dependencies graph
-            external_dep = Metrics.external_dependencies(f, list_of_frameworks)
-            for ed in external_dep:
-                external_edges.append((f.name, ed.dependent_framework, ed.number_of_imports, 'orangered'))
+        external_edges = seq(list_of_frameworks) \
+            .flat_map(lambda fr: Metrics.external_dependencies(fr, list_of_frameworks)) \
+            .map(lambda ed: GraphPresenter.__make_edge(ed, total_imports, 'orangered'))
 
-        self.__render_directed_graph('Internal dependencies graph', internal_edges)
-        self.__render_directed_graph('External dependencies graph', external_edges)
+        self.__render_directed_graph('Internal dependencies graph', nodes, internal_edges)
+        self.__render_directed_graph('External dependencies graph', nodes, external_edges)
 
         # Total
-        self.__render_directed_graph('Dependencies graph', internal_edges + external_edges)
+        self.__render_directed_graph('Dependencies graph', nodes, internal_edges + external_edges)
 
-    def __render_directed_graph(self, title, edges):
+    @staticmethod
+    def __make_edge(dep, total_imports, color):
+        return (dep.name, dep.dependent_framework, dep.number_of_imports,
+                ceil(10 * dep.number_of_imports / total_imports), color)
+
+    def __render_directed_graph(self, title, nodes, edges):
         try:
-            self.graph.directed_graph(title, edges)
+            self.graph.directed_graph(title, nodes, edges)
         except ValueError:
             print('Please ensure that you have Graphviz (https://www.graphviz.org/download) installed.')
