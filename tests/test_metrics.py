@@ -35,7 +35,8 @@ class MetricsTests(unittest.TestCase):
             self.foundation_kit.append_import(sf)
 
         foundation_external_deps = Metrics.external_dependencies(self.foundation_kit, self.frameworks)
-        expected_external_deps = [Dependency('AwesomeDependency', 1), Dependency('RxSwift', 1)]
+        expected_external_deps = [Dependency('FoundationKit', 'AwesomeDependency', 1),
+                                  Dependency('FoundationKit', 'RxSwift', 1)]
 
         design_external_deps = Metrics.external_dependencies(self.design_kit, self.frameworks)
 
@@ -49,8 +50,9 @@ class MetricsTests(unittest.TestCase):
         self.design_kit.append_import(self.foundation_kit)
 
         expected_foundation_internal_deps = []
-        expected_design_internal_deps = [Dependency('FoundationKit', 1)]
-        expected_app_layer_internal_deps = [Dependency('DesignKit', 2), Dependency('FoundationKit', 1)]
+        expected_design_internal_deps = [Dependency('DesignKit', 'FoundationKit', 1)]
+        expected_app_layer_internal_deps = [Dependency('ApplicationLayer', 'DesignKit', 2),
+                                            Dependency('ApplicationLayer', 'FoundationKit', 1)]
 
         self.assertEqual(expected_foundation_internal_deps,
                          Metrics.internal_dependencies(self.foundation_kit, self.frameworks))

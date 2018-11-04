@@ -1,5 +1,6 @@
 from ._helpers import AnalyzerHelpers
 
+
 class Metrics:
 
     @staticmethod
@@ -79,9 +80,9 @@ class Metrics:
         System libraries excluded.
         """
         return sorted(list(
-            filter(lambda f: f.framework not in AnalyzerHelpers.APPLE_FRAMEWORKS,
+            filter(lambda f: f.dependent_framework not in AnalyzerHelpers.APPLE_FRAMEWORKS,
                    Metrics.__filtered_imports(framework, frameworks, is_internal=False))
-        ), key=lambda f: f.framework)
+        ), key=lambda f: f.dependent_framework)
 
     @staticmethod
     def internal_dependencies(framework, frameworks):
@@ -91,7 +92,6 @@ class Metrics:
         :return: List of imported frameworks that are internal to the project
         """
         return Metrics.__filtered_imports(framework, frameworks, is_internal=True)
-
 
     @staticmethod
     def percentage_of_comments(noc, loc):
@@ -157,14 +157,14 @@ class Metrics:
     @staticmethod
     def __filtered_imports(framework, frameworks, is_internal):
         return list(
-            map(lambda imp: Dependency(imp[0].name, imp[1]),
+            map(lambda imp: Dependency(name=framework.name, dependent_framework=imp[0].name, number_of_imports=imp[1]),
                 dict(filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal,
                             framework.imports.items())).items()
-            )
+                )
         )
 
     @staticmethod
-    def __is_name_contained_in_list(framework, frameworks):
+    def __is_name_contained_in_list(framework, frameworks) -> bool:
         return len(list(
             filter(lambda f: f.name == framework.name, frameworks)
         )) > 0
@@ -211,13 +211,19 @@ class Framework:
 
 
 class Dependency:
-    def __init__(self, framework, number_of_imports=0):
-        self.framework = framework
+    def __init__(self, name: str, dependent_framework: str, number_of_imports: int =0):
+        self.name = name
+        self.dependent_framework = dependent_framework
         self.number_of_imports = number_of_imports
 
     def __eq__(self, other):
-        return (self.framework == other.framework) and \
+        return (self.name == other.name) and \
+               (self.dependent_framework == other.dependent_framework) and \
                (self.number_of_imports == other.number_of_imports)
 
     def __repr__(self):
-        return self.framework + '(' + str(self.number_of_imports) + ' imports)'
+        return self.name + ' - ' + self.dependent_framework + '(' + str(self.number_of_imports) + ' imports)'
+
+    @property
+    def relation(self) -> str:
+        return f'{self.name} > {self.dependent_framework}'

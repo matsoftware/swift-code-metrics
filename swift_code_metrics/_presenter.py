@@ -73,12 +73,12 @@ class GraphPresenter:
             # Internal dependencies graph
             internal_dep = Metrics.internal_dependencies(f, list_of_frameworks)
             for ind in internal_dep:
-                internal_edges.append((f.name, ind.framework, ind.number_of_imports, 'forestgreen'))
+                internal_edges.append((ind.name, ind.dependent_framework, ind.number_of_imports, 'forestgreen'))
 
             # External dependencies graph
             external_dep = Metrics.external_dependencies(f, list_of_frameworks)
             for ed in external_dep:
-                external_edges.append((f.name, ed.framework, ed.number_of_imports, 'orangered'))
+                external_edges.append((f.name, ed.dependent_framework, ed.number_of_imports, 'orangered'))
 
         self.__render_directed_graph('Internal dependencies graph', internal_edges)
         self.__render_directed_graph('External dependencies graph', external_edges)
