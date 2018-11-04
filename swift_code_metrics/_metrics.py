@@ -1,5 +1,5 @@
 from ._helpers import AnalyzerHelpers
-
+from functional import seq
 
 class Metrics:
 
@@ -79,10 +79,10 @@ class Metrics:
         :return: List of imported frameworks that are external to the project (e.g third party libraries).
         System libraries excluded.
         """
-        return sorted(list(
-            filter(lambda f: f.dependent_framework not in AnalyzerHelpers.APPLE_FRAMEWORKS,
-                   Metrics.__filtered_imports(framework, frameworks, is_internal=False))
-        ), key=lambda f: f.dependent_framework)
+        return seq(Metrics.__filtered_imports(framework, frameworks, is_internal=False))\
+            .filter(lambda f: f.dependent_framework not in AnalyzerHelpers.APPLE_FRAMEWORKS)\
+            .sorted(key=lambda f: f.dependent_framework)\
+            .list()
 
     @staticmethod
     def internal_dependencies(framework, frameworks):
@@ -152,23 +152,25 @@ class Metrics:
 
     @staticmethod
     def __other_frameworks(framework, frameworks):
-        return list(filter(lambda f: f is not framework, frameworks))
+        return seq(frameworks)\
+            .filter(lambda f: f is not framework)\
+            .list()
 
     @staticmethod
     def __filtered_imports(framework, frameworks, is_internal):
-        return list(
-            map(lambda imp: Dependency(name=framework.name, dependent_framework=imp[0].name, number_of_imports=imp[1]),
-                dict(filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal,
-                            framework.imports.items())).items()
-                )
-        )
+        return seq(framework.imports.items())\
+            .filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal)\
+            .map(lambda imp: Dependency(name=framework.name,
+                                        dependent_framework=imp[0].name,
+                                        number_of_imports=imp[1]))\
+            .list()
 
     @staticmethod
     def __is_name_contained_in_list(framework, frameworks) -> bool:
-        return len(list(
-            filter(lambda f: f.name == framework.name, frameworks)
-        )) > 0
-
+        return len(seq(frameworks)
+                   .filter(lambda f: f.name == framework.name)
+                   .list()) > 0
+    
 
 class Framework:
     def __init__(self, name):
@@ -211,7 +213,7 @@ class Framework:
 
 
 class Dependency:
-    def __init__(self, name: str, dependent_framework: str, number_of_imports: int =0):
+    def __init__(self, name: str, dependent_framework: str, number_of_imports: int = 0):
         self.name = name
         self.dependent_framework = dependent_framework
         self.number_of_imports = number_of_imports
