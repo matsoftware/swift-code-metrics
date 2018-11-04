@@ -18,11 +18,14 @@ Inspired by the book of Robert C. Martin, _Clean Architecture_, the software wil
 -   NBM (Number of Methods)
 -   Number of concretes (Number of classes and structs)
 -   NOT (Number Of Tests)
+-   NOI (Number Of Imports)
 -   Frameworks dependency graph (number of internal and external dependencies)
 
 ## Requirements
 
-This is a _Python 3_ script that depends on _matplotlib_, _adjustText_ and _pygraphviz_. This latest package depends on the [Graphviz](https://www.graphviz.org/download/) binary that must be installed.
+This is a _Python 3_ script that depends on _matplotlib_, _adjustText_, __pyfunctional__ and _pygraphviz_.
+
+This latest package depends on the [Graphviz](https://www.graphviz.org/download/) binary that must be installed.
 
 ## Usage
 

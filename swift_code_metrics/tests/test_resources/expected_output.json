@@ -9,6 +9,7 @@
                 "n_c": 3,
                 "nbm": 3,
                 "not": 0,
+                "noi": 1,
                 "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
                 "dependencies": [
                     "FoundationFramework(2)"
@@ -29,6 +30,7 @@
                 "n_c": 2,
                 "nbm": 3,
                 "not": 0,
+                "noi": 0,
                 "analysis": "Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
                 "dependencies": [],
                 "fan_in": 1,
@@ -47,6 +49,7 @@
                 "n_c": 2,
                 "nbm": 4,
                 "not": 0,
+                "noi": 1,
                 "analysis": "Highly unstable component (lack of dependents, easy to change, irresponsible) Low abstract component, few interfaces. ",
                 "dependencies": [
                     "BusinessLogic(1)"
@@ -69,6 +72,7 @@
                 "n_c": 1,
                 "nbm": 1,
                 "not": 1,
+                "noi": 0,
                 "analysis": "The code is over commented. ",
                 "dependencies": []
             }
@@ -82,6 +86,7 @@
                 "n_c": 2,
                 "nbm": 5,
                 "not": 3,
+                "noi": 0,
                 "analysis": "",
                 "dependencies": []
             }
@@ -95,6 +100,7 @@
                 "n_c": 1,
                 "nbm": 1,
                 "not": 1,
+                "noi": 0,
                 "analysis": "The code is over commented. ",
                 "dependencies": []
             }
@@ -108,6 +114,7 @@
             "n_c": 7,
             "nbm": 10,
             "not": 0,
+            "noi": 2,
             "poc": 26.515
         },
         "tests-frameworks": {
@@ -117,6 +124,7 @@
             "n_c": 4,
             "nbm": 7,
             "not": 5,
+            "noi": 0,
             "poc": 34.568
         },
         "total": {
@@ -126,6 +134,7 @@
             "n_c": 11,
             "nbm": 17,
             "not": 5,
+            "noi": 2,
             "poc": 29.577
         }
     }

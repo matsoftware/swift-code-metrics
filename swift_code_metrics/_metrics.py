@@ -218,8 +218,10 @@ class Framework:
         """
         :return: The total number of imports for this framework
         """
-        return seq(self.imports.items()) \
-            .reduce(lambda f1, f2: f1[1] + f2[1])
+        if len(self.imports.values()) == 0:
+            return 0
+        return seq(self.imports.values()) \
+            .reduce(lambda f1, f2: f1 + f2)
 
     @property
     def compact_name(self) -> str:

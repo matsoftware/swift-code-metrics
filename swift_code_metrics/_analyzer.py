@@ -58,6 +58,7 @@ class Inspector:
         nbm = framework.number_of_methods
         dependencies = Metrics.total_dependencies(framework)
         n_of_tests = framework.number_of_tests
+        n_of_imports = framework.number_of_imports
 
         # Non-test framework analysis
         non_test_analysis = {}
@@ -80,6 +81,7 @@ class Inspector:
             "n_c": n_c,
             "nbm": nbm,
             "not": n_of_tests,
+            "noi": n_of_imports,
             "analysis": analysis,
             "dependencies": dependencies,
         }
@@ -150,21 +152,23 @@ class Inspector:
 
 
 class _AggregateData:
-    def __init__(self, loc=0, noc=0, n_a=0, n_c=0, nbm=0, n_o_t=0):
+    def __init__(self, loc=0, noc=0, n_a=0, n_c=0, nbm=0, n_o_t=0, n_o_i=0):
         self.loc = loc
         self.noc = noc
         self.n_a = n_a
         self.n_c = n_c
         self.nbm = nbm
         self.n_o_t = n_o_t
+        self.n_o_i = n_o_i
 
-    def append_framework(self, f):
+    def append_framework(self, f: 'Framework'):
         self.loc += f.loc
         self.noc += f.noc
         self.n_a += f.number_of_interfaces
         self.n_c += f.number_of_concrete_data_structures
         self.nbm += f.number_of_methods
         self.n_o_t += f.number_of_tests
+        self.n_o_i += f.number_of_imports
 
     @property
     def poc(self):
@@ -179,6 +183,7 @@ class _AggregateData:
             "n_c": self.n_c,
             "nbm": self.nbm,
             "not": self.n_o_t,
+            "noi": self.n_o_i,
             "poc": ReportingHelpers.decimal_format(self.poc)
         }
 
@@ -189,7 +194,8 @@ class _AggregateData:
                               n_a=first.n_a + second.n_a,
                               n_c=first.n_c + second.n_c,
                               nbm=first.nbm + second.nbm,
-                              n_o_t=first.n_o_t + second.n_o_t)
+                              n_o_t=first.n_o_t + second.n_o_t,
+                              n_o_i=first.n_o_i + second.n_o_i)
 
 
 class _Report:

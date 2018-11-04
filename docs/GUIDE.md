@@ -1,19 +1,15 @@
 ## Guide
 
-How to use `swift-code-metrics`.
-
-## Example project
-
 A sample project is provided in the `resources` folder:
 
-`python3 swift-code-metrics-runner.py --source tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs`
+`python3 swift-code-metrics-runner.py --source swift_code_metrics/tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs`
 
 ### Output format
 
 The `output.json` file will contain the metrics related to all frameworks
 and an _aggregate_ result for the project.
 
-The example below is available [here](../swift_code_metrics/tests/test_resources/expected_output.json).
+The example below is an excerpt from the example available [here](../swift_code_metrics/tests/test_resources/expected_output.json).
 
 ```json
 {
@@ -26,22 +22,19 @@ The example below is available [here](../swift_code_metrics/tests/test_resources
                 "n_a": 0,
                 "n_c": 3,
                 "nbm": 3,
-                "analysis": "The code is under commented. Low abstract component, few interfaces. ",
-                "dependencies": [
-                    "UIKit(1)",
-                    "FoundationFramework(1)"
-                ],
                 "not": 0,
+                "noi": 1,
+                "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
+                "dependencies": [
+                    "FoundationFramework(2)"
+                ],
                 "fan_in": 1,
-                "fan_out": 2,
-                "i": 0.667,
+                "fan_out": 1,
+                "i": 0.5,
                 "a": 0.0,
-                "d_3": 0.333
+                "d_3": 0.5
             }
-        },
-
-        ...
-
+        }
     ],
     "tests-frameworks": [
         {
@@ -52,17 +45,12 @@ The example below is available [here](../swift_code_metrics/tests/test_resources
                 "n_a": 0,
                 "n_c": 1,
                 "nbm": 1,
+                "not": 1,
+                "noi": 0,
                 "analysis": "The code is over commented. ",
-                "dependencies": [
-                    "XCTest(1)"
-                ],
-                "not": 1
+                "dependencies": []
             }
-        },
-
-        ...
-
-
+        }
     ],
     "aggregate": {
         "non-test-frameworks": {
@@ -72,6 +60,7 @@ The example below is available [here](../swift_code_metrics/tests/test_resources
             "n_c": 7,
             "nbm": 10,
             "not": 0,
+            "noi": 2,
             "poc": 26.515
         },
         "tests-frameworks": {
@@ -81,6 +70,7 @@ The example below is available [here](../swift_code_metrics/tests/test_resources
             "n_c": 4,
             "nbm": 7,
             "not": 5,
+            "noi": 0,
             "poc": 34.568
         },
         "total": {
@@ -90,6 +80,7 @@ The example below is available [here](../swift_code_metrics/tests/test_resources
             "n_c": 11,
             "nbm": 17,
             "not": 5,
+            "noi": 2,
             "poc": 29.577
         }
     }
@@ -100,18 +91,19 @@ KPIs legend:
 
 |    Key    |              Metric              |                                             Description                                             |
 |:---------:|:--------------------------------:|:---------------------------------------------------------------------------------------------------:|
-|   `loc`   |           Lines Of Code          |                            Number of lines of code (empty lines excluded)                           |
-|   `noc`   |        Number of Comments        |                                          Number of comments                                         |
-|   `poc`   |      Percentage of Comments      |                                       100 * noc / ( noc + loc)                                      |
-|  `fan_in` |              Fan-In              | Incoming dependencies: number of classes  outside the framework that depend on classes  inside it.  |
-| `fan_out` |              Fan-Out             | Outgoing dependencies: number of classes  inside this component that depend on classes  outside it. |
-|    `i`    |            Instability           |                                   I = fan_out / (fan_in + fan_out)                                  |
-|   `n_a`   |        Number of abstracts       |                                 Number of protocols in the framework                                |
-|   `n_c`   |        Number of concretes       |                            Number of struct and classes in the framework                            |
+|   `loc`   |          Lines Of Code           |                           Number of lines of code (empty lines excluded)                            |
+|   `noc`   |        Number of Comments        |                                         Number of comments                                          |
+|   `poc`   |      Percentage of Comments      |                                      100 * noc / ( noc + loc)                                       |
+| `fan_in`  |              Fan-In              | Incoming dependencies: number of classes  outside the framework that depend on classes  inside it.  |
+| `fan_out` |             Fan-Out              | Outgoing dependencies: number of classes  inside this component that depend on classes  outside it. |
+|    `i`    |           Instability            |                                  I = fan_out / (fan_in + fan_out)                                   |
+|   `n_a`   |       Number of abstracts        |                                Number of protocols in the framework                                 |
+|   `n_c`   |       Number of concretes        |                            Number of struct and classes in the framework                            |
 |    `a`    |           Abstractness           |                                            A = n_a / n_c                                            |
-|   `d_3`   | Distance from  the main sequence |                                             D³ = abs( A + I - 1 )                                   |
-|   `nbm`   |         Number of methods        |                              Number of `func` (computed `var` excluded)                             |
-|   `not`   |          Number of tests         |                      Number of methods in test frameworks starting with `test`                      |
+|   `d_3`   | Distance from  the main sequence |                                        D³ = abs( A + I - 1 )                                        |
+|   `nbm`   |        Number of methods         |                             Number of `func` (computed `var` excluded)                              |
+|   `not`   |         Number of tests          |                      Number of methods in test frameworks starting with `test`                      |
+|   `noi`   |        Number of imports         |                                    Number of imported frameworks                                    |
 
 In addition:
 
