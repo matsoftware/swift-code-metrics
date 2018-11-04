@@ -26,7 +26,7 @@ The example below is an excerpt from the example available [here](../swift_code_
                 "noi": 1,
                 "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
                 "dependencies": [
-                    "FoundationFramework(2)"
+                    "FoundationFramework(1)"
                 ],
                 "fan_in": 1,
                 "fan_out": 1,
@@ -117,13 +117,13 @@ In addition:
 
 The `--generate-graphs` option will output the following reports:
 
-|                             Components coupling                             |
-|:---------------------------------------------------------------------------:|
-|              ![Dependency graph](assets/dependency_graph.jpg)               |
-|  Dependency graph, with number of imports of _destination_ from _origin_ .  |
-| ![Distance from main sequence](assets/deviation_from_the_main_sequence.jpg) |
-|                Distance of a library from the ideal domain.                 |
+|                             Components coupling                              |
+|:----------------------------------------------------------------------------:|
+|             ![Dependency graph](assets/dependencies_graph.jpeg)              |
+|  Dependency graph, with number of imports of _destination_ from _origin_ .   |
+| ![Distance from main sequence](assets/deviation_from_the_main_sequence.jpeg) |
+|                 Distance of a library from the ideal domain.                 |
 
-|                                                                                                                         Code distribution                                                                                                                         |
-|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| ![LOC](assets/lines_of_code_-_loc.jpg) ![NOC](assets/number_of_comments_-_noc.jpg) ![Nc](assets/n._of_classes_and_structs.jpg) ![Nbm](assets/n._of_methods_-_nbm.jpg) ![NOT](assets/number_of_tests_-_not.jpg) ![Code distribution](assets/code_distribution.jpg) |
+|                                                                                                        Code distribution                                                                                                         |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| ![LOC](assets/lines_of_code_-_loc.jpeg) ![NOC](assets/number_of_comments_-_noc.jpeg) ![Nc](assets/n._of_classes_and_structs.jpeg)  ![NOT](assets/number_of_tests_-_not.jpeg) ![Code distribution](assets/code_distribution.jpeg) |

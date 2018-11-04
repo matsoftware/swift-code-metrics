@@ -1,4 +1,3 @@
-from swift_code_metrics._helpers import ReportingHelpers
 from swift_code_metrics._metrics import Metrics
 from ._graphics import Graph
 from functional import seq

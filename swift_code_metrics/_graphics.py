@@ -70,7 +70,7 @@ class Graph:
         seq(list_of_nodes).for_each(lambda n: dir_graph.add_node(n[0],
                                                                  penwidth=ceil((n[1] + 1) / 2), width=(n[1] + 1)))
         seq(list_of_edges).for_each(
-            lambda e: dir_graph.add_edge(e[0], e[1], label=e[2], penwidth=e[3], color=e[4], fontcolor=e[4]))
+            lambda e: dir_graph.add_edge(e[0], e[1], label=e[2], penwidth=ceil((e[3] + 1) / 2), color=e[4], fontcolor=e[4]))
 
         dir_graph.layout('dot')
         try:
