@@ -214,6 +214,14 @@ class Framework:
             .dict()
 
     @property
+    def number_of_imports(self) -> int:
+        """
+        :return: The total number of imports for this framework
+        """
+        return seq(self.imports.items()) \
+            .reduce(lambda f1, f2: f1[1] + f2[1])
+
+    @property
     def compact_name(self) -> str:
         all_capitals = ''.join(c for c in self.name if c.isupper())
         if len(all_capitals) > 3:
@@ -231,7 +239,7 @@ class Framework:
 
     @property
     def compact_description(self) -> str:
-        return f'{self.name}({str(len(self.imports.keys()))})'
+        return f'{self.name}({str(self.number_of_files)})'
 
 
 class Dependency:

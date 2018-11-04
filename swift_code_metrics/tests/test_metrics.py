@@ -7,7 +7,7 @@ from functional import seq
 class FrameworkTests(unittest.TestCase):
 
     def setUp(self):
-        self.frameworks = [Framework('BusinessLogic'), Framework('UIKit')]
+        self.frameworks = [Framework('BusinessLogic'), Framework('UIKit'), Framework('Other'), ]
         self.framework = Framework('AwesomeName')
         seq(self.frameworks) \
             .for_each(lambda f: self.framework.append_import(f))
@@ -22,11 +22,15 @@ class FrameworkTests(unittest.TestCase):
         self.assertEqual(self.framework.compact_name_description, 'AN = AwesomeName')
 
     def test_compact_description(self):
-        self.assertEqual(self.framework.compact_description, 'AwesomeName(1)')
+        self.assertEqual(self.framework.compact_description, 'AwesomeName(0)')
 
     def test_imports(self):
-        expected_imports = {self.frameworks[0]: 1}
+        expected_imports = {self.frameworks[0]: 1,
+                            self.frameworks[2]: 1}
         self.assertEqual(expected_imports, self.framework.imports)
+
+    def test_number_of_imports(self):
+        self.assertEqual(2, self.framework.number_of_imports)
 
 
 class DependencyTests(unittest.TestCase):
