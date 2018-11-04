@@ -1,5 +1,11 @@
 # .coveragerc
 [run]
-include=swift_code_metrics/tests
+include=swift_code_metrics/*
+omit=
+    */__init__.py
+    */__main__.py
+    */version.py
+    */scm.py
+    */tests/*
 [report]
 show_missing = True
