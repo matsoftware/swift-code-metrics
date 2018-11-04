@@ -5,9 +5,9 @@
 
 Code metrics analyzer for Swift projects.
 
-| ![Example internal distribution](docs/assets/example_internal_deps_graph.jpeg)                                                                         |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------|
 | ![Example code distribution](docs/assets/code_distribution.jpeg)  ![Example deviation main sequence](docs/assets/example_deviation_main_sequence.jpeg) |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Example internal distribution](docs/assets/example_internal_deps_graph.jpeg)                                                                         |
 
 ## Introduction
 
