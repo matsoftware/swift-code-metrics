@@ -1,18 +1,47 @@
 import unittest
 from swift_code_metrics._metrics import Framework, Dependency
 from swift_code_metrics._metrics import Metrics
+from functional import seq
 
 
 class FrameworkTests(unittest.TestCase):
 
     def setUp(self):
-        self.dummy_framework = Framework('AwesomeName')
+        self.frameworks = [Framework('BusinessLogic'), Framework('UIKit')]
+        self.framework = Framework('AwesomeName')
+        seq(self.frameworks) \
+            .for_each(lambda f: self.framework.append_import(f))
+
+    def test_representation(self):
+        self.assertEqual(str(self.framework), 'AwesomeName(0 files)')
 
     def test_compact_name(self):
-        self.assertEqual(self.dummy_framework.compact_name, 'AN')
+        self.assertEqual(self.framework.compact_name, 'AN')
 
     def test_compact_name_description(self):
-        self.assertEqual(self.dummy_framework.compact_name_description, 'AN = AwesomeName')
+        self.assertEqual(self.framework.compact_name_description, 'AN = AwesomeName')
+
+    def test_compact_description(self):
+        self.assertEqual(self.framework.compact_description, 'AwesomeName(1)')
+
+    def test_imports(self):
+        expected_imports = {self.frameworks[0]: 1}
+        self.assertEqual(expected_imports, self.framework.imports)
+
+
+class DependencyTests(unittest.TestCase):
+
+    def setUp(self):
+        self.dependency = Dependency('AppLayer', 'DesignKit', 2)
+
+    def test_repr(self):
+        self.assertEqual('AppLayer - DesignKit (2) imports', str(self.dependency))
+
+    def test_compact_repr(self):
+        self.assertEqual('AppLayer (2)', self.dependency.compact_repr)
+
+    def test_relation(self):
+        self.assertEqual('AppLayer > DesignKit', self.dependency.relationship)
 
 
 class MetricsTests(unittest.TestCase):
@@ -24,6 +53,8 @@ class MetricsTests(unittest.TestCase):
         self.foundation_kit = Framework('FoundationKit')
         self.design_kit = Framework('DesignKit')
         self.app_layer = Framework('ApplicationLayer')
+        self.rxswift = Framework('RxSwift')
+        self.awesome_dependency = Framework('AwesomeDependency')
         self.frameworks = [
             self.foundation_kit,
             self.design_kit,
@@ -31,12 +62,12 @@ class MetricsTests(unittest.TestCase):
         ]
 
     def test_external_dependencies(self):
-        for sf in MetricsTests.__dummy_external_frameworks():
+        for sf in self.__dummy_external_frameworks:
             self.foundation_kit.append_import(sf)
 
         foundation_external_deps = Metrics.external_dependencies(self.foundation_kit, self.frameworks)
-        expected_external_deps = [Dependency('FoundationKit', 'AwesomeDependency', 1),
-                                  Dependency('FoundationKit', 'RxSwift', 1)]
+        expected_external_deps = [Dependency('FoundationKit', 'RxSwift', 1),
+                                  Dependency('FoundationKit', 'AwesomeDependency', 1)]
 
         design_external_deps = Metrics.external_dependencies(self.design_kit, self.frameworks)
 
@@ -61,13 +92,23 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(expected_app_layer_internal_deps,
                          Metrics.internal_dependencies(self.app_layer, self.frameworks))
 
-    @staticmethod
-    def __dummy_external_frameworks():
+    def test_total_dependencies(self):
+        for sf in self.__dummy_external_frameworks:
+            self.foundation_kit.append_import(sf)
+        self.foundation_kit.append_import(self.design_kit)
+
+        expected_deps = ['RxSwift(0)', 'AwesomeDependency(0)', 'DesignKit(0)']
+
+        self.assertEqual(expected_deps,
+                         Metrics.total_dependencies(self.foundation_kit))
+
+    @property
+    def __dummy_external_frameworks(self):
         return [
             Framework('Foundation'),
             Framework('UIKit'),
-            Framework('RxSwift'),
-            Framework('AwesomeDependency')
+            self.rxswift,
+            self.awesome_dependency,
         ]
 
 

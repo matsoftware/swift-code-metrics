@@ -8,6 +8,7 @@ import json
 class IntegrationTest(unittest.TestCase):
 
     def setUp(self):
+        self.maxDiff = None
         sys.argv.clear()
         sys.argv.append(os.path.dirname(os.path.realpath(__file__)))
         sys.argv.append("--source")

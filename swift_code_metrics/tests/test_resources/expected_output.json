@@ -9,15 +9,15 @@
                 "n_c": 3,
                 "nbm": 3,
                 "not": 0,
-                "analysis": "The code is under commented. Low abstract component, few interfaces. ",
+                "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
                 "dependencies": [
-                    "FoundationFramework(1)"
+                    "FoundationFramework(0)"
                 ],
                 "fan_in": 1,
-                "fan_out": 2,
-                "i": 0.667,
+                "fan_out": 1,
+                "i": 0.5,
                 "a": 0.0,
-                "d_3": 0.333
+                "d_3": 0.5
             }
         },
         {
@@ -29,13 +29,13 @@
                 "n_c": 2,
                 "nbm": 3,
                 "not": 0,
-                "analysis": "Zone of Uselessness. Maximally abstract with few or no dependents - potentially useless. This component is high likely a leftover that should be removed.",
+                "analysis": "Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
                 "dependencies": [],
                 "fan_in": 1,
-                "fan_out": 2,
-                "i": 0.667,
+                "fan_out": 0,
+                "i": 0.0,
                 "a": 0.5,
-                "d_3": 0.167
+                "d_3": 0.5
             }
         },
         {
@@ -52,7 +52,7 @@
                     "BusinessLogic(1)"
                 ],
                 "fan_in": 0,
-                "fan_out": 3,
+                "fan_out": 1,
                 "i": 1.0,
                 "a": 0.0,
                 "d_3": 0.0

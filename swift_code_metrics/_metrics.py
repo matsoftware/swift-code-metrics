@@ -1,6 +1,7 @@
 from ._helpers import AnalyzerHelpers
 from functional import seq
 
+
 class Metrics:
 
     @staticmethod
@@ -79,10 +80,7 @@ class Metrics:
         :return: List of imported frameworks that are external to the project (e.g third party libraries).
         System libraries excluded.
         """
-        return seq(Metrics.__filtered_imports(framework, frameworks, is_internal=False))\
-            .filter(lambda f: f.dependent_framework not in AnalyzerHelpers.APPLE_FRAMEWORKS)\
-            .sorted(key=lambda f: f.dependent_framework)\
-            .list()
+        return Metrics.__filtered_imports(framework, frameworks, is_internal=False)
 
     @staticmethod
     def internal_dependencies(framework, frameworks):
@@ -92,6 +90,13 @@ class Metrics:
         :return: List of imported frameworks that are internal to the project
         """
         return Metrics.__filtered_imports(framework, frameworks, is_internal=True)
+
+    @staticmethod
+    def total_dependencies(framework):
+        return seq(framework.imports.items()) \
+            .filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS) \
+            .map(lambda f: f[0].compact_description) \
+            .list()
 
     @staticmethod
     def percentage_of_comments(noc, loc):
@@ -152,17 +157,17 @@ class Metrics:
 
     @staticmethod
     def __other_frameworks(framework, frameworks):
-        return seq(frameworks)\
-            .filter(lambda f: f is not framework)\
+        return seq(frameworks) \
+            .filter(lambda f: f is not framework) \
             .list()
 
     @staticmethod
     def __filtered_imports(framework, frameworks, is_internal):
-        return seq(framework.imports.items())\
-            .filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal)\
+        return seq(framework.imports.items()) \
+            .filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal) \
             .map(lambda imp: Dependency(name=framework.name,
                                         dependent_framework=imp[0].name,
-                                        number_of_imports=imp[1]))\
+                                        number_of_imports=imp[1])) \
             .list()
 
     @staticmethod
@@ -170,7 +175,7 @@ class Metrics:
         return len(seq(frameworks)
                    .filter(lambda f: f.name == framework.name)
                    .list()) > 0
-    
+
 
 class Framework:
     def __init__(self, name):
@@ -182,21 +187,31 @@ class Framework:
         self.number_of_interfaces = 0
         self.number_of_methods = 0
         self.number_of_tests = 0
-        self.imports = {}
+        self.__total_imports = {}
         self.is_test_framework = False
 
     def __repr__(self):
         return self.name + '(' + str(self.number_of_files) + ' files)'
 
     def append_import(self, framework_import):
-        existing_framework = self.imports.get(framework_import)
+        existing_framework = self.__total_imports.get(framework_import)
         if not existing_framework:
-            self.imports[framework_import] = 1
+            self.__total_imports[framework_import] = 1
         else:
-            self.imports[framework_import] += 1
+            self.__total_imports[framework_import] += 1
 
     @property
-    def compact_name(self):
+    def imports(self):
+        """
+        Returns the list of framework imports without Apple libraries
+        :return: list of filtered imports
+        """
+        return seq(self.__total_imports.items()) \
+            .filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS) \
+            .dict()
+
+    @property
+    def compact_name(self) -> str:
         all_capitals = ''.join(c for c in self.name if c.isupper())
         if len(all_capitals) > 3:
             return all_capitals[0] + all_capitals[-1:]
@@ -208,8 +223,12 @@ class Framework:
             return all_capitals
 
     @property
-    def compact_name_description(self):
-        return self.compact_name + ' = ' + self.name
+    def compact_name_description(self) -> str:
+        return f'{self.compact_name} = {self.name}'
+
+    @property
+    def compact_description(self) -> str:
+        return f'{self.name}({str(len(self.imports.keys()))})'
 
 
 class Dependency:
@@ -224,8 +243,12 @@ class Dependency:
                (self.number_of_imports == other.number_of_imports)
 
     def __repr__(self):
-        return self.name + ' - ' + self.dependent_framework + '(' + str(self.number_of_imports) + ' imports)'
+        return f'{self.name} - {self.dependent_framework} ({str(self.number_of_imports)}) imports'
 
     @property
-    def relation(self) -> str:
+    def compact_repr(self) -> str:
+        return f'{self.name} ({str(self.number_of_imports)})'
+
+    @property
+    def relationship(self) -> str:
         return f'{self.name} > {self.dependent_framework}'

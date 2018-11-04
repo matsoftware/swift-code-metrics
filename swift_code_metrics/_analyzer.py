@@ -3,6 +3,7 @@ import json
 from ._helpers import AnalyzerHelpers, ReportingHelpers
 from ._parser import SwiftFileParser
 from ._metrics import Framework, Metrics
+from functional import seq
 
 
 class Inspector:
@@ -17,7 +18,9 @@ class Inspector:
             self._save_report(artifacts)
 
     def filtered_frameworks(self, is_test=False):
-        return list(filter(lambda f: f.is_test_framework == is_test, self.frameworks))
+        return seq(self.frameworks) \
+            .filter(lambda f: f.is_test_framework == is_test) \
+            .list()
 
     def _generate_report(self):
         report = _Report()
@@ -53,10 +56,7 @@ class Inspector:
         n_a = framework.number_of_interfaces
         n_c = framework.number_of_concrete_data_structures
         nbm = framework.number_of_methods
-        dependencies = list(
-            map(lambda f: f[0].name + '(' + str(f[1]) + ')',
-                filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS, framework.imports.items()))
-        )
+        dependencies = Metrics.total_dependencies(framework)
         n_of_tests = framework.number_of_tests
 
         # Non-test framework analysis
@@ -127,7 +127,9 @@ class Inspector:
 
     def __cleanup_external_dependencies(self):
         # It will remove external dependencies built as source
-        self.frameworks = list(filter(lambda f: f.number_of_files > 0, self.frameworks))
+        self.frameworks = seq(self.frameworks) \
+            .filter(lambda f: f.number_of_files > 0) \
+            .list()
 
     def __get_or_create_framework(self, framework_name):
         framework = self.__get_framework(framework_name)
@@ -142,6 +144,7 @@ class Inspector:
             if f.name == name:
                 return f
         return None
+
 
 # Report generation
 
