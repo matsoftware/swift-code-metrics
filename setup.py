@@ -7,7 +7,8 @@ with open("README.md", "r") as fh:
 install_requires = [
     "matplotlib",
     "adjustText",
-    "pygraphviz"
+    "pygraphviz",
+    "pyfunctional"
 ]
 
 setuptools.setup(
@@ -19,7 +20,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/matsoftware/swift-code-metrics",
-    packages=["swift_code_metrics"],
+    packages=setuptools.find_packages(exclude=['contrib', 'docs', 'tests*', 'test']),
     entry_points={
         "console_scripts": ['swift-code-metrics = swift_code_metrics.scm:main']
     },

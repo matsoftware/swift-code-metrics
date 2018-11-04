@@ -13,7 +13,7 @@ A sample project is provided in the `resources` folder:
 The `output.json` file will contain the metrics related to all frameworks
 and an _aggregate_ result for the project.
 
-The example below is available [here](../tests/test_resources/expected_output.json).
+The example below is available [here](../swift_code_metrics/tests/test_resources/expected_output.json).
 
 ```json
 {

@@ -1,3 +1,5 @@
 # .coveragerc
+[run]
+include=swift_code_metrics/tests
 [report]
 show_missing = True

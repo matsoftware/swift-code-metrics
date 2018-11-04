@@ -4,11 +4,12 @@ python:
   - "3.6"
 before_install:
   - pip install codecov
+  - pip install pytest pytest-cov
 install:
   - pip install -q coverage
   - pip install -r requirements.txt
   - pip install .
-script: tests/run_test.sh
+script: ./build_and_test.sh
 after_success:
   - codecov
 branches:

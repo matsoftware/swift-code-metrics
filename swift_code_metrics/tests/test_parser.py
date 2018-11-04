@@ -10,12 +10,12 @@ class ParserTests(unittest.TestCase):
 
     def _generate_mocks(self):
         self.example_parsed_file = _parser.SwiftFileParser(
-            file="test_resources/ExampleFile.swift",
-            base_path=""
+            file="swift_code_metrics/tests/test_resources/ExampleFile.swift",
+            base_path="swift_code_metrics/tests"
         ).parse()
         self.example_test_file = _parser.SwiftFileParser(
-            file="test_resources/ExampleTest.swift",
-            base_path="",
+            file="swift_code_metrics/tests/test_resources/ExampleTest.swift",
+            base_path="swift_code_metrics/tests",
             is_test=True
         ).parse()
 
