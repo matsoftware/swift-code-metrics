@@ -15,8 +15,16 @@ class FrameworkTests(unittest.TestCase):
     def test_representation(self):
         self.assertEqual(str(self.framework), 'AwesomeName(0 files)')
 
-    def test_compact_name(self):
-        self.assertEqual(self.framework.compact_name, 'AN')
+    def test_compact_name_morethanfourcapitals(self):
+        test_framework = Framework('FrameworkWithMoreThanFourCapitals')
+        self.assertEqual('FC', test_framework.compact_name)
+
+    def test_compact_name_lessthanfourcapitals(self):
+        self.assertEqual('AN', self.framework.compact_name)
+
+    def test_compact_name_nocapitals(self):
+        test_framework = Framework('nocapitals')
+        self.assertEqual('n', test_framework.compact_name)
 
     def test_compact_name_description(self):
         self.assertEqual(self.framework.compact_name_description, 'AN = AwesomeName')

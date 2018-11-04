@@ -226,10 +226,8 @@ class Framework:
     @property
     def compact_name(self) -> str:
         all_capitals = ''.join(c for c in self.name if c.isupper())
-        if len(all_capitals) > 3:
+        if len(all_capitals) > 4:
             return all_capitals[0] + all_capitals[-1:]
-        elif len(all_capitals) > 1:
-            return all_capitals
         elif len(all_capitals) == 0:
             return self.name[0]
         else:
