@@ -127,7 +127,7 @@ Dependency graph with number of imports of _destination_ from _origin_.
 
 The framework width and border size are directly proportional to the framework's LOC percentage compared to the total LOC. The thickness of the connection arrow between two frameworks is directly proportional to the percentage of imports call compared to the total number of imports.
 
-The tool will generate also the _external dependencies graph_ (which will represent the coupling of the source code with external libraries) and the _aggregate dependencies graph_ (which will represent both internal and external dependencies).
+The tool will generate also the _external dependencies graph_ (which will represent the coupling of the source code with external libraries) and the _aggregate dependencies graph_ (which will aggregate both internal and external dependencies).
 
 #### Distance from main sequence
 
@@ -142,4 +142,4 @@ For a more detailed description, please refer to the _Clean Architecture, Robert
 
 ### Code distribution
 
-| ![LOC](assets/lines_of_code_-_loc.jpeg) ![NOC](assets/number_of_comments_-_noc.jpeg) ![Nc](assets/n._of_classes_and_structs.jpeg)  ![NOT](assets/number_of_tests_-_not.jpeg) ![Code distribution](assets/code_distribution.jpeg) |
+![LOC](assets/lines_of_code_-_loc.jpeg) ![NOC](assets/number_of_comments_-_noc.jpeg) ![Nc](assets/n._of_classes_and_structs.jpeg)  ![NOT](assets/number_of_tests_-_not.jpeg) ![Code distribution](assets/code_distribution.jpeg)
