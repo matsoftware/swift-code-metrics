@@ -1,6 +1,6 @@
 from ._helpers import AnalyzerHelpers
+from ._helpers import Log
 from functional import seq
-from warnings import warn
 
 
 class Metrics:
@@ -32,7 +32,7 @@ class Metrics:
         fan_out = Metrics.fan_out(framework)
         sum_in_out = fan_in + fan_out
         if sum_in_out == 0:
-            warn(f'{framework.name} is not linked with the rest of the project.', Warning)
+            Log.warn(f'{framework.name} is not linked with the rest of the project.')
             return 0
         return fan_out / sum_in_out
 
@@ -46,7 +46,7 @@ class Metrics:
         :return: The abstractness value (double)
         """
         if framework.number_of_concrete_data_structures == 0:
-            warn(f'{framework.name} is an external dependency.', Warning)
+            Log.warn(f'{framework.name} is an external dependency.')
             return 0
         else:
             return framework.number_of_interfaces / framework.number_of_concrete_data_structures

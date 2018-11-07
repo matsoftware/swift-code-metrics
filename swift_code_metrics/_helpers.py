@@ -1,4 +1,13 @@
 import re
+import logging
+
+
+class Log:
+    __logger = logging.getLogger(__name__)
+
+    @classmethod
+    def warn(cls, message: str):
+        Log.__logger.warning(message)
 
 
 class AnalyzerHelpers:
