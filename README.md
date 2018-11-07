@@ -1,13 +1,13 @@
-[![Build Status](https://travis-ci.org/matsoftware/swift-code-metrics.svg?branch=master)](https://travis-ci.org/matsoftware/swift-code-metrics) [![codecov](https://codecov.io/gh/matsoftware/swift-code-metrics/branch/master/graph/badge.svg)](https://codecov.io/gh/matsoftware/swift-code-metrics) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ff12e0cafce4ec68024d47b000d2e42)](https://app.codacy.com/app/matsoftware/swift-code-metrics?utm_source=github.com&utm_medium=referral&utm_content=matsoftware/swift-code-metrics&utm_campaign=Badge_Grade_Dashboard)
-[![PyPI](https://img.shields.io/pypi/v/swift-code-metrics.svg)](https://pypi.python.org/pypi/swift-code-metrics) [![License](https://img.shields.io/badge/license-MIT-blue.svg?x=1)](LICENSE)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics?ref=badge_shield) [![License](https://img.shields.io/badge/license-MIT-blue.svg?x=1)](LICENSE) [![Build Status](https://travis-ci.org/matsoftware/swift-code-metrics.svg?branch=master)](https://travis-ci.org/matsoftware/swift-code-metrics) [![codecov](https://codecov.io/gh/matsoftware/swift-code-metrics/branch/master/graph/badge.svg)](https://codecov.io/gh/matsoftware/swift-code-metrics) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ff12e0cafce4ec68024d47b000d2e42)](https://app.codacy.com/app/matsoftware/swift-code-metrics?utm_source=github.com&utm_medium=referral&utm_content=matsoftware/swift-code-metrics&utm_campaign=Badge_Grade_Dashboard)
+[![PyPI](https://img.shields.io/pypi/v/swift-code-metrics.svg)](https://pypi.python.org/pypi/swift-code-metrics)
 
 # swift-code-metrics
 
 Code metrics analyzer for Swift projects.
 
-| ![Example code distribution](docs/assets/code_distribution.jpeg)  ![Example deviation main sequence](docs/assets/example_deviation_main_sequence.jpeg) |
+| ![Example code distribution](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/code_distribution.jpeg) ![Example deviation main sequence](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/example_deviation_main_sequence.jpeg) |
 |--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![Example internal distribution](docs/assets/example_internal_deps_graph.jpeg)                                                                         |
+| ![Example internal distribution](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/example_internal_deps_graph.jpeg)                                                                         |
 
 ## Introduction
 
@@ -47,7 +47,7 @@ The syntax is:
 
 ## Documentation
 
-Please follow the [guide](docs/GUIDE.md) with a practical example to get started.
+Please follow the [guide](https://github.com/matsoftware/swift-code-metrics/tree/master/docs/GUIDE.md) with a practical example to get started.
 
 ## Current limitations
 
