@@ -119,10 +119,17 @@ The `--generate-graphs` option will output the following reports:
 
 ### Components coupling
 
+#### Dependency graph
+
 ![Dependency graph](assets/example_internal_deps_graph.jpeg)
 
-Dependency graph, with number of imports of _destination_ from _origin_.
+Dependency graph with number of imports of _destination_ from _origin_.
+
 The framework width and border size are directly proportional to the framework's LOC percentage compared to the total LOC. The thickness of the connection arrow between two frameworks is directly proportional to the percentage of imports call compared to the total number of imports.
+
+The tool will generate also the _external dependencies graph_ (which will represent the coupling of the source code with external libraries) and the _aggregate dependencies graph_ (which will represent both internal and external dependencies).
+
+#### Distance from main sequence
 
 ![Distance from main sequence](assets/example_deviation_main_sequence.jpeg)
 
@@ -133,7 +140,6 @@ A framework with I < 0.5 and A < 0.5 indicates a library that's rigid to change,
 
 For a more detailed description, please refer to the _Clean Architecture, Robert C. Martin_ book, Chapter 14 _Component Coupling_.
 
+### Code distribution
 
-|                                                                                                        Code distribution                                                                                                         |
-|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | ![LOC](assets/lines_of_code_-_loc.jpeg) ![NOC](assets/number_of_comments_-_noc.jpeg) ![Nc](assets/n._of_classes_and_structs.jpeg)  ![NOT](assets/number_of_tests_-_not.jpeg) ![Code distribution](assets/code_distribution.jpeg) |
