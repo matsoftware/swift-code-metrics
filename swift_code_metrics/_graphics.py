@@ -11,6 +11,7 @@ import pygraphviz as pgv
 class Graph:
     def __init__(self, path=None):
         self.path = path
+        plt.rc('legend', fontsize='small')
 
     def bar_plot(self, title, data):
         plt.title(title)
@@ -32,7 +33,7 @@ class Graph:
     def pie_plot(self, title, sizes, labels, legend):
         plt.title(title)
         patches, _, _ = plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
-        plt.legend(patches, legend, loc='lower left')
+        plt.legend(patches, legend, loc='best')
         plt.tight_layout()
         plt.axis('equal')
 
@@ -70,7 +71,11 @@ class Graph:
         seq(list_of_nodes).for_each(lambda n: dir_graph.add_node(n[0],
                                                                  penwidth=ceil((n[1] + 1) / 2), width=(n[1] + 1)))
         seq(list_of_edges).for_each(
-            lambda e: dir_graph.add_edge(e[0], e[1], label=e[2], penwidth=ceil((e[3] + 1) / 2), color=e[4], fontcolor=e[4]))
+            lambda e: dir_graph.add_edge(e[0], e[1],
+                                         label=e[2],
+                                         penwidth=ceil((e[3] + 1) / 2),
+                                         color=e[4],
+                                         fontcolor=e[4]))
 
         dir_graph.layout('dot')
         try:
