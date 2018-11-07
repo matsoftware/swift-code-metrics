@@ -117,12 +117,22 @@ In addition:
 
 The `--generate-graphs` option will output the following reports:
 
-|                             Components coupling                              |
-|:----------------------------------------------------------------------------:|
-|             ![Dependency graph](assets/dependencies_graph.jpeg)              |
-|  Dependency graph, with number of imports of _destination_ from _origin_ .   |
-| ![Distance from main sequence](assets/deviation_from_the_main_sequence.jpeg) |
-|                 Distance of a library from the ideal domain.                 |
+### Components coupling
+
+![Dependency graph](assets/example_internal_deps_graph.jpeg)
+
+Dependency graph, with number of imports of _destination_ from _origin_.
+The framework width and border size are directly proportional to the framework's LOC percentage compared to the total LOC. The thickness of the connection arrow between two frameworks is directly proportional to the percentage of imports call compared to the total number of imports.
+
+![Distance from main sequence](assets/example_deviation_main_sequence.jpeg)
+
+It express the components coupling in terms of stability and abstraction.
+
+Ideally, components should be close to the ideal domain (in green) and the most distant areas are identified as _zones of pain_ (in red).
+A framework with I < 0.5 and A < 0.5 indicates a library that's rigid to change, usually a foundation component. Instead, with I > 0.5 and A > 0.5, it's possible to identify components with few dependents that's easy to change, usually representing a container of leftovers or elements still being fully developed.
+
+For a more detailed description, please refer to the _Clean Architecture, Robert C. Martin_ book, Chapter 14 _Component Coupling_.
+
 
 |                                                                                                        Code distribution                                                                                                         |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|

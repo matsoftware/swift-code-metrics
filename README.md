@@ -6,8 +6,8 @@
 Code metrics analyzer for Swift projects.
 
 | ![Example code distribution](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/code_distribution.jpeg) ![Example deviation main sequence](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/example_deviation_main_sequence.jpeg) |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![Example internal distribution](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/example_internal_deps_graph.jpeg)                                                                         |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Example internal distribution](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/example_internal_deps_graph.jpeg)                                                                                                                                                |
 
 ## Introduction
 
