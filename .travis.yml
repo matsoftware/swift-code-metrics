@@ -4,7 +4,7 @@ python:
   - "3.6"
 before_install:
   - pip install codecov
-  - pip install pytest pytest-cov
+  - pip install pytest 'pytest-cov==2.5.0'
 install:
   - pip install -q coverage
   - pip install -r requirements.txt
