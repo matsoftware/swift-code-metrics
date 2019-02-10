@@ -19,7 +19,7 @@ Inspired by the book of Robert C. Martin, _Clean Architecture_, the software wil
 -   LOC (Lines Of Code)
 -   NOC (Numbers Of Comments)
 -   POC (Percentage Of Comments)
--   NBM (Number of Methods)
+-   NOM (Number of Methods)
 -   Number of concretes (Number of classes and structs)
 -   NOT (Number Of Tests)
 -   NOI (Number Of Imports)

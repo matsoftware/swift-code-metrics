@@ -55,7 +55,7 @@ class Inspector:
         analysis = Metrics.poc_analysis(poc)
         n_a = framework.number_of_interfaces
         n_c = framework.number_of_concrete_data_structures
-        nbm = framework.number_of_methods
+        nom = framework.number_of_methods
         dependencies = Metrics.total_dependencies(framework)
         n_of_tests = framework.number_of_tests
         n_of_imports = framework.number_of_imports
@@ -79,7 +79,7 @@ class Inspector:
             "poc": ReportingHelpers.decimal_format(poc),
             "n_a": n_a,
             "n_c": n_c,
-            "nbm": nbm,
+            "nom": nom,
             "not": n_of_tests,
             "noi": n_of_imports,
             "analysis": analysis,
@@ -152,12 +152,12 @@ class Inspector:
 
 
 class _AggregateData:
-    def __init__(self, loc=0, noc=0, n_a=0, n_c=0, nbm=0, n_o_t=0, n_o_i=0):
+    def __init__(self, loc=0, noc=0, n_a=0, n_c=0, nom=0, n_o_t=0, n_o_i=0):
         self.loc = loc
         self.noc = noc
         self.n_a = n_a
         self.n_c = n_c
-        self.nbm = nbm
+        self.nom = nom
         self.n_o_t = n_o_t
         self.n_o_i = n_o_i
 
@@ -166,7 +166,7 @@ class _AggregateData:
         self.noc += f.noc
         self.n_a += f.number_of_interfaces
         self.n_c += f.number_of_concrete_data_structures
-        self.nbm += f.number_of_methods
+        self.nom += f.number_of_methods
         self.n_o_t += f.number_of_tests
         self.n_o_i += f.number_of_imports
 
@@ -181,7 +181,7 @@ class _AggregateData:
             "noc": self.noc,
             "n_a": self.n_a,
             "n_c": self.n_c,
-            "nbm": self.nbm,
+            "nom": self.nom,
             "not": self.n_o_t,
             "noi": self.n_o_i,
             "poc": ReportingHelpers.decimal_format(self.poc)
@@ -193,7 +193,7 @@ class _AggregateData:
                               noc=first.noc + second.noc,
                               n_a=first.n_a + second.n_a,
                               n_c=first.n_c + second.n_c,
-                              nbm=first.nbm + second.nbm,
+                              nom=first.nom + second.nom,
                               n_o_t=first.n_o_t + second.n_o_t,
                               n_o_i=first.n_o_i + second.n_o_i)
 

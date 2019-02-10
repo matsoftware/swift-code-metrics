@@ -21,7 +21,7 @@ The example below is an excerpt from the example available [here](../swift_code_
                 "poc": 12.5,
                 "n_a": 0,
                 "n_c": 3,
-                "nbm": 3,
+                "nom": 3,
                 "not": 0,
                 "noi": 1,
                 "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
@@ -44,7 +44,7 @@ The example below is an excerpt from the example available [here](../swift_code_
                 "poc": 50.0,
                 "n_a": 0,
                 "n_c": 1,
-                "nbm": 1,
+                "nom": 1,
                 "not": 1,
                 "noi": 0,
                 "analysis": "The code is over commented. ",
@@ -58,7 +58,7 @@ The example below is an excerpt from the example available [here](../swift_code_
             "noc": 35,
             "n_a": 1,
             "n_c": 7,
-            "nbm": 10,
+            "nom": 10,
             "not": 0,
             "noi": 2,
             "poc": 26.515
@@ -68,7 +68,7 @@ The example below is an excerpt from the example available [here](../swift_code_
             "noc": 28,
             "n_a": 0,
             "n_c": 4,
-            "nbm": 7,
+            "nom": 7,
             "not": 5,
             "noi": 0,
             "poc": 34.568
@@ -78,7 +78,7 @@ The example below is an excerpt from the example available [here](../swift_code_
             "noc": 63,
             "n_a": 1,
             "n_c": 11,
-            "nbm": 17,
+            "nom": 17,
             "not": 5,
             "noi": 2,
             "poc": 29.577
@@ -101,7 +101,7 @@ KPIs legend:
 |   `n_c`   |       Number of concretes        |                            Number of struct and classes in the framework                            |
 |    `a`    |           Abstractness           |                                            A = n_a / n_c                                            |
 |   `d_3`   | Distance from  the main sequence |                                        D³ = abs( A + I - 1 )                                        |
-|   `nbm`   |        Number of methods         |                             Number of `func` (computed `var` excluded)                              |
+|   `nom`   |        Number of methods         |                             Number of `func` (computed `var` excluded)                              |
 |   `not`   |         Number of tests          |                      Number of methods in test frameworks starting with `test`                      |
 |   `noi`   |        Number of imports         |                                    Number of imported frameworks                                    |
 
