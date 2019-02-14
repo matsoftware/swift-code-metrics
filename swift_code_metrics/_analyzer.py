@@ -4,18 +4,27 @@ from ._helpers import AnalyzerHelpers, ReportingHelpers
 from ._parser import SwiftFileParser
 from ._metrics import Framework, Metrics
 from functional import seq
-
+from ._helpers import Log
 
 class Inspector:
-    def __init__(self, directory, artifacts, tests_default_suffixes, exclude_paths=None):
-        if exclude_paths is None:
-            exclude_paths = []
+    def __init__(self, directory, artifacts, tests_default_suffixes, exclude_paths=[]):
+        self.exclude_paths = exclude_paths
+        self.directory = directory
+        self.artifacts = artifacts
+        self.tests_default_suffixes = tests_default_suffixes
         self.frameworks = []
-        if directory is not None:
+        self.report = None
+
+    def analyze(self) -> bool:
+        if self.directory is not None:
             # Initialize report
-            self.__analyze_directory(directory, exclude_paths, tests_default_suffixes)
-            self.report = self._generate_report()
-            self._save_report(artifacts)
+            self.__analyze_directory(self.directory, self.exclude_paths, self.tests_default_suffixes)
+            if len(self.frameworks) > 0:
+                self.report = self._generate_report()
+                self._save_report(self.artifacts)
+                return True
+        return False
+
 
     def filtered_frameworks(self, is_test=False):
         return seq(self.frameworks) \

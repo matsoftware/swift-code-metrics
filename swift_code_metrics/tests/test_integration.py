@@ -28,11 +28,31 @@ class IntegrationTest(unittest.TestCase):
         generated_json = IntegrationTest.read_json_file(output_file)
         self.assertEqual(generated_json, expected_json)
 
-
     @staticmethod
     def read_json_file(path):
         with open(path, 'r') as fp:
             return json.load(fp)
+
+
+class IntegrationUnhappyTest(unittest.TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+        sys.argv.clear()
+        sys.argv.append(os.path.dirname(os.path.realpath(__file__)))
+        sys.argv.append("--source")
+        sys.argv.append("any")
+        sys.argv.append("--artifacts")
+        sys.argv.append("any")
+
+    def tearDown(self):
+        sys.argv.clear()
+
+    def test_sample_app(self):
+        with self.assertRaises(SystemExit) as cm:
+            scm.main()  # should not throw exception and return 0
+
+        self.assertEqual(cm.exception.code, 0)
 
 
 if __name__ == '__main__':

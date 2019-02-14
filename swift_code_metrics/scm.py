@@ -2,7 +2,7 @@
 
 from argparse import ArgumentParser
 
-from ._helpers import ReportingHelpers
+from ._helpers import Log,ReportingHelpers
 from ._analyzer import Inspector
 from ._presenter import GraphPresenter
 from .version import VERSION
@@ -65,6 +65,10 @@ def main():
 
     # Inspects the provided directory
     analyzer = Inspector(directory, artifacts, default_tests_paths, exclude)
+
+    if not analyzer.analyze():
+        Log.warn('No valid swift files found in the project')
+        sys.exit(0)
 
     if not should_generate_graphs:
         sys.exit(0)
