@@ -114,7 +114,10 @@ class Metrics:
         :param loc: the number of lines of code
         :return: The POC value (double)
         """
-        return 100 * noc / (noc + loc)
+        noc_loc = noc + loc
+        if noc_loc == 0:
+            return 0
+        return 100 * noc / noc_loc
 
     # Analysis
 
