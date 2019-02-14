@@ -4,10 +4,10 @@ from ._helpers import AnalyzerHelpers, ReportingHelpers
 from ._parser import SwiftFileParser
 from ._metrics import Framework, Metrics
 from functional import seq
-from ._helpers import Log
+
 
 class Inspector:
-    def __init__(self, directory, artifacts, tests_default_suffixes, exclude_paths=[]):
+    def __init__(self, directory, artifacts, tests_default_suffixes, exclude_paths):
         self.exclude_paths = exclude_paths
         self.directory = directory
         self.artifacts = artifacts
@@ -24,7 +24,6 @@ class Inspector:
                 self._save_report(self.artifacts)
                 return True
         return False
-
 
     def filtered_frameworks(self, is_test=False):
         return seq(self.frameworks) \
