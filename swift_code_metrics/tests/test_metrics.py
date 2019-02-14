@@ -111,6 +111,12 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(expected_deps,
                          Metrics.total_dependencies(self.foundation_kit))
 
+    def test_poc_valid_loc_noc(self):
+        self.assertEqual(50, Metrics.percentage_of_comments(loc=2, noc=2))
+
+    def test_poc_invalid_loc_noc(self):
+        self.assertEqual(0, Metrics.percentage_of_comments(loc=0, noc=0))
+
     @property
     def __dummy_external_frameworks(self):
         return [
