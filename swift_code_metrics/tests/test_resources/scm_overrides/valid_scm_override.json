@@ -1,0 +1,15 @@
+{
+  "libraries": [
+    {
+      "name": "FoundationFramework",
+      "path": "FoundationFramework"
+    },
+    {
+      "name": "SecretLib",
+      "path": "SecretLib"
+    }
+  ],
+  "shared": [
+    "SharedIntegration"
+  ]
+}

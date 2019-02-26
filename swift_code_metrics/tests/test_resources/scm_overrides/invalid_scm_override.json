@@ -1,0 +1,11 @@
+{
+  "libraries": [
+    {
+      "name": "FoundationFramework"
+    },
+    {
+      "name": "SecretLib"
+      "path": "SecretLib"
+    }
+  ]
+}

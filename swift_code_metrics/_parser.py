@@ -34,8 +34,22 @@ class SwiftFile:
                            self.methods))
 
 
-class SwiftFileParser:
-    def __init__(self, file, base_path, is_test=False):
+class ProjectPathsOverride(object):
+
+    def __init__(self, **entries):
+        self.__dict__ = entries['entries']
+
+    def __eq__(self, other):
+        return (self.libraries == other.libraries) and (self.shared == other.shared)
+
+    @staticmethod
+    def load_from_json(path: str) -> 'ProjectPathsOverride':
+        with open(path, 'r') as f:
+            return ProjectPathsOverride(entries=json.load(f))
+
+
+class SwiftFileParser(object):
+    def __init__(self, file: str, base_path: str, is_test=False):
         self.file = file
         self.base_path = base_path
         self.is_test = is_test

@@ -1,5 +1,6 @@
 import unittest
-from swift_code_metrics import _parser
+from swift_code_metrics._parser import SwiftFileParser, ProjectPathsOverride
+from json import JSONDecodeError
 
 
 class ParserTests(unittest.TestCase):
@@ -9,11 +10,11 @@ class ParserTests(unittest.TestCase):
         self._generate_mocks()
 
     def _generate_mocks(self):
-        self.example_parsed_file = _parser.SwiftFileParser(
+        self.example_parsed_file = SwiftFileParser(
             file="swift_code_metrics/tests/test_resources/ExampleFile.swift",
             base_path="swift_code_metrics/tests"
         ).parse()
-        self.example_test_file = _parser.SwiftFileParser(
+        self.example_test_file = SwiftFileParser(
             file="swift_code_metrics/tests/test_resources/ExampleTest.swift",
             base_path="swift_code_metrics/tests",
             is_test=True
@@ -63,6 +64,36 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(len(self.example_test_file.methods), 3)
         self.assertEqual(['test_example_assertion',
                           'testAnotherExample'], self.example_test_file.tests)
+
+
+class ProjectPathsOverrideTests(unittest.TestCase):
+
+    def test_projectpathsoverride_loadFromJson_validfile_shouldParseExpectedData(self):
+        path = "test_resources/scm_overrides/valid_scm_override.json"
+        path_override = ProjectPathsOverride.load_from_json(path)
+        expected_path_override = ProjectPathsOverride(entries={
+            "libraries": [
+                {
+                    "name": "FoundationFramework",
+                    "path": "FoundationFramework"
+                },
+                {
+                    "name": "SecretLib",
+                    "path": "SecretLib"
+                }
+            ],
+            "shared": [
+                "SharedIntegration"
+            ]
+        })
+        self.assertEqual(path_override, expected_path_override)
+
+    def test_projectpathsoverride_loadFromJson_invalidfile_shouldRaiseException(self):
+        path = "test_resources/scm_overrides/invalid_scm_override.json"
+        with self.assertRaises(JSONDecodeError) as cm:
+            ProjectPathsOverride.load_from_json(path)
+
+        self.assertIsNotNone(cm)
 
 
 if __name__ == '__main__':
