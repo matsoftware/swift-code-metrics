@@ -11,6 +11,7 @@
 		E57696422117671600CADE76 /* FoundationFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57696412117671600CADE76 /* FoundationFrameworkTests.swift */; };
 		E576964E2117672A00CADE76 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964D2117672A00CADE76 /* Networking.swift */; };
 		E57696502117673500CADE76 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964F2117673500CADE76 /* Helpers.swift */; };
+		E5BFCA6922255715005321F6 /* CaesarChiper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BFCA6822255715005321F6 /* CaesarChiper.swift */; };
 		E5C30E9321711B35009CD6C4 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C30E9221711B35009CD6C4 /* NetworkingTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,9 @@
 		E57696432117671600CADE76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E576964D2117672A00CADE76 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		E576964F2117673500CADE76 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		E5BFCA5E222556D4005321F6 /* SecretLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SecretLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5BFCA61222556D4005321F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E5BFCA6822255715005321F6 /* CaesarChiper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaesarChiper.swift; sourceTree = "<group>"; };
 		E5C30E9221711B35009CD6C4 /* NetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -51,6 +55,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E5BFCA5B222556D4005321F6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -59,6 +70,7 @@
 			children = (
 				E57696352117671600CADE76 /* FoundationFramework */,
 				E57696402117671600CADE76 /* FoundationFrameworkTests */,
+				E5BFCA5F222556D4005321F6 /* SecretLib */,
 				E57696342117671600CADE76 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,6 +80,7 @@
 			children = (
 				E57696332117671600CADE76 /* FoundationFramework.framework */,
 				E576963C2117671600CADE76 /* FoundationFrameworkTests.xctest */,
+				E5BFCA5E222556D4005321F6 /* SecretLib.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -92,10 +105,26 @@
 			path = FoundationFrameworkTests;
 			sourceTree = "<group>";
 		};
+		E5BFCA5F222556D4005321F6 /* SecretLib */ = {
+			isa = PBXGroup;
+			children = (
+				E5BFCA6822255715005321F6 /* CaesarChiper.swift */,
+				E5BFCA61222556D4005321F6 /* Info.plist */,
+			);
+			path = SecretLib;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
 		E57696302117671600CADE76 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5BFCA59222556D4005321F6 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -141,6 +170,24 @@
 			productReference = E576963C2117671600CADE76 /* FoundationFrameworkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E5BFCA5D222556D4005321F6 /* SecretLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E5BFCA65222556D4005321F6 /* Build configuration list for PBXNativeTarget "SecretLib" */;
+			buildPhases = (
+				E5BFCA59222556D4005321F6 /* Headers */,
+				E5BFCA5A222556D4005321F6 /* Sources */,
+				E5BFCA5B222556D4005321F6 /* Frameworks */,
+				E5BFCA5C222556D4005321F6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SecretLib;
+			productName = SecretLib;
+			productReference = E5BFCA5E222556D4005321F6 /* SecretLib.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -159,6 +206,10 @@
 						CreatedOnToolsVersion = 9.4;
 						LastSwiftMigration = 1000;
 					};
+					E5BFCA5D222556D4005321F6 = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+					};
 				};
 			};
 			buildConfigurationList = E576962D2117671600CADE76 /* Build configuration list for PBXProject "FoundationFramework" */;
@@ -175,6 +226,7 @@
 			targets = (
 				E57696322117671600CADE76 /* FoundationFramework */,
 				E576963B2117671600CADE76 /* FoundationFrameworkTests */,
+				E5BFCA5D222556D4005321F6 /* SecretLib */,
 			);
 		};
 /* End PBXProject section */
@@ -188,6 +240,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E576963A2117671600CADE76 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5BFCA5C222556D4005321F6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -212,6 +271,14 @@
 			files = (
 				E57696422117671600CADE76 /* FoundationFrameworkTests.swift in Sources */,
 				E5C30E9321711B35009CD6C4 /* NetworkingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E5BFCA5A222556D4005321F6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E5BFCA6922255715005321F6 /* CaesarChiper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +500,62 @@
 			};
 			name = Release;
 		};
+		E5BFCA63222556D4005321F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = EUPRJDEKWL;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SecretLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.easyfutureltd.SecretLib;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E5BFCA64222556D4005321F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = EUPRJDEKWL;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SecretLib/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.easyfutureltd.SecretLib;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -459,6 +582,15 @@
 			buildConfigurations = (
 				E576964B2117671600CADE76 /* Debug */,
 				E576964C2117671600CADE76 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E5BFCA65222556D4005321F6 /* Build configuration list for PBXNativeTarget "SecretLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E5BFCA63222556D4005321F6 /* Debug */,
+				E5BFCA64222556D4005321F6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
