@@ -12,6 +12,7 @@
 		E576964E2117672A00CADE76 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964D2117672A00CADE76 /* Networking.swift */; };
 		E57696502117673500CADE76 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964F2117673500CADE76 /* Helpers.swift */; };
 		E5BFCA6922255715005321F6 /* CaesarChiper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BFCA6822255715005321F6 /* CaesarChiper.swift */; };
+		E5BFCA86222576E7005321F6 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964F2117673500CADE76 /* Helpers.swift */; };
 		E5C30E9321711B35009CD6C4 /* NetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C30E9221711B35009CD6C4 /* NetworkingTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 				E57696352117671600CADE76 /* FoundationFramework */,
 				E57696402117671600CADE76 /* FoundationFrameworkTests */,
 				E5BFCA5F222556D4005321F6 /* SecretLib */,
+				E5BFCA85222576D8005321F6 /* Shared */,
 				E57696342117671600CADE76 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,7 +92,6 @@
 			children = (
 				E57696372117671600CADE76 /* Info.plist */,
 				E576964D2117672A00CADE76 /* Networking.swift */,
-				E576964F2117673500CADE76 /* Helpers.swift */,
 			);
 			path = FoundationFramework;
 			sourceTree = "<group>";
@@ -112,6 +113,14 @@
 				E5BFCA61222556D4005321F6 /* Info.plist */,
 			);
 			path = SecretLib;
+			sourceTree = "<group>";
+		};
+		E5BFCA85222576D8005321F6 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E576964F2117673500CADE76 /* Helpers.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,7 +221,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E576962D2117671600CADE76 /* Build configuration list for PBXProject "FoundationFramework" */;
+			buildConfigurationList = E576962D2117671600CADE76 /* Build configuration list for PBXProject "Foundation" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -279,6 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5BFCA6922255715005321F6 /* CaesarChiper.swift in Sources */,
+				E5BFCA86222576E7005321F6 /* Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,7 +569,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E576962D2117671600CADE76 /* Build configuration list for PBXProject "FoundationFramework" */ = {
+		E576962D2117671600CADE76 /* Build configuration list for PBXProject "Foundation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E57696452117671600CADE76 /* Debug */,
