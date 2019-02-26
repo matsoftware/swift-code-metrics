@@ -1,9 +1,17 @@
-import os
+import json, os
+from typing import List
 from ._helpers import AnalyzerHelpers, ParsingHelpers
 
 
-class SwiftFile:
-    def __init__(self, framework_name, loc, imports, interfaces, structs, classes, methods, n_of_comments):
+class SwiftFile(object):
+    def __init__(self, framework_name: str,
+                 loc: int,
+                 imports: List[str],
+                 interfaces: List[str],
+                 structs: List[str],
+                 classes: List[str],
+                 methods: List[str],
+                 n_of_comments: int):
         """
         Creates a SwiftFile instance that represents a parsed swift file.
         :param framework_name: The framework where the file belongs to.
@@ -25,7 +33,7 @@ class SwiftFile:
         self.n_of_comments = n_of_comments
 
     @property
-    def tests(self):
+    def tests(self) -> List[str]:
         """
         List of test extracted from the parsed methods.
         :return: array of strings
@@ -122,11 +130,11 @@ class SwiftFileParser(object):
 
     # Private helpers
 
-    def __framework_name(self):
+    def __framework_name(self) -> str:
         suffix = ParsingHelpers.DEFAULT_TEST_FRAMEWORK_SUFFIX if self.is_test else ''
         return self.__extracted_framework_name() + suffix
 
-    def __extracted_framework_name(self):
+    def __extracted_framework_name(self) -> str:
         subdir = self.file.replace(self.base_path, '')
         first_subpath = self.__extract_first_subpath(subdir)
         if first_subpath.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION):
@@ -134,7 +142,7 @@ class SwiftFileParser(object):
         else:
             return first_subpath
 
-    def __extract_first_subpath(self, subdir):
+    def __extract_first_subpath(self, subdir) -> str:
         subdirs = os.path.split(subdir)
         if len(subdirs[0]) > 1:
             return self.__extract_first_subpath(subdirs[0])
