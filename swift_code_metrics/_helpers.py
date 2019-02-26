@@ -1,5 +1,7 @@
 import re
 import logging
+import json
+from typing import Dict
 
 
 class Log:
@@ -212,3 +214,11 @@ class ReportingHelpers:
     def decimal_format(number, decimal_places=3):
         format_string = "{:." + str(decimal_places) + "f}"
         return float(format_string.format(number))
+
+
+class JSONReader:
+
+    @staticmethod
+    def read_json_file(path: str) -> Dict:
+        with open(path, 'r') as fp:
+            return json.load(fp)

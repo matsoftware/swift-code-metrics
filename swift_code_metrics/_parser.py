@@ -1,7 +1,6 @@
 import json, os
 from typing import List
-from ._helpers import AnalyzerHelpers, ParsingHelpers
-
+from ._helpers import AnalyzerHelpers, ParsingHelpers, JSONReader
 
 class SwiftFile(object):
     def __init__(self, framework_name: str,
@@ -52,8 +51,7 @@ class ProjectPathsOverride(object):
 
     @staticmethod
     def load_from_json(path: str) -> 'ProjectPathsOverride':
-        with open(path, 'r') as f:
-            return ProjectPathsOverride(entries=json.load(f))
+        return ProjectPathsOverride(entries=JSONReader.read_json_file(path))
 
 
 class SwiftFileParser(object):

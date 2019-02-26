@@ -2,7 +2,7 @@ import unittest
 import os
 import sys
 from swift_code_metrics import scm
-import json
+from swift_code_metrics._helpers import JSONReader
 
 
 class IntegrationTest(unittest.TestCase):
@@ -24,14 +24,9 @@ class IntegrationTest(unittest.TestCase):
         output_file = "swift_code_metrics/tests/report/output.json"
         scm.main()  # generate report
         expected_file = os.path.join("swift_code_metrics/tests/test_resources", "expected_output.json")
-        expected_json = IntegrationTest.read_json_file(expected_file)
-        generated_json = IntegrationTest.read_json_file(output_file)
+        expected_json = JSONReader.read_json_file(expected_file)
+        generated_json = JSONReader.read_json_file(output_file)
         self.assertEqual(generated_json, expected_json)
-
-    @staticmethod
-    def read_json_file(path):
-        with open(path, 'r') as fp:
-            return json.load(fp)
 
 
 class IntegrationUnhappyTest(unittest.TestCase):

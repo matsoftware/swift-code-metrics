@@ -69,7 +69,7 @@ class ParserTests(unittest.TestCase):
 class ProjectPathsOverrideTests(unittest.TestCase):
 
     def test_projectpathsoverride_loadFromJson_validfile_shouldParseExpectedData(self):
-        path = "test_resources/scm_overrides/valid_scm_override.json"
+        path = "swift_code_metrics/tests/test_resources/scm_overrides/valid_scm_override.json"
         path_override = ProjectPathsOverride.load_from_json(path)
         expected_path_override = ProjectPathsOverride(entries={
             "libraries": [
@@ -89,7 +89,7 @@ class ProjectPathsOverrideTests(unittest.TestCase):
         self.assertEqual(path_override, expected_path_override)
 
     def test_projectpathsoverride_loadFromJson_invalidfile_shouldRaiseException(self):
-        path = "test_resources/scm_overrides/invalid_scm_override.json"
+        path = "swift_code_metrics/tests/test_resources/scm_overrides/invalid_scm_override.json"
         with self.assertRaises(JSONDecodeError) as cm:
             ProjectPathsOverride.load_from_json(path)
 
