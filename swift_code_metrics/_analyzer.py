@@ -113,8 +113,9 @@ class Inspector:
                         not AnalyzerHelpers.is_path_in_list(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
                     is_in_test_path = AnalyzerHelpers.is_path_in_list(subdir, tests_default_paths)
-                    swift_file = SwiftFileParser(file=full_path, base_path=directory, is_test=is_in_test_path).parse()
-                    self.__append_dependency(swift_file, is_in_test_path)
+                    swift_files = SwiftFileParser(file=full_path, base_path=directory, is_test=is_in_test_path).parse()
+                    for swift_file in swift_files:
+                        self.__append_dependency(swift_file, is_in_test_path)
         self.__cleanup_external_dependencies()
 
     def __append_dependency(self, swift_file, is_in_test_path):

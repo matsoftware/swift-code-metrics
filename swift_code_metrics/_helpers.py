@@ -176,6 +176,7 @@ class ParsingHelpers:
     DEFAULT_FRAMEWORK_NAME = 'AppTarget'
     DEFAULT_TEST_FRAMEWORK_SUFFIX = '_Test'
     TEST_METHOD_PREFIX = 'test'
+    FRAMEWORK_STRUCTURE_OVERRIDE_FILE = 'scm.json'
 
     # Constants - Regex patterns
 
