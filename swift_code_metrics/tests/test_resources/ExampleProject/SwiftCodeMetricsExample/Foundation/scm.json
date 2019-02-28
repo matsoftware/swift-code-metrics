@@ -2,14 +2,24 @@
   "libraries": [
     {
       "name": "FoundationFramework",
-      "path": "FoundationFramework"
+      "path": "FoundationFramework",
+      "is_test": false
+    },
+    {
+      "name": "FoundationFrameworkTest",
+      "path": "FoundationFrameworkTest",
+      "is_test": true
     },
     {
       "name": "SecretLib",
-      "path": "SecretLib"
+      "path": "SecretLib",
+      "is_test": false
     }
   ],
-  "shared": [
-    "SharedIntegration"
-  ]
+  "shared": {
+    "non_test": [
+      "Shared"
+    ],
+    "test": []
+  }
 }
