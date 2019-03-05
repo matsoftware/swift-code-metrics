@@ -12,13 +12,16 @@ class ParserTests(unittest.TestCase):
     def _generate_mocks(self):
         self.example_parsed_file = SwiftFileParser(
             file="swift_code_metrics/tests/test_resources/ExampleFile.swift",
-            base_path="swift_code_metrics/tests"
-        ).parse()
+            base_path="swift_code_metrics/tests",
+            current_subdir="tests",
+            tests_default_paths=""
+        ).parse()[0]
         self.example_test_file = SwiftFileParser(
             file="swift_code_metrics/tests/test_resources/ExampleTest.swift",
             base_path="swift_code_metrics/tests",
-            is_test=True
-        ).parse()
+            current_subdir="swift_code_metrics",
+            tests_default_paths="Test"
+        ).parse()[0]
 
     # Non-test file
 
@@ -75,15 +78,25 @@ class ProjectPathsOverrideTests(unittest.TestCase):
             "libraries": [
                 {
                     "name": "FoundationFramework",
-                    "path": "FoundationFramework"
+                    "path": "FoundationFramework",
+                    "is_test": False
+                },
+                {
+                    "name": "FoundationFrameworkTests",
+                    "path": "FoundationFrameworkTests",
+                    "is_test": True
                 },
                 {
                     "name": "SecretLib",
-                    "path": "SecretLib"
+                    "path": "SecretLib",
+                    "is_test": False
                 }
             ],
             "shared": [
-                "SharedIntegration"
+                {
+                    "path": "Shared",
+                    "is_test": False
+                }
             ]
         })
         self.assertEqual(path_override, expected_path_override)

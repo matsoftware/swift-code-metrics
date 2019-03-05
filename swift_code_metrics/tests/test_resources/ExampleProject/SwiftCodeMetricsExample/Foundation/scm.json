@@ -6,8 +6,8 @@
       "is_test": false
     },
     {
-      "name": "FoundationFrameworkTest",
-      "path": "FoundationFrameworkTest",
+      "name": "FoundationFrameworkTests",
+      "path": "FoundationFrameworkTests",
       "is_test": true
     },
     {
@@ -16,10 +16,10 @@
       "is_test": false
     }
   ],
-  "shared": {
-    "non_test": [
-      "Shared"
-    ],
-    "test": []
-  }
+  "shared": [
+    {
+      "path": "Shared",
+      "is_test": false
+    }
+  ]
 }

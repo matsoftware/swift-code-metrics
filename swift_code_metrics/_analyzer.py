@@ -112,13 +112,15 @@ class Inspector:
                 if file.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION) and \
                         not AnalyzerHelpers.is_path_in_list(subdir, exclude_paths):
                     full_path = os.path.join(subdir, file)
-                    is_in_test_path = AnalyzerHelpers.is_path_in_list(subdir, tests_default_paths)
-                    swift_files = SwiftFileParser(file=full_path, base_path=directory, is_test=is_in_test_path).parse()
+                    swift_files = SwiftFileParser(file=full_path,
+                                                  base_path=directory,
+                                                  current_subdir=subdir,
+                                                  tests_default_paths=tests_default_paths).parse()
                     for swift_file in swift_files:
-                        self.__append_dependency(swift_file, is_in_test_path)
+                        self.__append_dependency(swift_file)
         self.__cleanup_external_dependencies()
 
-    def __append_dependency(self, swift_file, is_in_test_path):
+    def __append_dependency(self, swift_file: 'SwiftFile'):
         framework = self.__get_or_create_framework(swift_file.framework_name)
         framework.number_of_files += 1
         framework.loc += swift_file.loc
@@ -128,7 +130,7 @@ class Inspector:
         framework.number_of_methods += len(swift_file.methods)
         framework.number_of_tests += len(swift_file.tests)
         # This covers the scenario where a test framework might contain no tests
-        framework.is_test_framework = is_in_test_path
+        framework.is_test_framework = swift_file.is_test
 
         for f in swift_file.imports:
             imported_framework = self.__get_or_create_framework(f)
