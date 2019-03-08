@@ -4,15 +4,17 @@ from ._helpers import AnalyzerHelpers, ReportingHelpers
 from ._parser import SwiftFileParser
 from ._metrics import Framework, Metrics
 from functional import seq
+from typing import List, Dict
 
 
 class Inspector:
-    def __init__(self, directory, artifacts, tests_default_suffixes, exclude_paths):
+    def __init__(self, directory: str, artifacts: str, tests_default_suffixes: List[str], exclude_paths: List[str]):
         self.exclude_paths = exclude_paths
         self.directory = directory
         self.artifacts = artifacts
         self.tests_default_suffixes = tests_default_suffixes
         self.frameworks = []
+        self.shared_code = {}
         self.report = None
 
     def analyze(self) -> bool:
@@ -25,12 +27,12 @@ class Inspector:
                 return True
         return False
 
-    def filtered_frameworks(self, is_test=False):
+    def filtered_frameworks(self, is_test=False) -> List['Framework']:
         return seq(self.frameworks) \
             .filter(lambda f: f.is_test_framework == is_test) \
             .list()
 
-    def _generate_report(self):
+    def _generate_report(self) -> 'Report':
         report = _Report()
 
         for f in sorted(self.frameworks, key=lambda fr: fr.name, reverse=False):
@@ -42,6 +44,7 @@ class Inspector:
                 report.non_test_framework.append(analysis)
                 report.non_test_framework_aggregate.append_framework(f)
 
+
         return report
 
     def _save_report(self, directory):
@@ -52,7 +55,7 @@ class Inspector:
 
     # Analysis
 
-    def __framework_analysis(self, framework):
+    def __framework_analysis(self, framework: 'Framework') -> Dict:
         """
         :param framework: The framework to analyze
         :return: The architectural analysis of the framework
@@ -98,15 +101,15 @@ class Inspector:
             framework.name: {**base_analysis, **non_test_analysis}
         }
 
-    def instability(self, framework):
+    def instability(self, framework: 'Framework') -> float:
         return Metrics.instability(framework, self.frameworks)
 
-    def abstractness(self, framework):
+    def abstractness(self, framework: 'Framework') -> float:
         return Metrics.abstractness(framework)
 
     # Directory inspection
 
-    def __analyze_directory(self, directory, exclude_paths, tests_default_paths):
+    def __analyze_directory(self, directory: str, exclude_paths: List[str], tests_default_paths: List[str]):
         for subdir, _, files in os.walk(directory):
             for file in files:
                 if file.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION) and \
@@ -118,6 +121,8 @@ class Inspector:
                                                   tests_default_paths=tests_default_paths).parse()
                     for swift_file in swift_files:
                         self.__append_dependency(swift_file)
+                        self.__process_shared_file(swift_file, full_path)
+
         self.__cleanup_external_dependencies()
 
     def __append_dependency(self, swift_file: 'SwiftFile'):
@@ -138,13 +143,22 @@ class Inspector:
                 imported_framework = Framework(f)
             framework.append_import(imported_framework)
 
+    def __process_shared_file(self, swift_file: 'SwiftFile', dir: str):
+        if not swift_file.is_shared:
+            return
+
+        if not self.shared_code.get(dir):
+            self.shared_code[dir] = [swift_file]
+        else:
+            self.shared_code[dir].append(swift_file)
+
     def __cleanup_external_dependencies(self):
         # It will remove external dependencies built as source
         self.frameworks = seq(self.frameworks) \
             .filter(lambda f: f.number_of_files > 0) \
             .list()
 
-    def __get_or_create_framework(self, framework_name):
+    def __get_or_create_framework(self, framework_name: str) -> 'Framework':
         framework = self.__get_framework(framework_name)
         if framework is None:
             # not found, create a new one
@@ -152,7 +166,7 @@ class Inspector:
             self.frameworks.append(framework)
         return framework
 
-    def __get_framework(self, name):
+    def __get_framework(self, name: str) -> 'Framework':
         for f in self.frameworks:
             if f.name == name:
                 return f
@@ -182,11 +196,11 @@ class _AggregateData:
         self.n_o_i += f.number_of_imports
 
     @property
-    def poc(self):
+    def poc(self) -> float:
         return Metrics.percentage_of_comments(self.noc, self.loc)
 
     @property
-    def as_dict(self):
+    def as_dict(self) -> Dict:
         return {
             "loc": self.loc,
             "noc": self.noc,
@@ -199,7 +213,7 @@ class _AggregateData:
         }
 
     @staticmethod
-    def merged_data(first, second):
+    def merged_data(first: 'Framework', second: 'Framework') -> 'AggregateData':
         return _AggregateData(loc=first.loc + second.loc,
                               noc=first.noc + second.noc,
                               n_a=first.n_a + second.n_a,
@@ -215,16 +229,21 @@ class _Report:
         self.tests_framework = list()
         self.non_test_framework_aggregate = _AggregateData()
         self.test_framework_aggregate = _AggregateData()
+        self.shared_code = _AggregateData()
         # Constants for report
         self.non_test_frameworks_key = "non-test-frameworks"
         self.tests_frameworks_key = "tests-frameworks"
         self.aggregate_key = "aggregate"
+        self.shared_key = "shared"
+
+
 
     @property
-    def as_dict(self):
+    def as_dict(self) -> Dict:
         return {
             self.non_test_frameworks_key: self.non_test_framework,
             self.tests_frameworks_key: self.tests_framework,
+            self.shared_key: self.shared_code.as_dict,
             self.aggregate_key: {
                 self.non_test_frameworks_key: self.non_test_framework_aggregate.as_dict,
                 self.tests_frameworks_key: self.test_framework_aggregate.as_dict,
