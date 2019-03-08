@@ -3,11 +3,24 @@ from swift_code_metrics._metrics import Framework, Dependency, Metrics, Syntheti
 from swift_code_metrics._parser import SwiftFile
 from functional import seq
 
+example_swiftfile = SwiftFile(
+    framework_name=['Test'],
+    loc=1,
+    imports=['dep1', 'dep2'],
+    interfaces=['prot1', 'prot2', 'prot3'],
+    structs=['struct'],
+    classes=['class'],
+    methods=['meth1', 'meth2', 'meth3', 'testMethod'],
+    n_of_comments=7,
+    is_shared=True,
+    is_test=False
+)
+
 
 class FrameworkTests(unittest.TestCase):
 
     def setUp(self):
-        self.frameworks = [Framework('BusinessLogic'), Framework('UIKit'), Framework('Other'), ]
+        self.frameworks = [Framework('BusinessLogic'), Framework('UIKit'), Framework('Other')]
         self.framework = Framework('AwesomeName')
         seq(self.frameworks) \
             .for_each(lambda f: self.framework.append_import(f))
@@ -77,8 +90,8 @@ class MetricsTests(unittest.TestCase):
 
     def test_distance_main_sequence(self):
         self._populate_app_layer_imports()
-        self.app_layer.number_of_concrete_data_structures = 7
-        self.app_layer.number_of_interfaces = 2
+        self.app_layer.data.number_of_concrete_data_structures = 7
+        self.app_layer.data.number_of_interfaces = 2
 
         self.assertAlmostEqual(0.286,
                                Metrics.distance_main_sequence(self.app_layer, self.frameworks),
@@ -95,8 +108,8 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(0, Metrics.abstractness(self.foundation_kit))
 
     def test_abstractness_concretes(self):
-        self.foundation_kit.number_of_interfaces = 8
-        self.foundation_kit.number_of_concrete_data_structures = 4
+        self.foundation_kit.data.number_of_interfaces = 8
+        self.foundation_kit.data.number_of_concrete_data_structures = 4
         self.assertEqual(2, Metrics.abstractness(self.foundation_kit))
 
     def test_fan_in(self):
@@ -164,26 +177,35 @@ class MetricsTests(unittest.TestCase):
 
 class SyntheticDataTests(unittest.TestCase):
 
+    def setUp(self):
+        self.synthetic_data = SyntheticData(swift_file=example_swiftfile)
+
+    def test_init_no_swift_file(self):
+        empty_data = SyntheticData()
+        self.assertEqual(0, empty_data.loc)
+        self.assertEqual(0, empty_data.noc)
+        self.assertEqual(0, empty_data.number_of_concrete_data_structures)
+        self.assertEqual(0, empty_data.number_of_interfaces)
+        self.assertEqual(0, empty_data.number_of_methods)
+        self.assertEqual(0, empty_data.number_of_tests)
+
     def test_synthetic_init_swiftfile(self):
-        example_swiftfile = SwiftFile(
-            framework_name='Test',
-            loc=1,
-            imports=['dep1', 'dep2'],
-            interfaces=['prot1', 'prot2', 'prot3'],
-            structs=['struct'],
-            classes=['class'],
-            methods=['meth1', 'meth2', 'meth3', 'testMethod'],
-            n_of_comments=7,
-            is_shared=True,
-            is_test=False
-        )
-        synthetic_data = SyntheticData(swift_file=example_swiftfile)
-        self.assertEqual(1, synthetic_data.loc)
-        self.assertEqual(7, synthetic_data.noc)
-        self.assertEqual(2, synthetic_data.number_of_concrete_data_structures)
-        self.assertEqual(3, synthetic_data.number_of_interfaces)
-        self.assertEqual(4, synthetic_data.number_of_methods)
-        self.assertEqual(1, synthetic_data.number_of_tests)
+        self.assertEqual(1, self.synthetic_data.loc)
+        self.assertEqual(7, self.synthetic_data.noc)
+        self.assertEqual(2, self.synthetic_data.number_of_concrete_data_structures)
+        self.assertEqual(3, self.synthetic_data.number_of_interfaces)
+        self.assertEqual(4, self.synthetic_data.number_of_methods)
+        self.assertEqual(1, self.synthetic_data.number_of_tests)
+
+    def test_append_data(self):
+        additional_data = SyntheticData(swift_file=example_swiftfile)
+        self.synthetic_data.append_data(data=additional_data)
+        self.assertEqual(2, self.synthetic_data.loc)
+        self.assertEqual(14, self.synthetic_data.noc)
+        self.assertEqual(4, self.synthetic_data.number_of_concrete_data_structures)
+        self.assertEqual(6, self.synthetic_data.number_of_interfaces)
+        self.assertEqual(8, self.synthetic_data.number_of_methods)
+        self.assertEqual(2, self.synthetic_data.number_of_tests)
 
 
 if __name__ == '__main__':

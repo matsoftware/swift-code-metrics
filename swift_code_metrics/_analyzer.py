@@ -1,10 +1,10 @@
 import os
 import json
 from ._helpers import AnalyzerHelpers, ReportingHelpers
-from ._parser import SwiftFileParser
-from ._metrics import Framework, Metrics
+from ._parser import SwiftFileParser, SwiftFile
+from ._metrics import Framework, Metrics, SyntheticData
 from functional import seq
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 class Inspector:
@@ -32,7 +32,7 @@ class Inspector:
             .filter(lambda f: f.is_test_framework == is_test) \
             .list()
 
-    def _generate_report(self) -> 'Report':
+    def _generate_report(self) -> '_Report':
         report = _Report()
 
         for f in sorted(self.frameworks, key=lambda fr: fr.name, reverse=False):
@@ -44,10 +44,9 @@ class Inspector:
                 report.non_test_framework.append(analysis)
                 report.non_test_framework_aggregate.append_framework(f)
 
-
         return report
 
-    def _save_report(self, directory):
+    def _save_report(self, directory: str):
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(os.path.join(directory, 'output.json'), 'w') as fp:
@@ -60,15 +59,16 @@ class Inspector:
         :param framework: The framework to analyze
         :return: The architectural analysis of the framework
         """
-        loc = framework.loc
-        noc = framework.noc
-        poc = Metrics.percentage_of_comments(framework.noc, framework.loc)
+        loc = framework.data.loc
+        noc = framework.data.noc
+        poc = Metrics.percentage_of_comments(framework.data.noc,
+                                             framework.data.loc)
         analysis = Metrics.poc_analysis(poc)
-        n_a = framework.number_of_interfaces
-        n_c = framework.number_of_concrete_data_structures
-        nom = framework.number_of_methods
+        n_a = framework.data.number_of_interfaces
+        n_c = framework.data.number_of_concrete_data_structures
+        nom = framework.data.number_of_methods
         dependencies = Metrics.total_dependencies(framework)
-        n_of_tests = framework.number_of_tests
+        n_of_tests = framework.data.number_of_tests
         n_of_imports = framework.number_of_imports
 
         # Non-test framework analysis
@@ -128,12 +128,7 @@ class Inspector:
     def __append_dependency(self, swift_file: 'SwiftFile'):
         framework = self.__get_or_create_framework(swift_file.framework_name)
         framework.number_of_files += 1
-        framework.loc += swift_file.loc
-        framework.noc += swift_file.n_of_comments
-        framework.number_of_interfaces += len(swift_file.interfaces)
-        framework.number_of_concrete_data_structures += len(swift_file.structs + swift_file.classes)
-        framework.number_of_methods += len(swift_file.methods)
-        framework.number_of_tests += len(swift_file.tests)
+        framework.data.append_data(data=SyntheticData(swift_file=swift_file))
         # This covers the scenario where a test framework might contain no tests
         framework.is_test_framework = swift_file.is_test
 
@@ -166,7 +161,7 @@ class Inspector:
             self.frameworks.append(framework)
         return framework
 
-    def __get_framework(self, name: str) -> 'Framework':
+    def __get_framework(self, name: str) -> Optional['Framework']:
         for f in self.frameworks:
             if f.name == name:
                 return f
@@ -187,12 +182,12 @@ class _AggregateData:
         self.n_o_i = n_o_i
 
     def append_framework(self, f: 'Framework'):
-        self.loc += f.loc
-        self.noc += f.noc
-        self.n_a += f.number_of_interfaces
-        self.n_c += f.number_of_concrete_data_structures
-        self.nom += f.number_of_methods
-        self.n_o_t += f.number_of_tests
+        self.loc += f.data.loc
+        self.noc += f.data.noc
+        self.n_a += f.data.number_of_interfaces
+        self.n_c += f.data.number_of_concrete_data_structures
+        self.nom += f.data.number_of_methods
+        self.n_o_t += f.data.number_of_tests
         self.n_o_i += f.number_of_imports
 
     @property
@@ -213,7 +208,7 @@ class _AggregateData:
         }
 
     @staticmethod
-    def merged_data(first: 'Framework', second: 'Framework') -> 'AggregateData':
+    def merged_data(first: '_AggregateData', second: '_AggregateData') -> '_AggregateData':
         return _AggregateData(loc=first.loc + second.loc,
                               noc=first.noc + second.noc,
                               n_a=first.n_a + second.n_a,
@@ -235,8 +230,6 @@ class _Report:
         self.tests_frameworks_key = "tests-frameworks"
         self.aggregate_key = "aggregate"
         self.shared_key = "shared"
-
-
 
     @property
     def as_dict(self) -> Dict:

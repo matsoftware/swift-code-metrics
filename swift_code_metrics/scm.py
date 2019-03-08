@@ -80,14 +80,14 @@ def main():
 
     # Sorted data plots
     non_test_reports_sorted_data = {
-        'N. of classes and structs': lambda fr: fr.number_of_concrete_data_structures,
-        'Lines Of Code - LOC': lambda fr: fr.loc,
-        'Number Of Comments - NOC': lambda fr: fr.noc,
+        'N. of classes and structs': lambda fr: fr.data.number_of_concrete_data_structures,
+        'Lines Of Code - LOC': lambda fr: fr.data.loc,
+        'Number Of Comments - NOC': lambda fr: fr.data.noc,
         'N. of imports - NOI': lambda fr: fr.number_of_imports
     }
 
     tests_reports_sorted_data = {
-        'Number of tests - NOT': lambda fr: fr.number_of_tests
+        'Number of tests - NOT': lambda fr: fr.data.number_of_tests
     }
 
     # Non-test graphs
@@ -107,7 +107,8 @@ def main():
     # Code distribution
     graph_presenter.pie_plot('Code distribution', non_test_frameworks,
                              lambda fr:
-                             ReportingHelpers.decimal_format(fr.loc / analyzer.report.non_test_framework_aggregate.loc))
+                             ReportingHelpers.decimal_format(fr.data.loc
+                                                             / analyzer.report.non_test_framework_aggregate.loc))
 
     # Test graphs
     for title, framework_function in tests_reports_sorted_data.items():

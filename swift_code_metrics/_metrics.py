@@ -2,7 +2,7 @@ from ._helpers import AnalyzerHelpers
 from ._helpers import Log
 from ._parser import  SwiftFile
 from functional import seq
-from typing import List
+from typing import List, Optional
 
 
 class Metrics:
@@ -47,11 +47,11 @@ class Metrics:
         :param framework: The framework to analyze
         :return: The abstractness value (float)
         """
-        if framework.number_of_concrete_data_structures == 0:
+        if framework.data.number_of_concrete_data_structures == 0:
             Log.warn(f'{framework.name} is an external dependency.')
             return 0
         else:
-            return framework.number_of_interfaces / framework.number_of_concrete_data_structures
+            return framework.data.number_of_interfaces / framework.data.number_of_concrete_data_structures
 
     @staticmethod
     def fan_in(framework: 'Framework', frameworks: List['Framework']) -> int:
@@ -80,7 +80,7 @@ class Metrics:
         return fan_out
 
     @staticmethod
-    def external_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependencies']:
+    def external_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependency']:
         """
         :param framework: The framework to inspect for imports
         :param frameworks: The other frameworks in the project
@@ -90,7 +90,7 @@ class Metrics:
         return Metrics.__filtered_imports(framework, frameworks, is_internal=False)
 
     @staticmethod
-    def internal_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependencies']:
+    def internal_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependency']:
         """
         :param framework: The framework to inspect for imports
         :param frameworks: The other frameworks in the project
@@ -169,7 +169,7 @@ class Metrics:
     # Internal
 
     @staticmethod
-    def __other_frameworks(framework: 'Framework', frameworks: List['Frameworks']) -> List['Framework']:
+    def __other_frameworks(framework: 'Framework', frameworks: List['Framework']) -> List['Framework']:
         return seq(frameworks) \
             .filter(lambda f: f is not framework) \
             .list()
@@ -186,20 +186,29 @@ class Metrics:
             .list()
 
     @staticmethod
-    def __is_name_contained_in_list(framework: 'Framework', frameworks: List['Frameworks']) -> bool:
+    def __is_name_contained_in_list(framework: 'Framework', frameworks: List['Framework']) -> bool:
         return len(seq(frameworks)
                    .filter(lambda f: f.name == framework.name)
                    .list()) > 0
 
 
 class SyntheticData:
-    def __init__(self, swift_file: 'SwiftFile'):
-        self.loc = swift_file.loc
-        self.noc = swift_file.n_of_comments
-        self.number_of_interfaces = len(swift_file.interfaces)
-        self.number_of_concrete_data_structures = len(swift_file.structs + swift_file.classes)
-        self.number_of_methods = len(swift_file.methods)
-        self.number_of_tests = len(swift_file.tests)
+    def __init__(self, swift_file: Optional['SwiftFile'] = None):
+        self.loc = 0 if swift_file is None else swift_file.loc
+        self.noc = 0 if swift_file is None else swift_file.n_of_comments
+        self.number_of_interfaces = 0 if swift_file is None else len(swift_file.interfaces)
+        self.number_of_concrete_data_structures = 0 if swift_file is None else \
+            len(swift_file.structs + swift_file.classes)
+        self.number_of_methods = 0 if swift_file is None else len(swift_file.methods)
+        self.number_of_tests = 0 if swift_file is None else len(swift_file.tests)
+
+    def append_data(self, data: 'SyntheticData'):
+        self.loc += data.loc
+        self.noc += data.noc
+        self.number_of_interfaces += data.number_of_interfaces
+        self.number_of_concrete_data_structures += data.number_of_concrete_data_structures
+        self.number_of_methods += data.number_of_methods
+        self.number_of_tests += data.number_of_tests
 
 
 class Framework:
@@ -219,6 +228,7 @@ class Framework:
             self.__total_imports[framework_import] = 1
         else:
             self.__total_imports[framework_import] += 1
+
 
     @property
     def imports(self):

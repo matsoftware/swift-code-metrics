@@ -64,7 +64,7 @@ class ProjectPathsOverride(object):
 
 
 class SwiftFileParser(object):
-    def __init__(self, file: str, base_path: str, current_subdir: str, tests_default_paths: str):
+    def __init__(self, file: str, base_path: str, current_subdir: str, tests_default_paths: List[str]):
         self.file = file
         self.base_path = base_path
         self.current_subdir = current_subdir
