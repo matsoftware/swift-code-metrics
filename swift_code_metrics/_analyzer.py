@@ -1,8 +1,11 @@
 import os
 import json
-from ._helpers import AnalyzerHelpers, ReportingHelpers
+
+from ._report import Report
+from ._helpers import AnalyzerHelpers
 from ._parser import SwiftFileParser, SwiftFile
 from ._metrics import Framework, Metrics, SyntheticData
+from ._report import ReportProcessor, Report
 from functional import seq
 from typing import List, Dict, Optional
 
@@ -22,7 +25,7 @@ class Inspector:
             # Initialize report
             self.__analyze_directory(self.directory, self.exclude_paths, self.tests_default_suffixes)
             if len(self.frameworks) > 0:
-                self.report = self._generate_report()
+                self.report = ReportProcessor.generate_report(self.frameworks, self.shared_code)
                 self._save_report(self.artifacts)
                 return True
         return False
@@ -32,74 +35,11 @@ class Inspector:
             .filter(lambda f: f.is_test_framework == is_test) \
             .list()
 
-    def _generate_report(self) -> '_Report':
-        report = _Report()
-
-        for f in sorted(self.frameworks, key=lambda fr: fr.name, reverse=False):
-            analysis = self.__framework_analysis(f)
-            if f.is_test_framework:
-                report.tests_framework.append(analysis)
-                report.test_framework_aggregate.append_framework(f)
-            else:
-                report.non_test_framework.append(analysis)
-                report.non_test_framework_aggregate.append_framework(f)
-
-        return report
-
     def _save_report(self, directory: str):
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(os.path.join(directory, 'output.json'), 'w') as fp:
             json.dump(self.report.as_dict, fp, indent=4)
-
-    # Analysis
-
-    def __framework_analysis(self, framework: 'Framework') -> Dict:
-        """
-        :param framework: The framework to analyze
-        :return: The architectural analysis of the framework
-        """
-        loc = framework.data.loc
-        noc = framework.data.noc
-        poc = Metrics.percentage_of_comments(framework.data.noc,
-                                             framework.data.loc)
-        analysis = Metrics.poc_analysis(poc)
-        n_a = framework.data.number_of_interfaces
-        n_c = framework.data.number_of_concrete_data_structures
-        nom = framework.data.number_of_methods
-        dependencies = Metrics.total_dependencies(framework)
-        n_of_tests = framework.data.number_of_tests
-        n_of_imports = framework.number_of_imports
-
-        # Non-test framework analysis
-        non_test_analysis = {}
-        if not framework.is_test_framework:
-            non_test_analysis["fan_in"] = Metrics.fan_in(framework, self.frameworks)
-            non_test_analysis["fan_out"] = Metrics.fan_out(framework)
-            i = Metrics.instability(framework, self.frameworks)
-            a = Metrics.abstractness(framework)
-            non_test_analysis["i"] = ReportingHelpers.decimal_format(i)
-            non_test_analysis["a"] = ReportingHelpers.decimal_format(a)
-            non_test_analysis["d_3"] = ReportingHelpers.decimal_format(
-                Metrics.distance_main_sequence(framework, self.frameworks))
-            analysis += Metrics.ia_analysis(i, a)
-
-        base_analysis = {
-            "loc": loc,
-            "noc": noc,
-            "poc": ReportingHelpers.decimal_format(poc),
-            "n_a": n_a,
-            "n_c": n_c,
-            "nom": nom,
-            "not": n_of_tests,
-            "noi": n_of_imports,
-            "analysis": analysis,
-            "dependencies": dependencies,
-        }
-
-        return {
-            framework.name: {**base_analysis, **non_test_analysis}
-        }
 
     def instability(self, framework: 'Framework') -> float:
         return Metrics.instability(framework, self.frameworks)
@@ -138,14 +78,14 @@ class Inspector:
                 imported_framework = Framework(f)
             framework.append_import(imported_framework)
 
-    def __process_shared_file(self, swift_file: 'SwiftFile', dir: str):
+    def __process_shared_file(self, swift_file: 'SwiftFile', directory: str):
         if not swift_file.is_shared:
             return
 
-        if not self.shared_code.get(dir):
-            self.shared_code[dir] = [swift_file]
+        if not self.shared_code.get(directory):
+            self.shared_code[directory] = [swift_file]
         else:
-            self.shared_code[dir].append(swift_file)
+            self.shared_code[directory].append(swift_file)
 
     def __cleanup_external_dependencies(self):
         # It will remove external dependencies built as source
@@ -167,80 +107,3 @@ class Inspector:
                 return f
         return None
 
-
-# Report generation
-
-
-class _AggregateData:
-    def __init__(self, loc=0, noc=0, n_a=0, n_c=0, nom=0, n_o_t=0, n_o_i=0):
-        self.loc = loc
-        self.noc = noc
-        self.n_a = n_a
-        self.n_c = n_c
-        self.nom = nom
-        self.n_o_t = n_o_t
-        self.n_o_i = n_o_i
-
-    def append_framework(self, f: 'Framework'):
-        self.loc += f.data.loc
-        self.noc += f.data.noc
-        self.n_a += f.data.number_of_interfaces
-        self.n_c += f.data.number_of_concrete_data_structures
-        self.nom += f.data.number_of_methods
-        self.n_o_t += f.data.number_of_tests
-        self.n_o_i += f.number_of_imports
-
-    @property
-    def poc(self) -> float:
-        return Metrics.percentage_of_comments(self.noc, self.loc)
-
-    @property
-    def as_dict(self) -> Dict:
-        return {
-            "loc": self.loc,
-            "noc": self.noc,
-            "n_a": self.n_a,
-            "n_c": self.n_c,
-            "nom": self.nom,
-            "not": self.n_o_t,
-            "noi": self.n_o_i,
-            "poc": ReportingHelpers.decimal_format(self.poc)
-        }
-
-    @staticmethod
-    def merged_data(first: '_AggregateData', second: '_AggregateData') -> '_AggregateData':
-        return _AggregateData(loc=first.loc + second.loc,
-                              noc=first.noc + second.noc,
-                              n_a=first.n_a + second.n_a,
-                              n_c=first.n_c + second.n_c,
-                              nom=first.nom + second.nom,
-                              n_o_t=first.n_o_t + second.n_o_t,
-                              n_o_i=first.n_o_i + second.n_o_i)
-
-
-class _Report:
-    def __init__(self):
-        self.non_test_framework = list()
-        self.tests_framework = list()
-        self.non_test_framework_aggregate = _AggregateData()
-        self.test_framework_aggregate = _AggregateData()
-        self.shared_code = _AggregateData()
-        # Constants for report
-        self.non_test_frameworks_key = "non-test-frameworks"
-        self.tests_frameworks_key = "tests-frameworks"
-        self.aggregate_key = "aggregate"
-        self.shared_key = "shared"
-
-    @property
-    def as_dict(self) -> Dict:
-        return {
-            self.non_test_frameworks_key: self.non_test_framework,
-            self.tests_frameworks_key: self.tests_framework,
-            self.shared_key: self.shared_code.as_dict,
-            self.aggregate_key: {
-                self.non_test_frameworks_key: self.non_test_framework_aggregate.as_dict,
-                self.tests_frameworks_key: self.test_framework_aggregate.as_dict,
-                "total": _AggregateData.merged_data(self.non_test_framework_aggregate,
-                                                    self.test_framework_aggregate).as_dict
-            }
-        }

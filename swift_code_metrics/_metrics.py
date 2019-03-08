@@ -1,8 +1,8 @@
 from ._helpers import AnalyzerHelpers
-from ._helpers import Log
+from ._helpers import Log, ReportingHelpers
 from ._parser import  SwiftFile
 from functional import seq
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 
 class Metrics:
@@ -210,6 +210,36 @@ class SyntheticData:
         self.number_of_methods += data.number_of_methods
         self.number_of_tests += data.number_of_tests
 
+    @property
+    def poc(self) -> float:
+        return Metrics.percentage_of_comments(self.noc, self.loc)
+
+    @property
+    def as_dict(self) -> Dict:
+        return {
+            "loc": self.loc,
+            "noc": self.noc,
+            "n_a": self.number_of_interfaces,
+            "n_c": self.number_of_concrete_data_structures,
+            "nom": self.number_of_methods,
+            "not": self.number_of_tests,
+            "poc": ReportingHelpers.decimal_format(self.poc)
+        }
+
+
+class FrameworkData(SyntheticData):
+    def __init__(self, swift_file: Optional['SwiftFile'] = None):
+        super().__init__(swift_file)
+        self.n_o_i = 0
+
+    def append_framework(self, f: 'Framework'):
+        self.append_data(data=f.data)
+        self.n_o_i += f.number_of_imports
+
+    @property
+    def as_dict(self) -> Dict:
+        return {**super().as_dict, **{"noi": self.n_o_i}}
+
 
 class Framework:
     def __init__(self, name: str):
@@ -228,7 +258,6 @@ class Framework:
             self.__total_imports[framework_import] = 1
         else:
             self.__total_imports[framework_import] += 1
-
 
     @property
     def imports(self):
@@ -286,3 +315,4 @@ class Dependency:
     @property
     def relationship(self) -> str:
         return f'{self.name} > {self.dependent_framework}'
+

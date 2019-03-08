@@ -1,5 +1,5 @@
 import unittest
-from swift_code_metrics._metrics import Framework, Dependency, Metrics, SyntheticData
+from swift_code_metrics._metrics import Framework, Dependency, Metrics, SyntheticData, FrameworkData
 from swift_code_metrics._parser import SwiftFile
 from functional import seq
 
@@ -206,6 +206,64 @@ class SyntheticDataTests(unittest.TestCase):
         self.assertEqual(6, self.synthetic_data.number_of_interfaces)
         self.assertEqual(8, self.synthetic_data.number_of_methods)
         self.assertEqual(2, self.synthetic_data.number_of_tests)
+
+    def test_poc(self):
+        self.assertAlmostEqual(87.5, self.synthetic_data.poc)
+
+    def test_as_dict(self):
+        expected_dict = {
+            "loc": 1,
+            "noc": 7,
+            "n_a": 3,
+            "n_c": 2,
+            "nom": 4,
+            "not": 1,
+            "poc": 87.5
+        }
+        self.assertEqual(expected_dict, self.synthetic_data.as_dict)
+
+
+class FrameworkDataTests(unittest.TestCase):
+
+    def setUp(self):
+        self.framework_data = FrameworkData(swift_file=example_swiftfile)
+
+    def test_init_no_swift_file(self):
+        self.assertEqual(1, self.framework_data.loc)
+        self.assertEqual(7, self.framework_data.noc)
+        self.assertEqual(2, self.framework_data.number_of_concrete_data_structures)
+        self.assertEqual(3, self.framework_data.number_of_interfaces)
+        self.assertEqual(4, self.framework_data.number_of_methods)
+        self.assertEqual(1, self.framework_data.number_of_tests)
+        self.assertEqual(0, self.framework_data.n_o_i)
+
+    def test_append_framework(self):
+        framework_additional_data = SyntheticData(swift_file=example_swiftfile)
+        test_framework = Framework('Test')
+        test_framework.append_import(Framework('Imported'))
+        test_framework.data = framework_additional_data
+
+        self.framework_data.append_framework(test_framework)
+        self.assertEqual(2, self.framework_data.loc)
+        self.assertEqual(14, self.framework_data.noc)
+        self.assertEqual(4, self.framework_data.number_of_concrete_data_structures)
+        self.assertEqual(6, self.framework_data.number_of_interfaces)
+        self.assertEqual(8, self.framework_data.number_of_methods)
+        self.assertEqual(2, self.framework_data.number_of_tests)
+        self.assertEqual(1, self.framework_data.n_o_i)
+
+    def test_as_dict(self):
+        expected_dict = {
+            "loc": 1,
+            "noc": 7,
+            "n_a": 3,
+            "n_c": 2,
+            "nom": 4,
+            "not": 1,
+            "poc": 87.5,
+            "noi": 0
+        }
+        self.assertEqual(expected_dict, self.framework_data.as_dict)
 
 
 if __name__ == '__main__':
