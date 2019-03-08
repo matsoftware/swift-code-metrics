@@ -1,5 +1,6 @@
 from ._helpers import AnalyzerHelpers
 from ._helpers import Log
+from ._parser import  SwiftFile
 from functional import seq
 from typing import List
 
@@ -191,23 +192,28 @@ class Metrics:
                    .list()) > 0
 
 
+class SyntheticData:
+    def __init__(self, swift_file: 'SwiftFile'):
+        self.loc = swift_file.loc
+        self.noc = swift_file.n_of_comments
+        self.number_of_interfaces = len(swift_file.interfaces)
+        self.number_of_concrete_data_structures = len(swift_file.structs + swift_file.classes)
+        self.number_of_methods = len(swift_file.methods)
+        self.number_of_tests = len(swift_file.tests)
+
+
 class Framework:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
-        self.loc = 0
-        self.noc = 0
         self.number_of_files = 0
-        self.number_of_concrete_data_structures = 0
-        self.number_of_interfaces = 0
-        self.number_of_methods = 0
-        self.number_of_tests = 0
+        self.data = SyntheticData()
         self.__total_imports = {}
         self.is_test_framework = False
 
     def __repr__(self):
         return self.name + '(' + str(self.number_of_files) + ' files)'
 
-    def append_import(self, framework_import: str):
+    def append_import(self, framework_import: 'Framework'):
         existing_framework = self.__total_imports.get(framework_import)
         if not existing_framework:
             self.__total_imports[framework_import] = 1

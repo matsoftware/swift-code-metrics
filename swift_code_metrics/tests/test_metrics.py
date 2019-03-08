@@ -1,6 +1,6 @@
 import unittest
-from swift_code_metrics._metrics import Framework, Dependency
-from swift_code_metrics._metrics import Metrics
+from swift_code_metrics._metrics import Framework, Dependency, Metrics, SyntheticData
+from swift_code_metrics._parser import SwiftFile
 from functional import seq
 
 
@@ -160,6 +160,30 @@ class MetricsTests(unittest.TestCase):
             self.rxswift,
             self.awesome_dependency,
         ]
+
+
+class SyntheticDataTests(unittest.TestCase):
+
+    def test_synthetic_init_swiftfile(self):
+        example_swiftfile = SwiftFile(
+            framework_name='Test',
+            loc=1,
+            imports=['dep1', 'dep2'],
+            interfaces=['prot1', 'prot2', 'prot3'],
+            structs=['struct'],
+            classes=['class'],
+            methods=['meth1', 'meth2', 'meth3', 'testMethod'],
+            n_of_comments=7,
+            is_shared=True,
+            is_test=False
+        )
+        synthetic_data = SyntheticData(swift_file=example_swiftfile)
+        self.assertEqual(1, synthetic_data.loc)
+        self.assertEqual(7, synthetic_data.noc)
+        self.assertEqual(2, synthetic_data.number_of_concrete_data_structures)
+        self.assertEqual(3, synthetic_data.number_of_interfaces)
+        self.assertEqual(4, synthetic_data.number_of_methods)
+        self.assertEqual(1, synthetic_data.number_of_tests)
 
 
 if __name__ == '__main__':
