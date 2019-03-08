@@ -1,12 +1,13 @@
 from ._helpers import AnalyzerHelpers
 from ._helpers import Log
 from functional import seq
+from typing import List
 
 
 class Metrics:
 
     @staticmethod
-    def distance_main_sequence(framework, frameworks):
+    def distance_main_sequence(framework: 'Framework', frameworks: List['Framework']) -> float:
         """
         Distance from the main sequence (sweet spot in the A/I ratio)
         D³ = |A+I-1|
@@ -19,14 +20,14 @@ class Metrics:
         return abs(Metrics.abstractness(framework) + Metrics.instability(framework, frameworks) - 1)
 
     @staticmethod
-    def instability(framework, frameworks):
+    def instability(framework: 'Framework', frameworks: List['Framework']) -> float:
         """
         Instability: I = fan-out / (fan-in + fan-out)
         I = 0: maximally stable component
         I = 1: maximally unstable component
         :param framework: The framework to analyze
         :param frameworks: The other frameworks in the project
-        :return: the instability value (double)
+        :return: the instability value (float)
         """
         fan_in = Metrics.fan_in(framework, frameworks)
         fan_out = Metrics.fan_out(framework)
@@ -37,13 +38,13 @@ class Metrics:
         return fan_out / sum_in_out
 
     @staticmethod
-    def abstractness(framework):
+    def abstractness(framework: 'Framework') -> float:
         """
         A = Na / Nc
         A = 0: maximally abstract component
         A = 1: maximally concrete component
         :param framework: The framework to analyze
-        :return: The abstractness value (double)
+        :return: The abstractness value (float)
         """
         if framework.number_of_concrete_data_structures == 0:
             Log.warn(f'{framework.name} is an external dependency.')
@@ -52,7 +53,7 @@ class Metrics:
             return framework.number_of_interfaces / framework.number_of_concrete_data_structures
 
     @staticmethod
-    def fan_in(framework, frameworks):
+    def fan_in(framework: 'Framework', frameworks: List['Framework']) -> int:
         """
         Fan-In: incoming dependencies (number of classes outside the framework that depend on classes inside it)
         :param framework: The framework to analyze
@@ -66,7 +67,7 @@ class Metrics:
         return fan_in
 
     @staticmethod
-    def fan_out(framework):
+    def fan_out(framework: 'Framework') -> int:
         """
         Fan-Out: outgoing dependencies. (number of classes inside this component that depend on classes outside it)
         :param framework: The framework to analyze
@@ -78,7 +79,7 @@ class Metrics:
         return fan_out
 
     @staticmethod
-    def external_dependencies(framework, frameworks):
+    def external_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependencies']:
         """
         :param framework: The framework to inspect for imports
         :param frameworks: The other frameworks in the project
@@ -88,7 +89,7 @@ class Metrics:
         return Metrics.__filtered_imports(framework, frameworks, is_internal=False)
 
     @staticmethod
-    def internal_dependencies(framework, frameworks):
+    def internal_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependencies']:
         """
         :param framework: The framework to inspect for imports
         :param frameworks: The other frameworks in the project
@@ -97,7 +98,7 @@ class Metrics:
         return Metrics.__filtered_imports(framework, frameworks, is_internal=True)
 
     @staticmethod
-    def total_dependencies(framework):
+    def total_dependencies(framework: 'Framework') -> List[str]:
         """
         :param framework: The framework to inspect
         :return: The list of imported frameworks description
@@ -107,7 +108,7 @@ class Metrics:
             .list()
 
     @staticmethod
-    def percentage_of_comments(noc, loc):
+    def percentage_of_comments(noc: int, loc: int) -> float:
         """
         Percentage Of Comments (POC) = 100 * NoC / ( NoC + LoC)
         :param noc: The number of lines of comments
@@ -122,7 +123,7 @@ class Metrics:
     # Analysis
 
     @staticmethod
-    def ia_analysis(instability, abstractness):
+    def ia_analysis(instability: float, abstractness: float) -> str:
         """
         Verbose qualitative analysis of instability and abstractness.
         :param instability: The instability value of the framework
@@ -156,7 +157,7 @@ class Metrics:
         return res
 
     @staticmethod
-    def poc_analysis(poc):
+    def poc_analysis(poc: float) -> str:
         if poc <= 20:
             return 'The code is under commented. '
         if poc >= 40:
@@ -167,13 +168,15 @@ class Metrics:
     # Internal
 
     @staticmethod
-    def __other_frameworks(framework, frameworks):
+    def __other_frameworks(framework: 'Framework', frameworks: List['Frameworks']) -> List['Framework']:
         return seq(frameworks) \
             .filter(lambda f: f is not framework) \
             .list()
 
     @staticmethod
-    def __filtered_imports(framework, frameworks, is_internal):
+    def __filtered_imports(framework: 'Framework',
+                           frameworks: List['Framework'],
+                           is_internal: bool) -> List['Dependency']:
         return seq(framework.imports.items()) \
             .filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal) \
             .map(lambda imp: Dependency(name=framework.name,
@@ -182,7 +185,7 @@ class Metrics:
             .list()
 
     @staticmethod
-    def __is_name_contained_in_list(framework, frameworks) -> bool:
+    def __is_name_contained_in_list(framework: 'Framework', frameworks: List['Frameworks']) -> bool:
         return len(seq(frameworks)
                    .filter(lambda f: f.name == framework.name)
                    .list()) > 0
@@ -204,7 +207,7 @@ class Framework:
     def __repr__(self):
         return self.name + '(' + str(self.number_of_files) + ' files)'
 
-    def append_import(self, framework_import):
+    def append_import(self, framework_import: str):
         existing_framework = self.__total_imports.get(framework_import)
         if not existing_framework:
             self.__total_imports[framework_import] = 1

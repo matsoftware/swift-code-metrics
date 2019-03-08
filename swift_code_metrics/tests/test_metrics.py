@@ -70,6 +70,43 @@ class MetricsTests(unittest.TestCase):
             self.app_layer
         ]
 
+    def _populate_app_layer_imports(self):
+        self.app_layer.append_import(self.design_kit)
+        self.app_layer.append_import(self.design_kit)
+        self.app_layer.append_import(self.foundation_kit)
+
+    def test_distance_main_sequence(self):
+        self._populate_app_layer_imports()
+        self.app_layer.number_of_concrete_data_structures = 7
+        self.app_layer.number_of_interfaces = 2
+
+        self.assertAlmostEqual(0.286,
+                               Metrics.distance_main_sequence(self.app_layer, self.frameworks),
+                               places=3)
+
+    def test_instability_no_imports(self):
+        self.assertEqual(0, Metrics.instability(self.foundation_kit, self.frameworks))
+
+    def test_instability_imports(self):
+        self._populate_app_layer_imports()
+        self.assertAlmostEqual(1.0, Metrics.instability(self.app_layer, self.frameworks))
+
+    def test_abstractness_no_concretes(self):
+        self.assertEqual(0, Metrics.abstractness(self.foundation_kit))
+
+    def test_abstractness_concretes(self):
+        self.foundation_kit.number_of_interfaces = 8
+        self.foundation_kit.number_of_concrete_data_structures = 4
+        self.assertEqual(2, Metrics.abstractness(self.foundation_kit))
+
+    def test_fan_in(self):
+        self._populate_app_layer_imports()
+        self.assertEqual(2, Metrics.fan_in(self.design_kit, self.frameworks))
+
+    def test_fan_out(self):
+        self._populate_app_layer_imports()
+        self.assertEqual(3, Metrics.fan_out(self.app_layer))
+
     def test_external_dependencies(self):
         for sf in self.__dummy_external_frameworks:
             self.foundation_kit.append_import(sf)
@@ -84,9 +121,7 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(design_external_deps, [])
 
     def test_internal_dependencies(self):
-        self.app_layer.append_import(self.design_kit)
-        self.app_layer.append_import(self.design_kit)
-        self.app_layer.append_import(self.foundation_kit)
+        self._populate_app_layer_imports()
         self.design_kit.append_import(self.foundation_kit)
 
         expected_foundation_internal_deps = []
