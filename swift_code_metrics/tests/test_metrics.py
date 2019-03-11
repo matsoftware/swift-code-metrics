@@ -6,7 +6,7 @@ from functional import seq
 example_swiftfile = SwiftFile(
     framework_name=['Test'],
     loc=1,
-    imports=['dep1', 'dep2'],
+    imports=['Foundation', 'dep1', 'dep2'],
     interfaces=['prot1', 'prot2', 'prot3'],
     structs=['struct'],
     classes=['class'],
@@ -207,6 +207,16 @@ class SyntheticDataTests(unittest.TestCase):
         self.assertEqual(8, self.synthetic_data.number_of_methods)
         self.assertEqual(2, self.synthetic_data.number_of_tests)
 
+    def test_remove_data(self):
+        additional_data = SyntheticData(swift_file=example_swiftfile)
+        self.synthetic_data.remove_data(data=additional_data)
+        self.assertEqual(0, self.synthetic_data.loc)
+        self.assertEqual(0, self.synthetic_data.noc)
+        self.assertEqual(0, self.synthetic_data.number_of_concrete_data_structures)
+        self.assertEqual(0, self.synthetic_data.number_of_interfaces)
+        self.assertEqual(0, self.synthetic_data.number_of_methods)
+        self.assertEqual(0, self.synthetic_data.number_of_tests)
+
     def test_poc(self):
         self.assertAlmostEqual(87.5, self.synthetic_data.poc)
 
@@ -228,14 +238,14 @@ class FrameworkDataTests(unittest.TestCase):
     def setUp(self):
         self.framework_data = FrameworkData(swift_file=example_swiftfile)
 
-    def test_init_no_swift_file(self):
+    def test_init_swift_file(self):
         self.assertEqual(1, self.framework_data.loc)
         self.assertEqual(7, self.framework_data.noc)
         self.assertEqual(2, self.framework_data.number_of_concrete_data_structures)
         self.assertEqual(3, self.framework_data.number_of_interfaces)
         self.assertEqual(4, self.framework_data.number_of_methods)
         self.assertEqual(1, self.framework_data.number_of_tests)
-        self.assertEqual(0, self.framework_data.n_o_i)
+        self.assertEqual(2, self.framework_data.n_o_i)
 
     def test_append_framework(self):
         framework_additional_data = SyntheticData(swift_file=example_swiftfile)
@@ -250,7 +260,19 @@ class FrameworkDataTests(unittest.TestCase):
         self.assertEqual(6, self.framework_data.number_of_interfaces)
         self.assertEqual(8, self.framework_data.number_of_methods)
         self.assertEqual(2, self.framework_data.number_of_tests)
-        self.assertEqual(1, self.framework_data.n_o_i)
+        self.assertEqual(3, self.framework_data.n_o_i)
+
+    def test_remove_framework_data(self):
+        framework_additional_data = FrameworkData(swift_file=example_swiftfile)
+
+        self.framework_data.remove_data(framework_additional_data)
+        self.assertEqual(0, self.framework_data.loc)
+        self.assertEqual(0, self.framework_data.noc)
+        self.assertEqual(0, self.framework_data.number_of_concrete_data_structures)
+        self.assertEqual(0, self.framework_data.number_of_interfaces)
+        self.assertEqual(0, self.framework_data.number_of_methods)
+        self.assertEqual(0, self.framework_data.number_of_tests)
+        self.assertEqual(0, self.framework_data.n_o_i)
 
     def test_as_dict(self):
         expected_dict = {
@@ -261,7 +283,7 @@ class FrameworkDataTests(unittest.TestCase):
             "nom": 4,
             "not": 1,
             "poc": 87.5,
-            "noi": 0
+            "noi": 2
         }
         self.assertEqual(expected_dict, self.framework_data.as_dict)
 

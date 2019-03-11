@@ -210,6 +210,14 @@ class SyntheticData:
         self.number_of_methods += data.number_of_methods
         self.number_of_tests += data.number_of_tests
 
+    def remove_data(self, data: 'SyntheticData'):
+        self.loc -= data.loc
+        self.noc -= data.noc
+        self.number_of_interfaces -= data.number_of_interfaces
+        self.number_of_concrete_data_structures -= data.number_of_concrete_data_structures
+        self.number_of_methods -= data.number_of_methods
+        self.number_of_tests -= data.number_of_tests
+
     @property
     def poc(self) -> float:
         return Metrics.percentage_of_comments(self.noc, self.loc)
@@ -230,11 +238,16 @@ class SyntheticData:
 class FrameworkData(SyntheticData):
     def __init__(self, swift_file: Optional['SwiftFile'] = None):
         super().__init__(swift_file)
-        self.n_o_i = 0
+        self.n_o_i = 0 if swift_file is None else\
+            len([imp for imp in swift_file.imports if imp not in AnalyzerHelpers.APPLE_FRAMEWORKS])
 
     def append_framework(self, f: 'Framework'):
-        self.append_data(data=f.data)
+        super().append_data(data=f.data)
         self.n_o_i += f.number_of_imports
+
+    def remove_data(self, data: 'FrameworkData'):
+        super().remove_data(data=data)
+        self.n_o_i -= data.n_o_i
 
     @property
     def as_dict(self) -> Dict:

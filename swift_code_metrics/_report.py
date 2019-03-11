@@ -10,6 +10,20 @@ class ReportProcessor:
     def generate_report(frameworks: List['Framework'], shared_files: Dict[str, 'SwiftFile']):
         report = Report()
 
+        # Shared files
+        for path, shared_files in shared_files.items():
+            shared_file = shared_files[0]
+            shared_file_data = FrameworkData(swift_file=shared_file)
+            for _ in range((len(shared_files) - 1)):
+                report.shared_code.append_data(shared_file_data)
+                report.total_aggregate.remove_data(shared_file_data)
+                if shared_file.is_test:
+                    report.test_framework_aggregate.remove_data(shared_file_data)
+                else:
+                    report.non_test_framework_aggregate.remove_data(shared_file_data)
+
+        # Frameworks
+        total_data = FrameworkData()
         for f in sorted(frameworks, key=lambda fr: fr.name, reverse=False):
             analysis = ReportProcessor.__framework_analysis(f, frameworks)
             if f.is_test_framework:
@@ -18,6 +32,7 @@ class ReportProcessor:
             else:
                 report.non_test_framework.append(analysis)
                 report.non_test_framework_aggregate.append_framework(f)
+            report.total_aggregate.append_framework(f)
 
         return report
 
@@ -77,7 +92,7 @@ class Report:
         self.non_test_framework_aggregate = FrameworkData()
         self.test_framework_aggregate = FrameworkData()
         self.total_aggregate = FrameworkData()
-        self.shared_code = SyntheticData()
+        self.shared_code = FrameworkData()
         # Constants for report
         self.non_test_frameworks_key = "non-test-frameworks"
         self.tests_frameworks_key = "tests-frameworks"

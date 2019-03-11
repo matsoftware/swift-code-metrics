@@ -2,23 +2,24 @@
     "non-test-frameworks": [
         {
             "BusinessLogic": {
-                "loc": 49,
+                "loc": 51,
                 "noc": 7,
-                "poc": 12.5,
+                "poc": 12.069,
                 "n_a": 0,
                 "n_c": 3,
                 "nom": 3,
                 "not": 0,
-                "noi": 1,
-                "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
+                "noi": 2,
+                "analysis": "The code is under commented. Low abstract component, few interfaces. ",
                 "dependencies": [
-                    "FoundationFramework(1)"
+                    "FoundationFramework(1)",
+                    "SecretLib(1)"
                 ],
                 "fan_in": 1,
-                "fan_out": 1,
-                "i": 0.5,
+                "fan_out": 2,
+                "i": 0.667,
                 "a": 0.0,
-                "d_3": 0.5
+                "d_3": 0.333
             }
         },
         {
@@ -38,6 +39,25 @@
                 "i": 0.0,
                 "a": 0.5,
                 "d_3": 0.5
+            }
+        },
+        {
+            "SecretLib": {
+                "loc": 12,
+                "noc": 14,
+                "poc": 53.846,
+                "n_a": 0,
+                "n_c": 2,
+                "nom": 2,
+                "not": 0,
+                "noi": 0,
+                "analysis": "The code is over commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
+                "dependencies": [],
+                "fan_in": 1,
+                "fan_out": 0,
+                "i": 0.0,
+                "a": 0.0,
+                "d_3": 1.0
             }
         },
         {
@@ -78,7 +98,7 @@
             }
         },
         {
-            "FoundationFramework_Test": {
+            "FoundationFrameworkTests": {
                 "loc": 41,
                 "noc": 14,
                 "poc": 25.455,
@@ -106,16 +126,26 @@
             }
         }
     ],
+    "shared": {
+        "loc": 4,
+        "noc": 7,
+        "n_a": 0,
+        "n_c": 1,
+        "nom": 1,
+        "not": 0,
+        "poc": 63.636,
+        "noi": 0
+    },
     "aggregate": {
         "non-test-frameworks": {
-            "loc": 97,
-            "noc": 35,
+            "loc": 107,
+            "noc": 42,
             "n_a": 1,
-            "n_c": 7,
-            "nom": 10,
+            "n_c": 8,
+            "nom": 11,
             "not": 0,
-            "noi": 2,
-            "poc": 26.515
+            "poc": 28.188,
+            "noi": 3
         },
         "tests-frameworks": {
             "loc": 53,
@@ -124,18 +154,18 @@
             "n_c": 4,
             "nom": 7,
             "not": 5,
-            "noi": 0,
-            "poc": 34.568
+            "poc": 34.568,
+            "noi": 0
         },
         "total": {
-            "loc": 150,
-            "noc": 63,
+            "loc": 160,
+            "noc": 70,
             "n_a": 1,
-            "n_c": 11,
-            "nom": 17,
+            "n_c": 12,
+            "nom": 18,
             "not": 5,
-            "noi": 2,
-            "poc": 29.577
+            "poc": 30.435,
+            "noi": 3
         }
     }
 }
