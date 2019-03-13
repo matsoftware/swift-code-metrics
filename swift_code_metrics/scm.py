@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 from ._helpers import Log,ReportingHelpers
 from ._analyzer import Inspector
 from ._presenter import GraphPresenter
+from ._metrics import Metrics
 from .version import VERSION
 import sys
 
@@ -96,8 +97,8 @@ def main():
 
     # Distance from the main sequence
     graph_presenter.distance_from_main_sequence_plot(non_test_frameworks,
-                                                     lambda fr: analyzer.instability(fr),
-                                                     lambda fr: analyzer.abstractness(fr))
+                                                     lambda fr: Metrics.instability(fr, analyzer.frameworks),
+                                                     lambda fr: Metrics.abstractness(fr))
 
     # Dependency graph
     graph_presenter.dependency_graph(non_test_frameworks,

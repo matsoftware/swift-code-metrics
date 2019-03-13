@@ -1,6 +1,6 @@
 from typing import Dict, List
 from ._helpers import ReportingHelpers
-from ._metrics import FrameworkData, SyntheticData, Framework, Metrics
+from ._metrics import FrameworkData, Framework, Metrics
 from ._parser import SwiftFile
 
 
@@ -11,7 +11,7 @@ class ReportProcessor:
         report = Report()
 
         # Shared files
-        for path, shared_files in shared_files.items():
+        for _, shared_files in shared_files.items():
             shared_file = shared_files[0]
             shared_file_data = FrameworkData(swift_file=shared_file)
             for _ in range((len(shared_files) - 1)):
@@ -23,7 +23,6 @@ class ReportProcessor:
                     report.non_test_framework_aggregate.remove_data(shared_file_data)
 
         # Frameworks
-        total_data = FrameworkData()
         for f in sorted(frameworks, key=lambda fr: fr.name, reverse=False):
             analysis = ReportProcessor.__framework_analysis(f, frameworks)
             if f.is_test_framework:

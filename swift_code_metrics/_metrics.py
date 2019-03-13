@@ -1,6 +1,6 @@
 from ._helpers import AnalyzerHelpers
 from ._helpers import Log, ReportingHelpers
-from ._parser import  SwiftFile
+from ._parser import SwiftFile
 from functional import seq
 from typing import Dict, List, Optional
 

@@ -1,13 +1,12 @@
 import os
 import json
 
-from ._report import Report
 from ._helpers import AnalyzerHelpers
 from ._parser import SwiftFileParser, SwiftFile
-from ._metrics import Framework, Metrics, SyntheticData
-from ._report import ReportProcessor, Report
+from ._metrics import Framework, SyntheticData
+from ._report import ReportProcessor
 from functional import seq
-from typing import List, Dict, Optional
+from typing import List, Optional
 
 
 class Inspector:
@@ -40,12 +39,6 @@ class Inspector:
             os.makedirs(directory)
         with open(os.path.join(directory, 'output.json'), 'w') as fp:
             json.dump(self.report.as_dict, fp, indent=4)
-
-    def instability(self, framework: 'Framework') -> float:
-        return Metrics.instability(framework, self.frameworks)
-
-    def abstractness(self, framework: 'Framework') -> float:
-        return Metrics.abstractness(framework)
 
     # Directory inspection
 
