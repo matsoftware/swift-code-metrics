@@ -125,7 +125,7 @@ class SwiftFileParser(object):
                         value.append(extracted_value)
                         continue
 
-        subdir = self.file.replace(self.base_path, '')
+        subdir = self.file.replace(self.base_path, '', 1)
         first_subpath = self.__extract_first_subpath(subdir)
 
         framework_names, is_test = self.__extract_overrides(first_subpath) or \
