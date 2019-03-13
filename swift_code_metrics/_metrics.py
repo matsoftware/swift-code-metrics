@@ -1,12 +1,14 @@
 from ._helpers import AnalyzerHelpers
-from ._helpers import Log
+from ._helpers import Log, ReportingHelpers
+from ._parser import SwiftFile
 from functional import seq
+from typing import Dict, List, Optional
 
 
 class Metrics:
 
     @staticmethod
-    def distance_main_sequence(framework, frameworks):
+    def distance_main_sequence(framework: 'Framework', frameworks: List['Framework']) -> float:
         """
         Distance from the main sequence (sweet spot in the A/I ratio)
         D³ = |A+I-1|
@@ -19,14 +21,14 @@ class Metrics:
         return abs(Metrics.abstractness(framework) + Metrics.instability(framework, frameworks) - 1)
 
     @staticmethod
-    def instability(framework, frameworks):
+    def instability(framework: 'Framework', frameworks: List['Framework']) -> float:
         """
         Instability: I = fan-out / (fan-in + fan-out)
         I = 0: maximally stable component
         I = 1: maximally unstable component
         :param framework: The framework to analyze
         :param frameworks: The other frameworks in the project
-        :return: the instability value (double)
+        :return: the instability value (float)
         """
         fan_in = Metrics.fan_in(framework, frameworks)
         fan_out = Metrics.fan_out(framework)
@@ -37,22 +39,22 @@ class Metrics:
         return fan_out / sum_in_out
 
     @staticmethod
-    def abstractness(framework):
+    def abstractness(framework: 'Framework') -> float:
         """
         A = Na / Nc
         A = 0: maximally abstract component
         A = 1: maximally concrete component
         :param framework: The framework to analyze
-        :return: The abstractness value (double)
+        :return: The abstractness value (float)
         """
-        if framework.number_of_concrete_data_structures == 0:
+        if framework.data.number_of_concrete_data_structures == 0:
             Log.warn(f'{framework.name} is an external dependency.')
             return 0
         else:
-            return framework.number_of_interfaces / framework.number_of_concrete_data_structures
+            return framework.data.number_of_interfaces / framework.data.number_of_concrete_data_structures
 
     @staticmethod
-    def fan_in(framework, frameworks):
+    def fan_in(framework: 'Framework', frameworks: List['Framework']) -> int:
         """
         Fan-In: incoming dependencies (number of classes outside the framework that depend on classes inside it)
         :param framework: The framework to analyze
@@ -66,7 +68,7 @@ class Metrics:
         return fan_in
 
     @staticmethod
-    def fan_out(framework):
+    def fan_out(framework: 'Framework') -> int:
         """
         Fan-Out: outgoing dependencies. (number of classes inside this component that depend on classes outside it)
         :param framework: The framework to analyze
@@ -78,7 +80,7 @@ class Metrics:
         return fan_out
 
     @staticmethod
-    def external_dependencies(framework, frameworks):
+    def external_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependency']:
         """
         :param framework: The framework to inspect for imports
         :param frameworks: The other frameworks in the project
@@ -88,7 +90,7 @@ class Metrics:
         return Metrics.__filtered_imports(framework, frameworks, is_internal=False)
 
     @staticmethod
-    def internal_dependencies(framework, frameworks):
+    def internal_dependencies(framework: 'Framework', frameworks: List['Framework']) -> List['Dependency']:
         """
         :param framework: The framework to inspect for imports
         :param frameworks: The other frameworks in the project
@@ -97,7 +99,7 @@ class Metrics:
         return Metrics.__filtered_imports(framework, frameworks, is_internal=True)
 
     @staticmethod
-    def total_dependencies(framework):
+    def total_dependencies(framework: 'Framework') -> List[str]:
         """
         :param framework: The framework to inspect
         :return: The list of imported frameworks description
@@ -107,7 +109,7 @@ class Metrics:
             .list()
 
     @staticmethod
-    def percentage_of_comments(noc, loc):
+    def percentage_of_comments(noc: int, loc: int) -> float:
         """
         Percentage Of Comments (POC) = 100 * NoC / ( NoC + LoC)
         :param noc: The number of lines of comments
@@ -122,7 +124,7 @@ class Metrics:
     # Analysis
 
     @staticmethod
-    def ia_analysis(instability, abstractness):
+    def ia_analysis(instability: float, abstractness: float) -> str:
         """
         Verbose qualitative analysis of instability and abstractness.
         :param instability: The instability value of the framework
@@ -156,7 +158,7 @@ class Metrics:
         return res
 
     @staticmethod
-    def poc_analysis(poc):
+    def poc_analysis(poc: float) -> str:
         if poc <= 20:
             return 'The code is under commented. '
         if poc >= 40:
@@ -167,13 +169,15 @@ class Metrics:
     # Internal
 
     @staticmethod
-    def __other_frameworks(framework, frameworks):
+    def __other_frameworks(framework: 'Framework', frameworks: List['Framework']) -> List['Framework']:
         return seq(frameworks) \
             .filter(lambda f: f is not framework) \
             .list()
 
     @staticmethod
-    def __filtered_imports(framework, frameworks, is_internal):
+    def __filtered_imports(framework: 'Framework',
+                           frameworks: List['Framework'],
+                           is_internal: bool) -> List['Dependency']:
         return seq(framework.imports.items()) \
             .filter(lambda f: (Metrics.__is_name_contained_in_list(f[0], frameworks)) == is_internal) \
             .map(lambda imp: Dependency(name=framework.name,
@@ -182,29 +186,86 @@ class Metrics:
             .list()
 
     @staticmethod
-    def __is_name_contained_in_list(framework, frameworks) -> bool:
+    def __is_name_contained_in_list(framework: 'Framework', frameworks: List['Framework']) -> bool:
         return len(seq(frameworks)
                    .filter(lambda f: f.name == framework.name)
                    .list()) > 0
 
 
+class SyntheticData:
+    def __init__(self, swift_file: Optional['SwiftFile'] = None):
+        self.loc = 0 if swift_file is None else swift_file.loc
+        self.noc = 0 if swift_file is None else swift_file.n_of_comments
+        self.number_of_interfaces = 0 if swift_file is None else len(swift_file.interfaces)
+        self.number_of_concrete_data_structures = 0 if swift_file is None else \
+            len(swift_file.structs + swift_file.classes)
+        self.number_of_methods = 0 if swift_file is None else len(swift_file.methods)
+        self.number_of_tests = 0 if swift_file is None else len(swift_file.tests)
+
+    def append_data(self, data: 'SyntheticData'):
+        self.loc += data.loc
+        self.noc += data.noc
+        self.number_of_interfaces += data.number_of_interfaces
+        self.number_of_concrete_data_structures += data.number_of_concrete_data_structures
+        self.number_of_methods += data.number_of_methods
+        self.number_of_tests += data.number_of_tests
+
+    def remove_data(self, data: 'SyntheticData'):
+        self.loc -= data.loc
+        self.noc -= data.noc
+        self.number_of_interfaces -= data.number_of_interfaces
+        self.number_of_concrete_data_structures -= data.number_of_concrete_data_structures
+        self.number_of_methods -= data.number_of_methods
+        self.number_of_tests -= data.number_of_tests
+
+    @property
+    def poc(self) -> float:
+        return Metrics.percentage_of_comments(self.noc, self.loc)
+
+    @property
+    def as_dict(self) -> Dict:
+        return {
+            "loc": self.loc,
+            "noc": self.noc,
+            "n_a": self.number_of_interfaces,
+            "n_c": self.number_of_concrete_data_structures,
+            "nom": self.number_of_methods,
+            "not": self.number_of_tests,
+            "poc": ReportingHelpers.decimal_format(self.poc)
+        }
+
+
+class FrameworkData(SyntheticData):
+    def __init__(self, swift_file: Optional['SwiftFile'] = None):
+        super().__init__(swift_file)
+        self.n_o_i = 0 if swift_file is None else\
+            len([imp for imp in swift_file.imports if imp not in AnalyzerHelpers.APPLE_FRAMEWORKS])
+
+    def append_framework(self, f: 'Framework'):
+        super().append_data(data=f.data)
+        self.n_o_i += f.number_of_imports
+
+    def remove_data(self, data: 'FrameworkData'):
+        super().remove_data(data=data)
+        self.n_o_i -= data.n_o_i
+
+    @property
+    def as_dict(self) -> Dict:
+        return {**super().as_dict, **{"noi": self.n_o_i}}
+
+
 class Framework:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
-        self.loc = 0
-        self.noc = 0
         self.number_of_files = 0
-        self.number_of_concrete_data_structures = 0
-        self.number_of_interfaces = 0
-        self.number_of_methods = 0
-        self.number_of_tests = 0
+        self.data = SyntheticData()
         self.__total_imports = {}
         self.is_test_framework = False
 
     def __repr__(self):
         return self.name + '(' + str(self.number_of_files) + ' files)'
 
-    def append_import(self, framework_import):
+    def append_import(self, framework_import: 'Framework'):
         existing_framework = self.__total_imports.get(framework_import)
         if not existing_framework:
             self.__total_imports[framework_import] = 1
@@ -267,3 +328,4 @@ class Dependency:
     @property
     def relationship(self) -> str:
         return f'{self.name} > {self.dependent_framework}'
+

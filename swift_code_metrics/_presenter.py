@@ -69,7 +69,7 @@ class GraphPresenter:
         Renders the Frameworks dependency graph.
         """
 
-        nodes = seq(list_of_frameworks).map(lambda fr: (fr.name, ceil(10 * fr.loc / total_code))).list()
+        nodes = seq(list_of_frameworks).map(lambda fr: (fr.name, ceil(10 * fr.data.loc / total_code))).list()
 
         internal_edges = seq(list_of_frameworks) \
             .flat_map(lambda fr: Metrics.internal_dependencies(fr, list_of_frameworks)) \

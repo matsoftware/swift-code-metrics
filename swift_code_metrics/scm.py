@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 from ._helpers import Log,ReportingHelpers
 from ._analyzer import Inspector
 from ._presenter import GraphPresenter
+from ._metrics import Metrics
 from .version import VERSION
 import sys
 
@@ -80,14 +81,14 @@ def main():
 
     # Sorted data plots
     non_test_reports_sorted_data = {
-        'N. of classes and structs': lambda fr: fr.number_of_concrete_data_structures,
-        'Lines Of Code - LOC': lambda fr: fr.loc,
-        'Number Of Comments - NOC': lambda fr: fr.noc,
+        'N. of classes and structs': lambda fr: fr.data.number_of_concrete_data_structures,
+        'Lines Of Code - LOC': lambda fr: fr.data.loc,
+        'Number Of Comments - NOC': lambda fr: fr.data.noc,
         'N. of imports - NOI': lambda fr: fr.number_of_imports
     }
 
     tests_reports_sorted_data = {
-        'Number of tests - NOT': lambda fr: fr.number_of_tests
+        'Number of tests - NOT': lambda fr: fr.data.number_of_tests
     }
 
     # Non-test graphs
@@ -96,8 +97,8 @@ def main():
 
     # Distance from the main sequence
     graph_presenter.distance_from_main_sequence_plot(non_test_frameworks,
-                                                     lambda fr: analyzer.instability(fr),
-                                                     lambda fr: analyzer.abstractness(fr))
+                                                     lambda fr: Metrics.instability(fr, analyzer.frameworks),
+                                                     lambda fr: Metrics.abstractness(fr))
 
     # Dependency graph
     graph_presenter.dependency_graph(non_test_frameworks,
@@ -107,7 +108,8 @@ def main():
     # Code distribution
     graph_presenter.pie_plot('Code distribution', non_test_frameworks,
                              lambda fr:
-                             ReportingHelpers.decimal_format(fr.loc / analyzer.report.non_test_framework_aggregate.loc))
+                             ReportingHelpers.decimal_format(fr.data.loc
+                                                             / analyzer.report.non_test_framework_aggregate.loc))
 
     # Test graphs
     for title, framework_function in tests_reports_sorted_data.items():

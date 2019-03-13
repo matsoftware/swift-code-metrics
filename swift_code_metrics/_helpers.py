@@ -1,5 +1,7 @@
 import re
 import logging
+import json
+from typing import Dict
 
 
 class Log:
@@ -174,6 +176,7 @@ class ParsingHelpers:
     DEFAULT_FRAMEWORK_NAME = 'AppTarget'
     DEFAULT_TEST_FRAMEWORK_SUFFIX = '_Test'
     TEST_METHOD_PREFIX = 'test'
+    FRAMEWORK_STRUCTURE_OVERRIDE_FILE = 'scm.json'
 
     # Constants - Regex patterns
 
@@ -212,3 +215,11 @@ class ReportingHelpers:
     def decimal_format(number, decimal_places=3):
         format_string = "{:." + str(decimal_places) + "f}"
         return float(format_string.format(number))
+
+
+class JSONReader:
+
+    @staticmethod
+    def read_json_file(path: str) -> Dict:
+        with open(path, 'r') as fp:
+            return json.load(fp)

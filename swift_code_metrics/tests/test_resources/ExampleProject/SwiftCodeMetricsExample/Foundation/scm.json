@@ -1,0 +1,25 @@
+{
+  "libraries": [
+    {
+      "name": "FoundationFramework",
+      "path": "FoundationFramework",
+      "is_test": false
+    },
+    {
+      "name": "FoundationFrameworkTests",
+      "path": "FoundationFrameworkTests",
+      "is_test": true
+    },
+    {
+      "name": "SecretLib",
+      "path": "SecretLib",
+      "is_test": false
+    }
+  ],
+  "shared": [
+    {
+      "path": "Shared",
+      "is_test": false
+    }
+  ]
+}

@@ -8,6 +8,7 @@
 
 import UIKit
 import FoundationFramework
+import SecretLib
 
 public class FeatureViewController: UIViewController {
     
@@ -41,7 +42,8 @@ public class FeatureViewController: UIViewController {
         client.makeRequest(with: URL(fileURLWithPath: baseRequestPath)) { res in
             switch res {
             case .success(data: let data):
-                label.text = String(data: data, encoding: .utf8)
+                let plainText = String(data: data, encoding: .utf8)!
+                label.text = CaesarChiper.encrypt(message: plainText, shift: 9)
                 view.backgroundColor = .green
             case .error(error: let error):
                 view.backgroundColor = .red

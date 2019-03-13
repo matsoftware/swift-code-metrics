@@ -1,9 +1,21 @@
 import os
-from ._helpers import AnalyzerHelpers, ParsingHelpers
+from pathlib import Path
+from typing import List, Optional, Tuple
+from ._helpers import AnalyzerHelpers, ParsingHelpers, JSONReader
+from ._helpers import Log
 
 
-class SwiftFile:
-    def __init__(self, framework_name, loc, imports, interfaces, structs, classes, methods, n_of_comments):
+class SwiftFile(object):
+    def __init__(self, framework_name: List[str],
+                 loc: int,
+                 imports: List[str],
+                 interfaces: List[str],
+                 structs: List[str],
+                 classes: List[str],
+                 methods: List[str],
+                 n_of_comments: int,
+                 is_shared: bool,
+                 is_test: bool):
         """
         Creates a SwiftFile instance that represents a parsed swift file.
         :param framework_name: The framework where the file belongs to.
@@ -14,6 +26,8 @@ class SwiftFile:
         :param classes: List of classes defined in the file
         :param methods: List of functions defined in the file
         :param n_of_comments: Total number of comments in the file
+        :param is_shared: True if the file is shared with other frameworks
+        :param is_test: True if the file is a test class
         """
         self.framework_name = framework_name
         self.loc = loc
@@ -23,9 +37,11 @@ class SwiftFile:
         self.classes = classes
         self.methods = methods
         self.n_of_comments = n_of_comments
+        self.is_shared = is_shared
+        self.is_test = is_test
 
     @property
-    def tests(self):
+    def tests(self) -> List[str]:
         """
         List of test extracted from the parsed methods.
         :return: array of strings
@@ -34,11 +50,25 @@ class SwiftFile:
                            self.methods))
 
 
-class SwiftFileParser:
-    def __init__(self, file, base_path, is_test=False):
+class ProjectPathsOverride(object):
+
+    def __init__(self, **entries):
+        self.__dict__ = entries['entries']
+
+    def __eq__(self, other):
+        return (self.libraries == other.libraries) and (self.shared == other.shared)
+
+    @staticmethod
+    def load_from_json(path: str) -> 'ProjectPathsOverride':
+        return ProjectPathsOverride(entries=JSONReader.read_json_file(path))
+
+
+class SwiftFileParser(object):
+    def __init__(self, file: str, base_path: str, current_subdir: str, tests_default_paths: List[str]):
         self.file = file
         self.base_path = base_path
-        self.is_test = is_test
+        self.current_subdir = current_subdir
+        self.tests_default_paths = tests_default_paths
         self.imports = []
         self.attributes_regex_map = {
             ParsingHelpers.IMPORTS: [],
@@ -48,7 +78,7 @@ class SwiftFileParser:
             ParsingHelpers.FUNCS: [],
         }
 
-    def parse(self):
+    def parse(self) -> List['SwiftFile']:
         """
         Parses the .swift file to inspect the code inside.
         Notes:
@@ -95,32 +125,62 @@ class SwiftFileParser:
                         value.append(extracted_value)
                         continue
 
-        return SwiftFile(
-            framework_name=self.__framework_name(),
+        subdir = self.file.replace(self.base_path, '')
+        first_subpath = self.__extract_first_subpath(subdir)
+
+        framework_names, is_test = self.__extract_overrides(first_subpath) or \
+                                   self.__extract_attributes(first_subpath)
+
+        is_shared_file = len(framework_names) > 1
+        return [SwiftFile(
+            framework_name=f,
             loc=loc,
             imports=self.attributes_regex_map[ParsingHelpers.IMPORTS],
             interfaces=self.attributes_regex_map[ParsingHelpers.PROTOCOLS],
             structs=self.attributes_regex_map[ParsingHelpers.STRUCTS],
             classes=self.attributes_regex_map[ParsingHelpers.CLASSES],
             methods=self.attributes_regex_map[ParsingHelpers.FUNCS],
-            n_of_comments=n_of_comments
-        )
+            n_of_comments=n_of_comments,
+            is_shared=is_shared_file,
+            is_test=is_test
+        ) for f in framework_names]
 
     # Private helpers
 
-    def __framework_name(self):
-        suffix = ParsingHelpers.DEFAULT_TEST_FRAMEWORK_SUFFIX if self.is_test else ''
-        return self.__extracted_framework_name() + suffix
+    def __extract_overrides(self, first_subpath: str) -> Optional[Tuple[List[str], bool]]:
+        project_override_path = Path(self.base_path) / first_subpath / ParsingHelpers.FRAMEWORK_STRUCTURE_OVERRIDE_FILE
+        if not project_override_path.exists():
+            return None
 
-    def __extracted_framework_name(self):
-        subdir = self.file.replace(self.base_path, '')
-        first_subpath = self.__extract_first_subpath(subdir)
+        # Analysis of custom libraries folder
+        file_parts = Path(self.file).parts
+        project_override = ProjectPathsOverride.load_from_json(str(project_override_path))
+        for library in project_override.libraries:
+            if library['path'] in file_parts:
+                return [library['name']], library['is_test']
+        # Analysis of shared folder
+        for shared_path in project_override.shared:
+            if shared_path['path'] in file_parts:
+                is_test = shared_path['is_test']
+                libraries = [l['name'] for l in project_override.libraries if l['is_test'] == is_test]
+                return libraries, shared_path['is_test']
+
+        # No overrides (wrong configuration)
+        Log.warn(f'{self.file} not classified in a folder with projects overrides (scm.json).')
+        return None
+
+    def __extract_attributes(self, first_subpath: str) -> Tuple[List[str], bool]:
+        # Test attribute
+        is_test = AnalyzerHelpers.is_path_in_list(self.current_subdir, self.tests_default_paths)
+
+        # Root folder files
         if first_subpath.endswith(AnalyzerHelpers.SWIFT_FILE_EXTENSION):
-            return ParsingHelpers.DEFAULT_FRAMEWORK_NAME
+            return [ParsingHelpers.DEFAULT_FRAMEWORK_NAME], is_test
         else:
-            return first_subpath
+            suffix = ParsingHelpers.DEFAULT_TEST_FRAMEWORK_SUFFIX if is_test else ''
+            return [first_subpath + suffix], is_test
 
-    def __extract_first_subpath(self, subdir):
+    def __extract_first_subpath(self, subdir: str) -> str:
         subdirs = os.path.split(subdir)
         if len(subdirs[0]) > 1:
             return self.__extract_first_subpath(subdirs[0])

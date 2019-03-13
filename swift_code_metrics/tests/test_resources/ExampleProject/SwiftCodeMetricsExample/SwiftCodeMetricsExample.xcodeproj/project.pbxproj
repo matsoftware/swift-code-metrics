@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E5726D8921176F650058296E /* BusinessLogic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E576968721176EB800CADE76 /* BusinessLogic.framework */; };
-		E5726D8A21176F650058296E /* FoundationFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E576965721176AAB00CADE76 /* FoundationFramework.framework */; };
 		E5726D8C21176F6D0058296E /* BusinessLogic.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E576968721176EB800CADE76 /* BusinessLogic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E5726D9021176F6D0058296E /* FoundationFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E576965721176AAB00CADE76 /* FoundationFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E576960A2117651700CADE76 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57696092117651700CADE76 /* AppDelegate.swift */; };
 		E576960C2117651700CADE76 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576960B2117651700CADE76 /* ViewController.swift */; };
 		E576960F2117651700CADE76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E576960D2117651700CADE76 /* Main.storyboard */; };
@@ -27,33 +25,12 @@
 			remoteGlobalIDString = E576966321176D6600CADE76;
 			remoteInfo = BusinessLogic;
 		};
-		E5726D9121176F6D0058296E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E576965121176AAB00CADE76 /* FoundationFramework.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E57696322117671600CADE76;
-			remoteInfo = FoundationFramework;
-		};
 		E576961B2117651900CADE76 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E57695FE2117651700CADE76 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E57696052117651700CADE76;
 			remoteInfo = SwiftCodeMetricsExample;
-		};
-		E576965621176AAB00CADE76 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E576965121176AAB00CADE76 /* FoundationFramework.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E57696332117671600CADE76;
-			remoteInfo = FoundationFramework;
-		};
-		E576965821176AAB00CADE76 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E576965121176AAB00CADE76 /* FoundationFramework.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E576963C2117671600CADE76;
-			remoteInfo = FoundationFrameworkTests;
 		};
 		E576968621176EB800CADE76 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -69,6 +46,27 @@
 			remoteGlobalIDString = E576966D21176D6600CADE76;
 			remoteInfo = BusinessLogicTests;
 		};
+		E5BFCA7F222576AE005321F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BFCA79222576AD005321F6 /* Foundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E57696332117671600CADE76;
+			remoteInfo = FoundationFramework;
+		};
+		E5BFCA81222576AE005321F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BFCA79222576AD005321F6 /* Foundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E576963C2117671600CADE76;
+			remoteInfo = FoundationFrameworkTests;
+		};
+		E5BFCA83222576AE005321F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BFCA79222576AD005321F6 /* Foundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E5BFCA5E222556D4005321F6;
+			remoteInfo = SecretLib;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -78,7 +76,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E5726D9021176F6D0058296E /* FoundationFramework.framework in Embed Frameworks */,
 				E5726D8C21176F6D0058296E /* BusinessLogic.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -97,8 +94,8 @@
 		E576961A2117651900CADE76 /* SwiftCodeMetricsExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftCodeMetricsExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E576961E2117651900CADE76 /* SwiftCodeMetricsExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftCodeMetricsExampleTests.swift; sourceTree = "<group>"; };
 		E57696202117651900CADE76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E576965121176AAB00CADE76 /* FoundationFramework.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FoundationFramework.xcodeproj; path = FoundationFramework/FoundationFramework.xcodeproj; sourceTree = "<group>"; };
 		E576968121176EB800CADE76 /* BusinessLogic.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BusinessLogic.xcodeproj; path = BusinessLogic/BusinessLogic.xcodeproj; sourceTree = "<group>"; };
+		E5BFCA79222576AD005321F6 /* Foundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Foundation.xcodeproj; path = Foundation/Foundation.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +104,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5726D8921176F650058296E /* BusinessLogic.framework in Frameworks */,
-				E5726D8A21176F650058296E /* FoundationFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,8 +127,8 @@
 		E57695FD2117651700CADE76 = {
 			isa = PBXGroup;
 			children = (
+				E5BFCA79222576AD005321F6 /* Foundation.xcodeproj */,
 				E576968121176EB800CADE76 /* BusinessLogic.xcodeproj */,
-				E576965121176AAB00CADE76 /* FoundationFramework.xcodeproj */,
 				E57696082117651700CADE76 /* SwiftCodeMetricsExample */,
 				E576961D2117651900CADE76 /* SwiftCodeMetricsExampleTests */,
 				E57696072117651700CADE76 /* Products */,
@@ -171,20 +167,21 @@
 			path = SwiftCodeMetricsExampleTests;
 			sourceTree = "<group>";
 		};
-		E576965221176AAB00CADE76 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E576965721176AAB00CADE76 /* FoundationFramework.framework */,
-				E576965921176AAB00CADE76 /* FoundationFrameworkTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		E576968221176EB800CADE76 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				E576968721176EB800CADE76 /* BusinessLogic.framework */,
 				E576968921176EB800CADE76 /* BusinessLogicTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E5BFCA7A222576AD005321F6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E5BFCA80222576AE005321F6 /* FoundationFramework.framework */,
+				E5BFCA82222576AE005321F6 /* FoundationFrameworkTests.xctest */,
+				E5BFCA84222576AE005321F6 /* SecretLib.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -205,7 +202,6 @@
 			);
 			dependencies = (
 				E5726D8E21176F6D0058296E /* PBXTargetDependency */,
-				E5726D9221176F6D0058296E /* PBXTargetDependency */,
 			);
 			name = SwiftCodeMetricsExample;
 			productName = SwiftCodeMetricsExample;
@@ -268,8 +264,8 @@
 					ProjectRef = E576968121176EB800CADE76 /* BusinessLogic.xcodeproj */;
 				},
 				{
-					ProductGroup = E576965221176AAB00CADE76 /* Products */;
-					ProjectRef = E576965121176AAB00CADE76 /* FoundationFramework.xcodeproj */;
+					ProductGroup = E5BFCA7A222576AD005321F6 /* Products */;
+					ProjectRef = E5BFCA79222576AD005321F6 /* Foundation.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -281,20 +277,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E576965721176AAB00CADE76 /* FoundationFramework.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = FoundationFramework.framework;
-			remoteRef = E576965621176AAB00CADE76 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E576965921176AAB00CADE76 /* FoundationFrameworkTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = FoundationFrameworkTests.xctest;
-			remoteRef = E576965821176AAB00CADE76 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		E576968721176EB800CADE76 /* BusinessLogic.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -307,6 +289,27 @@
 			fileType = wrapper.cfbundle;
 			path = BusinessLogicTests.xctest;
 			remoteRef = E576968821176EB800CADE76 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5BFCA80222576AE005321F6 /* FoundationFramework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FoundationFramework.framework;
+			remoteRef = E5BFCA7F222576AE005321F6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5BFCA82222576AE005321F6 /* FoundationFrameworkTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FoundationFrameworkTests.xctest;
+			remoteRef = E5BFCA81222576AE005321F6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5BFCA84222576AE005321F6 /* SecretLib.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SecretLib.framework;
+			remoteRef = E5BFCA83222576AE005321F6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -356,11 +359,6 @@
 			isa = PBXTargetDependency;
 			name = BusinessLogic;
 			targetProxy = E5726D8D21176F6D0058296E /* PBXContainerItemProxy */;
-		};
-		E5726D9221176F6D0058296E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FoundationFramework;
-			targetProxy = E5726D9121176F6D0058296E /* PBXContainerItemProxy */;
 		};
 		E576961C2117651900CADE76 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
