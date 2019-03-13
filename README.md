@@ -52,7 +52,8 @@ Please follow the [guide](https://github.com/matsoftware/swift-code-metrics/tree
 ## Current limitations
 
 -   This tool is designed for medium/large codebases composed by different frameworks.
-The script will scan the directory and it will identify the frameworks by the name of the 'root' folder, so it's strictly dependent on the file hierarchy.
+The script will scan the directory and it will identify the frameworks by the name of the 'root' folder, 
+so it's strictly dependent on the file hierarchy (unless a [project path override file](docs/GUIDE.md#Project-paths-override) is specified)
 
 -   Libraries built with `spm` are not supported.
 

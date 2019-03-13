@@ -4,6 +4,61 @@ A sample project is provided in the `resources` folder:
 
 `python3 swift-code-metrics-runner.py --source swift_code_metrics/tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs`
 
+### Source
+
+The library will start scanning the content under the `source` folder provided. Frameworks will be identified by their 
+relative path to the root folder specified, meaning that the file system hierarchy will define the naming convention
+(e.g. if a class is under the path `SwiftCodeMetricsExample/BusinessLogic/Logic.swift`, the framework name will be identified
+as `BusinessLogic` since `SwiftCodeMetricsExample` is the root of the `source` parameter in the command above).
+
+#### Project paths override
+
+Sometimes the folder structure is not enough to provide a description of the libraries involved, for instance when multiple frameworks are
+defined inside the same folder and they are reusing shared code. For these scenarios, it's possible to define a `scm.json` 
+file in the root of the custom folder. This file will let `scm` know how to infer the framework structure.
+
+Let's consider the following example:
+
+![SCM Override](assets/scm_override_example.png)
+
+The `SecretLib` and `FoundationFramework` libraries are both reusing the code in the `Shared` folder and they're both
+defined in the same project under the `Foundation` folder. Without an override specification, all of the code inside this
+folder will be identifier as part of the `Foundation` framework, which is wrong.
+
+Let's then define the correct structure by adopting this `scm.json` file:
+
+```json
+{
+  "libraries": [
+    {
+      "name": "FoundationFramework",
+      "path": "FoundationFramework",
+      "is_test": false
+    },
+    {
+      "name": "FoundationFrameworkTests",
+      "path": "FoundationFrameworkTests",
+      "is_test": true
+    },
+    {
+      "name": "SecretLib",
+      "path": "SecretLib",
+      "is_test": false
+    }
+  ],
+  "shared": [
+    {
+      "path": "Shared",
+      "is_test": false
+    }
+  ]
+}
+```
+The `libraries` array defines the list of frameworks with their relative path.
+
+The code in the `Shared` folder will contribute to the metrics of every single framework defined in the `libraries` 
+array but it will be counted only once for the total aggregate data.
+
 ### Output format
 
 The `output.json` file will contain the metrics related to all frameworks
