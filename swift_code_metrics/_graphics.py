@@ -18,7 +18,7 @@ class Graph:
         plt.title(title)
         plt.ylabel(title)
         opacity = 0.8
-        plotted_data = plt.barh(data[1], data[0], color='blue', alpha=opacity)
+        _ = plt.barh(data[1], data[0], color='blue', alpha=opacity)
         index = np.arange(len(data[1]))
         plt.yticks(index, data[1], fontsize=5, rotation=30)
         self.__render(plt, title)
