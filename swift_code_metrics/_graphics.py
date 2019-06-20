@@ -6,6 +6,7 @@ from functional import seq
 from adjustText import adjust_text
 from math import ceil
 import pygraphviz as pgv
+import numpy as np
 
 
 class Graph:
@@ -16,18 +17,10 @@ class Graph:
     def bar_plot(self, title, data):
         plt.title(title)
         plt.ylabel(title)
-        bar_width = 0.75
-        opacity = 0.4
-        plotted_data = plt.barh(data[1], data[0], bar_width, alpha=opacity)
-
-        texts = []
-        for i, v in enumerate(data[0]):
-            texts.append(plt.text(v, i, f' {str(v)}', va='center', color='blue', size='smaller'))
-
-        adjust_text(texts, autoalign='x', only_move={'text': 'x'})
-
-        plt.legend(plotted_data, data[2], loc='lower right')
-
+        opacity = 0.8
+        _ = plt.barh(data[1], data[0], color='blue', alpha=opacity)
+        index = np.arange(len(data[1]))
+        plt.yticks(index, data[1], fontsize=5, rotation=30)
         self.__render(plt, title)
 
     def pie_plot(self, title, sizes, labels, legend):
