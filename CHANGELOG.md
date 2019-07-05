@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 -   [PR-11](https://github.com/matsoftware/swift-code-metrics/pull/11) Improved layout of bar plots for codebases with many frameworks
+-   [Issue-12](https://github.com/matsoftware/swift-code-metrics/issues/12) `matplotlib` not initialized if `generate-graphs` is not passed
+
 
 ## [1.3.0](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.3.0) - 2019-03-14
 
