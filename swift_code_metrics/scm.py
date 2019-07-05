@@ -4,7 +4,6 @@ from argparse import ArgumentParser
 
 from ._helpers import Log,ReportingHelpers
 from ._analyzer import Inspector
-from ._presenter import GraphPresenter
 from ._metrics import Metrics
 from .version import VERSION
 import sys
@@ -75,6 +74,7 @@ def main():
         sys.exit(0)
 
     # Creates graphs
+    from ._presenter import GraphPresenter
     graph_presenter = GraphPresenter(artifacts)
     non_test_frameworks = analyzer.filtered_frameworks(is_test=False)
     test_frameworks = analyzer.filtered_frameworks(is_test=True)
