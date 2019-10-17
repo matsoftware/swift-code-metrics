@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## \[Unreleased]
 
+### Added
+
+- [PR-17](https://github.com/matsoftware/swift-code-metrics/pull/17) Support for iOS 13 / Mac OSX 15 frameworks
+
 ### Fixed
 
 -   [PR-11](https://github.com/matsoftware/swift-code-metrics/pull/11) Improved layout of bar plots for codebases with many frameworks
