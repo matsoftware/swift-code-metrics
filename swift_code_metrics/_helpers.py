@@ -206,7 +206,7 @@ class ParsingHelpers:
     END_COMMENT = '\*/$'
     SINGLE_COMMENT = '^//'
 
-    IMPORTS = '(?<=^import )(?:\\b\w+\s|)([^.; ]+)'
+    IMPORTS = '(?:(?<=^import )|@testable import )(?:\\b\w+\s|)([^.; ]+)'
 
     PROTOCOLS = '.*protocol (.*?)[:|{|\s]'
     STRUCTS = '.*struct (.*?)[:|{|\s]'
