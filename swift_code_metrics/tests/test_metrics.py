@@ -28,14 +28,14 @@ class FrameworkTests(unittest.TestCase):
     def test_representation(self):
         self.assertEqual(str(self.framework), 'AwesomeName(0 files)')
 
-    def test_compact_name_morethanfourcapitals(self):
+    def test_compact_name_more_than_four_capitals(self):
         test_framework = Framework('FrameworkWithMoreThanFourCapitals')
         self.assertEqual('FC', test_framework.compact_name)
 
-    def test_compact_name_lessthanfourcapitals(self):
+    def test_compact_name_less_than_four_capitals(self):
         self.assertEqual('AN', self.framework.compact_name)
 
-    def test_compact_name_nocapitals(self):
+    def test_compact_name_no_capitals(self):
         test_framework = Framework('nocapitals')
         self.assertEqual('n', test_framework.compact_name)
 
@@ -70,26 +70,29 @@ class MetricsTests(unittest.TestCase):
 
     def setUp(self):
         self._generate_mocks()
+        self._populate_imports()
 
     def _generate_mocks(self):
         self.foundation_kit = Framework('FoundationKit')
         self.design_kit = Framework('DesignKit')
         self.app_layer = Framework('ApplicationLayer')
         self.rxswift = Framework('RxSwift')
+        self.test_design_kit = Framework(name='DesiggnKitTests', is_test_framework=True)
         self.awesome_dependency = Framework('AwesomeDependency')
         self.frameworks = [
             self.foundation_kit,
             self.design_kit,
-            self.app_layer
+            self.app_layer,
+            self.test_design_kit
         ]
 
-    def _populate_app_layer_imports(self):
+    def _populate_imports(self):
         self.app_layer.append_import(self.design_kit)
         self.app_layer.append_import(self.design_kit)
         self.app_layer.append_import(self.foundation_kit)
+        self.test_design_kit.append_import(self.design_kit)
 
     def test_distance_main_sequence(self):
-        self._populate_app_layer_imports()
         self.app_layer.data.number_of_concrete_data_structures = 7
         self.app_layer.data.number_of_interfaces = 2
 
@@ -101,7 +104,6 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(0, Metrics.instability(self.foundation_kit, self.frameworks))
 
     def test_instability_imports(self):
-        self._populate_app_layer_imports()
         self.assertAlmostEqual(1.0, Metrics.instability(self.app_layer, self.frameworks))
 
     def test_abstractness_no_concretes(self):
@@ -112,12 +114,13 @@ class MetricsTests(unittest.TestCase):
         self.foundation_kit.data.number_of_concrete_data_structures = 4
         self.assertEqual(2, Metrics.abstractness(self.foundation_kit))
 
-    def test_fan_in(self):
-        self._populate_app_layer_imports()
+    def test_fan_in_test_frameworks(self):
         self.assertEqual(2, Metrics.fan_in(self.design_kit, self.frameworks))
 
+    def test_fan_in_no_test_frameworks(self):
+        self.assertEqual(1, Metrics.fan_in(self.foundation_kit, self.frameworks))
+
     def test_fan_out(self):
-        self._populate_app_layer_imports()
         self.assertEqual(3, Metrics.fan_out(self.app_layer))
 
     def test_external_dependencies(self):
@@ -134,7 +137,6 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(design_external_deps, [])
 
     def test_internal_dependencies(self):
-        self._populate_app_layer_imports()
         self.design_kit.append_import(self.foundation_kit)
 
         expected_foundation_internal_deps = []

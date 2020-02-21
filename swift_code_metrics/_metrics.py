@@ -1,5 +1,4 @@
-from ._helpers import AnalyzerHelpers
-from ._helpers import Log, ReportingHelpers
+from ._helpers import AnalyzerHelpers, Log, ParsingHelpers, ReportingHelpers
 from ._parser import SwiftFile
 from functional import seq
 from typing import Dict, List, Optional
@@ -62,7 +61,7 @@ class Metrics:
         :return: The Fan-In value (int)
         """
         fan_in = 0
-        for f in Metrics.__other_frameworks(framework, frameworks):
+        for f in Metrics.__other_nontest_frameworks(framework, frameworks):
             existing = f.imports.get(framework, 0)
             fan_in += existing
         return fan_in
@@ -169,9 +168,9 @@ class Metrics:
     # Internal
 
     @staticmethod
-    def __other_frameworks(framework: 'Framework', frameworks: List['Framework']) -> List['Framework']:
+    def __other_nontest_frameworks(framework: 'Framework', frameworks: List['Framework']) -> List['Framework']:
         return seq(frameworks) \
-            .filter(lambda f: f is not framework) \
+            .filter(lambda f: f is not framework and not f.is_test_framework) \
             .list()
 
     @staticmethod
@@ -266,6 +265,11 @@ class Framework:
         return self.name + '(' + str(self.number_of_files) + ' files)'
 
     def append_import(self, framework_import: 'Framework'):
+        """
+        Adds the dependent framework to the list of imported dependencies
+        :param framework_import: The framework that is being imported
+        :return:
+        """
         existing_framework = self.__total_imports.get(framework_import)
         if not existing_framework:
             self.__total_imports[framework_import] = 1
@@ -273,24 +277,19 @@ class Framework:
             self.__total_imports[framework_import] += 1
 
     @property
-    def imports(self):
+    def imports(self) -> Dict[str, int]:
         """
         Returns the list of framework imports without Apple libraries
         :return: list of filtered imports
         """
-        return seq(self.__total_imports.items()) \
-            .filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS) \
-            .dict()
+        return Framework.__filtered_imports(self.__total_imports.items())
 
     @property
     def number_of_imports(self) -> int:
         """
         :return: The total number of imports for this framework
         """
-        if len(self.imports.values()) == 0:
-            return 0
-        return seq(self.imports.values()) \
-            .reduce(lambda f1, f2: f1 + f2)
+        return ParsingHelpers.reduce_dictionary(self.imports)
 
     @property
     def compact_name(self) -> str:
@@ -305,6 +304,12 @@ class Framework:
     @property
     def compact_name_description(self) -> str:
         return f'{self.compact_name} = {self.name}'
+
+    # Static
+
+    @staticmethod
+    def __filtered_imports(items: 'ItemsView') -> Dict[str, int]:
+        return seq(items).filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS).dict()
 
 
 class Dependency:

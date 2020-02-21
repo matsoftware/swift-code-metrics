@@ -156,6 +156,9 @@ class HelpersTests(unittest.TestCase):
         string = 'private func funzione(){'
         self.assertEqual('funzione', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
+    def test_helpers_funcs_reduce_dictionary(self):
+        self.assertEqual(3, _helpers.ParsingHelpers.reduce_dictionary({"one": 1, "two": 2}))
+
 
 if __name__ == '__main__':
     unittest.main()
