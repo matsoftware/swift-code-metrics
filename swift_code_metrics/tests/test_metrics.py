@@ -77,7 +77,7 @@ class MetricsTests(unittest.TestCase):
         self.design_kit = Framework('DesignKit')
         self.app_layer = Framework('ApplicationLayer')
         self.rxswift = Framework('RxSwift')
-        self.test_design_kit = Framework(name='DesiggnKitTests', is_test_framework=True)
+        self.test_design_kit = Framework(name='DesignKitTests', is_test_framework=True)
         self.awesome_dependency = Framework('AwesomeDependency')
         self.frameworks = [
             self.foundation_kit,

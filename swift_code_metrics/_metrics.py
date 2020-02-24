@@ -254,12 +254,12 @@ class FrameworkData(SyntheticData):
 
 
 class Framework:
-    def __init__(self, name: str):
+    def __init__(self, name: str, is_test_framework: bool = False):
         self.name = name
         self.number_of_files = 0
         self.data = SyntheticData()
         self.__total_imports = {}
-        self.is_test_framework = False
+        self.is_test_framework = is_test_framework
 
     def __repr__(self):
         return self.name + '(' + str(self.number_of_files) + ' files)'
