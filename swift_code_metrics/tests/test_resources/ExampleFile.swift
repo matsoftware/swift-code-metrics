@@ -7,6 +7,8 @@
 
 import Foundation
 import AmazingFramework
+import struct Helper.CoolFunction
+@testable import TestedLibrary
 
 // First protocol SimpleProtocol
 protocol SimpleProtocol {}

@@ -2,7 +2,7 @@ import re
 import logging
 import json
 from typing import Dict
-
+from functional import seq
 
 class Log:
     __logger = logging.getLogger(__name__)
@@ -206,7 +206,7 @@ class ParsingHelpers:
     END_COMMENT = '\*/$'
     SINGLE_COMMENT = '^//'
 
-    IMPORTS = '(?<=^import )(?:\\b\w+\s|)([^.; ]+)'
+    IMPORTS = '(?:(?<=^import )|@testable import )(?:\\b\w+\s|)([^.; ]+)'
 
     PROTOCOLS = '.*protocol (.*?)[:|{|\s]'
     STRUCTS = '.*struct (.*?)[:|{|\s]'
@@ -229,6 +229,13 @@ class ParsingHelpers:
             return re.search(regex_pattern, trimmed_string).group(1)
         except AttributeError:
             return ''
+
+    @staticmethod
+    def reduce_dictionary(items: Dict[str, int]) -> int:
+        if len(items.values()) == 0:
+            return 0
+        return seq(items.values()) \
+            .reduce(lambda f1, f2: f1 + f2)
 
 
 class ReportingHelpers:

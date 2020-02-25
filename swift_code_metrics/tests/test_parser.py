@@ -32,10 +32,10 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(21, self.example_parsed_file.n_of_comments)
 
     def test_swiftparser_parse_should_return_expected_loc(self):
-        self.assertEqual(23, self.example_parsed_file.loc)
+        self.assertEqual(25, self.example_parsed_file.loc)
 
     def test_swiftparser_parse_should_return_expected_imports(self):
-        self.assertEqual(['Foundation', 'AmazingFramework'], self.example_parsed_file.imports)
+        self.assertEqual(['Foundation', 'AmazingFramework', 'Helper', 'TestedLibrary'], self.example_parsed_file.imports)
 
     def test_swiftparser_parse_should_return_expected_interfaces(self):
         self.assertEqual(['SimpleProtocol', 'UnusedClassProtocol'], self.example_parsed_file.interfaces)

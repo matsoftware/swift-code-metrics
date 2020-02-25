@@ -92,9 +92,11 @@
                 "n_c": 1,
                 "nom": 1,
                 "not": 1,
-                "noi": 0,
+                "noi": 1,
                 "analysis": "The code is over commented. ",
-                "dependencies": []
+                "dependencies": [
+                    "BusinessLogic(1)"
+                ]
             }
         },
         {
@@ -106,9 +108,11 @@
                 "n_c": 2,
                 "nom": 5,
                 "not": 3,
-                "noi": 0,
+                "noi": 2,
                 "analysis": "",
-                "dependencies": []
+                "dependencies": [
+                    "FoundationFramework(2)"
+                ]
             }
         },
         {
@@ -120,9 +124,11 @@
                 "n_c": 1,
                 "nom": 1,
                 "not": 1,
-                "noi": 0,
+                "noi": 1,
                 "analysis": "The code is over commented. ",
-                "dependencies": []
+                "dependencies": [
+                    "SwiftCodeMetricsExample(1)"
+                ]
             }
         }
     ],
@@ -155,7 +161,7 @@
             "nom": 7,
             "not": 5,
             "poc": 34.568,
-            "noi": 0
+            "noi": 4
         },
         "total": {
             "loc": 160,
@@ -165,7 +171,7 @@
             "nom": 18,
             "not": 5,
             "poc": 30.435,
-            "noi": 3
+            "noi": 7
         }
     }
 }
