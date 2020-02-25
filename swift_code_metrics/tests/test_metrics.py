@@ -79,6 +79,7 @@ class MetricsTests(unittest.TestCase):
         self.rxswift = Framework('RxSwift')
         self.test_design_kit = Framework(name='DesignKitTests', is_test_framework=True)
         self.awesome_dependency = Framework('AwesomeDependency')
+        self.not_linked_framework = Framework('External')
         self.frameworks = [
             self.foundation_kit,
             self.design_kit,
@@ -102,6 +103,9 @@ class MetricsTests(unittest.TestCase):
 
     def test_instability_no_imports(self):
         self.assertEqual(0, Metrics.instability(self.foundation_kit, self.frameworks))
+
+    def test_instability_not_linked_framework(self):
+        self.assertEqual(0, Metrics.instability(self.not_linked_framework, self.frameworks))
 
     def test_instability_imports(self):
         self.assertAlmostEqual(1.0, Metrics.instability(self.app_layer, self.frameworks))
@@ -166,6 +170,24 @@ class MetricsTests(unittest.TestCase):
 
     def test_poc_invalid_loc_noc(self):
         self.assertEqual(0, Metrics.percentage_of_comments(loc=0, noc=0))
+
+    def test_ia_analysis_zone_of_pain(self):
+        self.assertTrue("Zone of Pain" in Metrics.ia_analysis(0.4, 0.4))
+
+    def test_ia_analysis_zone_of_uselessness(self):
+        self.assertTrue("Zone of Uselessness" in Metrics.ia_analysis(0.7, 0.7))
+
+    def test_ia_analysis_highly_stable(self):
+        self.assertTrue("Highly stable component" in Metrics.ia_analysis(0.1, 0.51))
+
+    def test_ia_analysis_highly_unstable(self):
+        self.assertTrue("Highly unstable component" in Metrics.ia_analysis(0.81, 0.49))
+
+    def test_ia_analysis_low_abstract(self):
+        self.assertTrue("Low abstract component" in Metrics.ia_analysis(0.51, 0.1))
+
+    def test_ia_analysis_high_abstract(self):
+        self.assertTrue("High abstract component" in Metrics.ia_analysis(0.49, 0.81))
 
     @property
     def __dummy_external_frameworks(self):
