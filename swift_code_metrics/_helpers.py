@@ -220,16 +220,16 @@ class ParsingHelpers:
 
     # Constants - Regex patterns
 
-    BEGIN_COMMENT = '^//*'
-    END_COMMENT = '\*/$'
-    SINGLE_COMMENT = '^//'
+    BEGIN_COMMENT = r'^//*'
+    END_COMMENT = r'\*/$'
+    SINGLE_COMMENT = r'^//'
 
-    IMPORTS = '(?:(?<=^import )|@testable import )(?:\\b\w+\s|)([^.; ]+)'
+    IMPORTS = r'(?:(?<=^import )|@testable import )(?:\b\w+\s|)([^.; \/]+)'
 
-    PROTOCOLS = '.*protocol (.*?)[:|{|\s]'
-    STRUCTS = '.*struct (.*?)[:|{|\s]'
-    CLASSES = '.*class (.*?)[:|{|\s]'
-    FUNCS = '.*func (.*?)[:|\(|\s]'
+    PROTOCOLS = r'.*protocol (.*?)[:|{|\s]'
+    STRUCTS = r'.*struct (.*?)[:|{|\s]'
+    CLASSES = r'.*class (.*?)[:|{|\s]'
+    FUNCS = r'.*func (.*?)[:|\(|\s]'
 
     # Static helpers
 
