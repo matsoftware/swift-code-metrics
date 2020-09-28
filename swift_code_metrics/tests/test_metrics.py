@@ -4,6 +4,7 @@ from swift_code_metrics._parser import SwiftFile
 from functional import seq
 
 example_swiftfile = SwiftFile(
+    path='/my/path/class.swift',
     framework_name=['Test'],
     loc=1,
     imports=['Foundation', 'dep1', 'dep2'],
@@ -22,6 +23,9 @@ class FrameworkTests(unittest.TestCase):
     def setUp(self):
         self.frameworks = [Framework('BusinessLogic'), Framework('UIKit'), Framework('Other')]
         self.framework = Framework('AwesomeName')
+        self.framework.raw_files['Group1'] = {}
+        self.framework.raw_files['Group1']['File1'] = example_swiftfile
+        self.framework.raw_files['Group1']['File2'] = example_swiftfile
         seq(self.frameworks) \
             .for_each(lambda f: self.framework.append_import(f))
 
@@ -40,7 +44,7 @@ class FrameworkTests(unittest.TestCase):
         self.assertEqual('n', test_framework.compact_name)
 
     def test_compact_name_description(self):
-        self.assertEqual(self.framework.compact_name_description, 'AN = AwesomeName')
+        self.assertEqual('AN = AwesomeName', self.framework.compact_name_description)
 
     def test_imports(self):
         expected_imports = {self.frameworks[0]: 1,

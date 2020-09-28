@@ -258,6 +258,7 @@ class Framework:
         self.name = name
         self.number_of_files = 0
         self.data = SyntheticData()
+        self.raw_files = {}
         self.__total_imports = {}
         self.is_test_framework = is_test_framework
 

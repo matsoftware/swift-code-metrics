@@ -6,7 +6,9 @@ from ._helpers import Log
 
 
 class SwiftFile(object):
-    def __init__(self, framework_name: List[str],
+    def __init__(self,
+                 path: str,
+                 framework_name: str,
                  loc: int,
                  imports: List[str],
                  interfaces: List[str],
@@ -18,6 +20,7 @@ class SwiftFile(object):
                  is_test: bool):
         """
         Creates a SwiftFile instance that represents a parsed swift file.
+        :param path: The path of the file being analyzed
         :param framework_name: The framework where the file belongs to.
         :param loc: Lines Of Code
         :param imports: List of imported frameworks
@@ -29,6 +32,7 @@ class SwiftFile(object):
         :param is_shared: True if the file is shared with other frameworks
         :param is_test: True if the file is a test class
         """
+        self.path = path
         self.framework_name = framework_name
         self.loc = loc
         self.imports = imports
@@ -133,6 +137,7 @@ class SwiftFileParser(object):
 
         is_shared_file = len(framework_names) > 1
         return [SwiftFile(
+            path=Path(self.current_subdir.replace(f'{self.base_path}/', '')) / Path(self.file).name,
             framework_name=f,
             loc=loc,
             imports=self.attributes_regex_map[ParsingHelpers.IMPORTS],
