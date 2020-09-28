@@ -1,4 +1,4 @@
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics?ref=badge_shield) [![License](https://img.shields.io/badge/license-MIT-blue.svg?x=1)](LICENSE) [![Build Status](https://travis-ci.org/matsoftware/swift-code-metrics.svg?branch=master)](https://travis-ci.org/matsoftware/swift-code-metrics) [![codecov](https://codecov.io/gh/matsoftware/swift-code-metrics/branch/master/graph/badge.svg)](https://codecov.io/gh/matsoftware/swift-code-metrics) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ff12e0cafce4ec68024d47b000d2e42)](https://app.codacy.com/app/matsoftware/swift-code-metrics?utm_source=github.com&utm_medium=referral&utm_content=matsoftware/swift-code-metrics&utm_campaign=Badge_Grade_Dashboard)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics?ref=badge_shield) [![License](https://img.shields.io/badge/license-MIT-blue.svg?x=1)](LICENSE) [![Build Status](https://travis-ci.org/matsoftware/swift-code-metrics.svg?branch=master)](https://travis-ci.org/matsoftware/swift-code-metrics) [![codecov](https://codecov.io/gh/matsoftware/swift-code-metrics/branch/master/graph/badge.svg)](https://codecov.io/gh/matsoftware/swift-code-metrics) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ff12e0cafce4ec68024d47b000d2e42)](https://app.codacy.com/app/matsoftware/swift-code-metrics?utm_source=github.com&utm_medium=referral&utm_content=matsoftware/swift-code-metrics&utm_campaign=Badge_Grade_Dashboard)
 [![PyPI](https://img.shields.io/pypi/v/swift-code-metrics.svg)](https://pypi.python.org/pypi/swift-code-metrics)
 
 # swift-code-metrics
@@ -6,13 +6,14 @@
 Code metrics analyzer for Swift projects.
 
 | ![Example code distribution](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/code_distribution.jpeg) ![Example deviation main sequence](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/example_deviation_main_sequence.jpeg) |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Example internal distribution](https://raw.githubusercontent.com/matsoftware/swift-code-metrics/master/docs/assets/example_internal_deps_graph.jpeg)                                                                                                                                                |
 
 ## Introduction
 
 The goal of this software is to provide an insight of the architectural state of a software written in `Swift` that consists in several modules.
 Inspired by the book of Robert C. Martin, _Clean Architecture_, the software will scan the project to identify the different components in order to assess several common code metrics in the software industry:
+
 -   the overall number of concrete classes and interfaces
 -   the _instability_ and _abstractness_ of the framework
 -   the _distance from the main sequence_
@@ -52,8 +53,8 @@ Please follow the [guide](https://github.com/matsoftware/swift-code-metrics/tree
 ## Current limitations
 
 -   This tool is designed for medium/large codebases composed by different frameworks.
-The script will scan the directory and it will identify the frameworks by the name of the 'root' folder, 
-so it's strictly dependent on the file hierarchy (unless a [project path override file](docs/GUIDE.md#Project-paths-override) is specified)
+    The script will scan the directory and it will identify the frameworks by the name of the 'root' folder, 
+    so it's strictly dependent on the file hierarchy (unless a [project path override file](docs/GUIDE.md#Project-paths-override) is specified)
 
 -   Libraries built with `spm` are not supported.
 
