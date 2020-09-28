@@ -63,6 +63,11 @@ class HelpersTests(unittest.TestCase):
         string = 'import struct Foundation.KeyChain'
         self.assertEqual('Foundation', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
 
+    def test_helpers_imports_comments_expectTrue(self):
+        regex = _helpers.ParsingHelpers.IMPORTS
+        string = 'import Contacts // fix for `dyld: Library not loaded: @rpath/libswiftContacts.dylib`'
+        self.assertEqual('Contacts', _helpers.ParsingHelpers.extract_substring_with_pattern(regex, string))
+
     def test_helpers_imports_specialwords_expectFalse(self):
         regex = _helpers.ParsingHelpers.IMPORTS
         string = 'importedMigratedComponents: AnyImportedComponent'

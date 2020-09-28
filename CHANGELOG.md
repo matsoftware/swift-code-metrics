@@ -1,20 +1,27 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## UNRELEASED
+
+### Fixed
+
+-   [PR-24](https://github.com/matsoftware/swift-code-metrics/pull/24) Fix on parsing import statements with complex comments
+
 ## [1.4.1](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.4.1) - 2020-07-29
 
 ### Added
 
-- [PR-22](https://github.com/matsoftware/swift-code-metrics/pull/22) Support for iOS 14 / macOS 11 frameworks
+-   [PR-22](https://github.com/matsoftware/swift-code-metrics/pull/22) Support for iOS 14 / macOS 11 frameworks
 
 ## [1.4.0](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.4.0) - 2020-02-25
 
 ### Added
 
-- [PR-17](https://github.com/matsoftware/swift-code-metrics/pull/17) Support for iOS 13 / Mac OSX 15 frameworks
+-   [PR-17](https://github.com/matsoftware/swift-code-metrics/pull/17) Support for iOS 13 / Mac OSX 15 frameworks
 
 ### Fixed
 
@@ -37,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 -   [PR-6](https://github.com/matsoftware/swift-code-metrics/pull/6)
-Gracefully fail on empty projects or code without modules
+    Gracefully fail on empty projects or code without modules
 
 ## [1.2.2](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.2.2) - 2019-02-10
 
@@ -60,6 +67,7 @@ Gracefully fail on empty projects or code without modules
 -   Added NOI (number of imports) metric and graph
 
 ### Changed
+
 -   Improved dependency graphs by using a variable node and arrow thickness
 -   Improved parsing of import statements
 -   Improved bar charts' reports
