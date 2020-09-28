@@ -1,4 +1,4 @@
-from ._helpers import AnalyzerHelpers, Log, ParsingHelpers, ReportingHelpers
+from ._helpers import AnalyzerHelpers, Log, ParsingHelpers, ReportingHelpers, flatten_nested_dictionary_values
 from ._parser import SwiftFile
 from functional import seq
 from typing import Dict, List, Optional
@@ -256,7 +256,6 @@ class FrameworkData(SyntheticData):
 class Framework:
     def __init__(self, name: str, is_test_framework: bool = False):
         self.name = name
-        self.number_of_files = 0
         self.data = SyntheticData()
         self.raw_files = {}
         self.__total_imports = {}
@@ -276,6 +275,10 @@ class Framework:
             self.__total_imports[framework_import] = 1
         else:
             self.__total_imports[framework_import] += 1
+
+    @property
+    def number_of_files(self) -> int:
+        return len(self.__raw_files_data())
 
     @property
     def imports(self) -> Dict[str, int]:
@@ -312,6 +315,10 @@ class Framework:
     def __filtered_imports(items: 'ItemsView') -> Dict[str, int]:
         return seq(items).filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS).dict()
 
+    # Private
+
+    def __raw_files_data(self) -> List['SwiftFile']:
+        return list(flatten_nested_dictionary_values(self.raw_files))
 
 class Dependency:
     def __init__(self, name: str, dependent_framework: str, number_of_imports: int = 0):

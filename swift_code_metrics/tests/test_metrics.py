@@ -30,7 +30,7 @@ class FrameworkTests(unittest.TestCase):
             .for_each(lambda f: self.framework.append_import(f))
 
     def test_representation(self):
-        self.assertEqual(str(self.framework), 'AwesomeName(0 files)')
+        self.assertEqual('AwesomeName(2 files)', str(self.framework))
 
     def test_compact_name_more_than_four_capitals(self):
         test_framework = Framework('FrameworkWithMoreThanFourCapitals')
@@ -53,6 +53,9 @@ class FrameworkTests(unittest.TestCase):
 
     def test_number_of_imports(self):
         self.assertEqual(2, self.framework.number_of_imports)
+
+    def test_number_of_files(self):
+        self.assertEqual(2, self.framework.number_of_files)
 
 
 class DependencyTests(unittest.TestCase):

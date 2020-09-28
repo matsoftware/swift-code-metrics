@@ -61,7 +61,6 @@ class Inspector:
 
     def __append_dependency(self, swift_file: 'SwiftFile'):
         framework = self.__get_or_create_framework(swift_file.framework_name)
-        framework.number_of_files += 1
         Inspector.__add_raw_files(framework=framework, swift_file=swift_file)
         framework.data.append_data(data=SyntheticData(swift_file=swift_file))
         # This covers the scenario where a test framework might contain no tests
