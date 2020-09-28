@@ -1,8 +1,9 @@
 import re
 import logging
 import json
-from typing import Dict
+from typing import List,Dict
 from functional import seq
+
 
 class Log:
     __logger = logging.getLogger(__name__)
@@ -270,3 +271,13 @@ class JSONReader:
     def read_json_file(path: str) -> Dict:
         with open(path, 'r') as fp:
             return json.load(fp)
+
+
+# Methods
+
+def flatten_nested_dictionary_values(dictionary) -> List:
+    for v in dictionary.values():
+        if isinstance(v, dict):
+            yield from flatten_nested_dictionary_values(v)
+        else:
+            yield v
