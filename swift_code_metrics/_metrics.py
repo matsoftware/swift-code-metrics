@@ -217,6 +217,11 @@ class SyntheticData:
         )
 
     def __add__(self, data):
+        """
+        Implementation of the `+` operator
+        :param data: An instance of SyntheticData
+        :return: a new instance of SyntheticData
+        """
         return SyntheticData(
             loc=self.loc + data.loc,
             noc=self.noc + data.noc,
@@ -228,6 +233,11 @@ class SyntheticData:
         )
 
     def __sub__(self, data):
+        """
+        Implementation of the `-` operator
+        :param data: An instance of SyntheticData
+        :return: a new instance of SyntheticData
+        """
         return SyntheticData(
             loc=self.loc - data.loc,
             noc=self.noc - data.noc,
@@ -271,10 +281,20 @@ class FrameworkData(SyntheticData):
                                                 AnalyzerHelpers.APPLE_FRAMEWORKS]))
 
     def __add__(self, data):
+        """
+        Implementation of the `+` operator
+        :param data: An instance of FrameworkData
+        :return: a new instance of FrameworkData
+        """
         sd = self.__current_sd().__add__(data=data)
         return FrameworkData.__from_sd(sd=sd, n_o_i=self.n_o_i + data.n_o_i)
 
     def __sub__(self, data):
+        """
+        Implementation of the `-` operator
+        :param data: An instance of FrameworkData
+        :return: a new instance of FrameworkData
+        """
         sd = self.__current_sd().__sub__(data=data)
         return FrameworkData.__from_sd(sd=sd, n_o_i=self.n_o_i - data.n_o_i)
 

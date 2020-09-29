@@ -3,7 +3,7 @@ import json
 
 from ._helpers import AnalyzerHelpers
 from ._parser import SwiftFileParser, SwiftFile
-from ._metrics import Framework, SyntheticData
+from ._metrics import Framework
 from ._report import ReportProcessor
 from functional import seq
 from typing import List, Optional
