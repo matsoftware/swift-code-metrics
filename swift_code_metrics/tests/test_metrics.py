@@ -1,5 +1,5 @@
 import unittest
-from swift_code_metrics._metrics import Framework, Dependency, Metrics, SyntheticData, FrameworkData
+from swift_code_metrics._metrics import Framework, Dependency, Metrics, SyntheticData, FrameworkData, SubModule
 from swift_code_metrics._parser import SwiftFile
 from functional import seq
 
@@ -16,6 +16,21 @@ example_swiftfile = SwiftFile(
     is_shared=True,
     is_test=False
 )
+
+example_file2 = SwiftFile(
+            path='/my/path/class.swift',
+            framework_name='Test',
+            loc=1,
+            imports=['Foundation', 'dep1', 'dep2'],
+            interfaces=['prot1', 'prot2', 'prot3', 'prot4',
+                        'prot5', 'prot6', 'prot7', 'prot8'],
+            structs=['struct1', 'struct2'],
+            classes=['class1', 'class2'],
+            methods=['meth1', 'meth2', 'meth3', 'testMethod'],
+            n_of_comments=7,
+            is_shared=False,
+            is_test=False
+        )
 
 
 class FrameworkTests(unittest.TestCase):
@@ -138,23 +153,7 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(0, Metrics.abstractness(self.foundation_kit))
 
     def test_abstractness_concretes(self):
-
-        example_file = SwiftFile(
-            path='/my/path/class.swift',
-            framework_name='Test',
-            loc=1,
-            imports=['Foundation', 'dep1', 'dep2'],
-            interfaces=['prot1', 'prot2', 'prot3', 'prot4',
-                        'prot5', 'prot6', 'prot7', 'prot8'],
-            structs=['struct1', 'struct2'],
-            classes=['class1', 'class2'],
-            methods=['meth1', 'meth2', 'meth3', 'testMethod'],
-            n_of_comments=7,
-            is_shared=False,
-            is_test=False
-        )
-
-        self.foundation_kit.raw_files['File'] = example_file
+        self.foundation_kit.raw_files['File'] = example_file2
         self.assertEqual(2, Metrics.abstractness(self.foundation_kit))
 
     def test_fan_in_test_frameworks(self):
@@ -348,6 +347,52 @@ class FrameworkDataTests(unittest.TestCase):
             "noi": 2
         }
         self.assertEqual(expected_dict, self.framework_data.as_dict)
+
+
+class SubModuleTests(unittest.TestCase):
+
+    def setUp(self):
+        self.submodule = SubModule(
+            name="BusinessModule",
+            files=[example_swiftfile],
+            submodules=[
+                SubModule(
+                    name="Helper",
+                    files=[example_file2],
+                    submodules=[]
+                )
+            ]
+        )
+
+    def test_n_of_files(self):
+        self.assertEqual(2, self.submodule.n_of_files)
+
+    def test_data(self):
+        data = SyntheticData(
+            loc=2,
+            noc=14,
+            number_of_interfaces=11,
+            number_of_concrete_data_structures=6,
+            number_of_methods=8,
+            number_of_tests=2
+        )
+        self.assertEqual(data, self.submodule.data)
+
+    def test_dict_repr(self):
+        self.assertEqual({
+            "BusinessModule": {
+                "n_of_files": 2,
+                "metric": {
+                    "loc": 2,
+                     "n_a": 11,
+                     "n_c": 6,
+                     "noc": 14,
+                     "nom": 8,
+                     "not": 2,
+                     "poc": 87.5
+                }
+            }
+        }, self.submodule.as_dict)
 
 
 if __name__ == '__main__':

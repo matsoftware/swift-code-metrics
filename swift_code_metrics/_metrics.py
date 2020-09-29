@@ -420,6 +420,38 @@ class Framework:
 
 
 @dataclass
+class SubModule:
+    """
+    Representation of a submodule inside a Framework
+    """
+    name: str
+    files: List['SwiftFile']
+    submodules: List['SubModule']
+
+    @property
+    def n_of_files(self) -> int:
+        sub_files = 0 if (len(self.submodules) == 0) else \
+            seq([s.n_of_files for s in self.submodules]).reduce(lambda a, b: a + b)
+        return len(self.files) + sub_files
+
+    @property
+    def data(self) -> 'SyntheticData':
+        root_module_files = [SyntheticData.from_swift_file(swift_file=f) for f in self.files]
+        submodules_files = [SyntheticData.from_swift_file(swift_file=f) for f in
+                            seq([f.files for f in [s for s in self.submodules]]).flatten()]
+        return seq(root_module_files + submodules_files).reduce(lambda a, b: a + b)
+
+    @property
+    def as_dict(self) -> Dict:
+        return {
+            self.name: {
+                "n_of_files": self.n_of_files,
+                "metric": self.data.as_dict
+            }
+        }
+
+
+@dataclass
 class Dependency:
     name: str
     dependent_framework: str
