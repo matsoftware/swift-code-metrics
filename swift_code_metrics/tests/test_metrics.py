@@ -4,7 +4,8 @@ from swift_code_metrics._parser import SwiftFile
 from functional import seq
 
 example_swiftfile = SwiftFile(
-    framework_name=['Test'],
+    path='/my/path/class.swift',
+    framework_name='Test',
     loc=1,
     imports=['Foundation', 'dep1', 'dep2'],
     interfaces=['prot1', 'prot2', 'prot3'],
@@ -22,11 +23,14 @@ class FrameworkTests(unittest.TestCase):
     def setUp(self):
         self.frameworks = [Framework('BusinessLogic'), Framework('UIKit'), Framework('Other')]
         self.framework = Framework('AwesomeName')
+        self.framework.raw_files['Group1'] = {}
+        self.framework.raw_files['Group1']['File1'] = example_swiftfile
+        self.framework.raw_files['Group1']['File2'] = example_swiftfile
         seq(self.frameworks) \
             .for_each(lambda f: self.framework.append_import(f))
 
     def test_representation(self):
-        self.assertEqual(str(self.framework), 'AwesomeName(0 files)')
+        self.assertEqual('AwesomeName(2 files)', str(self.framework))
 
     def test_compact_name_more_than_four_capitals(self):
         test_framework = Framework('FrameworkWithMoreThanFourCapitals')
@@ -40,7 +44,7 @@ class FrameworkTests(unittest.TestCase):
         self.assertEqual('n', test_framework.compact_name)
 
     def test_compact_name_description(self):
-        self.assertEqual(self.framework.compact_name_description, 'AN = AwesomeName')
+        self.assertEqual('AN = AwesomeName', self.framework.compact_name_description)
 
     def test_imports(self):
         expected_imports = {self.frameworks[0]: 1,
@@ -49,6 +53,13 @@ class FrameworkTests(unittest.TestCase):
 
     def test_number_of_imports(self):
         self.assertEqual(2, self.framework.number_of_imports)
+
+    def test_number_of_files(self):
+        self.assertEqual(2, self.framework.number_of_files)
+
+    def test_synthetic_data(self):
+        self.assertEqual(self.framework.data.loc, 2)
+        self.assertEqual(self.framework.data.noc, 14)
 
 
 class DependencyTests(unittest.TestCase):
@@ -94,8 +105,21 @@ class MetricsTests(unittest.TestCase):
         self.test_design_kit.append_import(self.design_kit)
 
     def test_distance_main_sequence(self):
-        self.app_layer.data.number_of_concrete_data_structures = 7
-        self.app_layer.data.number_of_interfaces = 2
+
+        example_file = SwiftFile(
+            path='/my/path/class.swift',
+            framework_name='Test',
+            loc=1,
+            imports=['Foundation', 'dep1', 'dep2'],
+            interfaces=['prot1', 'prot2'],
+            structs=['struct1', 'struct2', 'struct3', 'struct4'],
+            classes=['class1', 'class2', 'class3'],
+            methods=['meth1', 'meth2', 'meth3', 'testMethod'],
+            n_of_comments=7,
+            is_shared=False,
+            is_test=False
+        )
+        self.app_layer.raw_files['File'] = example_file
 
         self.assertAlmostEqual(0.286,
                                Metrics.distance_main_sequence(self.app_layer, self.frameworks),
@@ -114,8 +138,23 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(0, Metrics.abstractness(self.foundation_kit))
 
     def test_abstractness_concretes(self):
-        self.foundation_kit.data.number_of_interfaces = 8
-        self.foundation_kit.data.number_of_concrete_data_structures = 4
+
+        example_file = SwiftFile(
+            path='/my/path/class.swift',
+            framework_name='Test',
+            loc=1,
+            imports=['Foundation', 'dep1', 'dep2'],
+            interfaces=['prot1', 'prot2', 'prot3', 'prot4',
+                        'prot5', 'prot6', 'prot7', 'prot8'],
+            structs=['struct1', 'struct2'],
+            classes=['class1', 'class2'],
+            methods=['meth1', 'meth2', 'meth3', 'testMethod'],
+            n_of_comments=7,
+            is_shared=False,
+            is_test=False
+        )
+
+        self.foundation_kit.raw_files['File'] = example_file
         self.assertEqual(2, Metrics.abstractness(self.foundation_kit))
 
     def test_fan_in_test_frameworks(self):
@@ -202,7 +241,7 @@ class MetricsTests(unittest.TestCase):
 class SyntheticDataTests(unittest.TestCase):
 
     def setUp(self):
-        self.synthetic_data = SyntheticData(swift_file=example_swiftfile)
+        self.synthetic_data = SyntheticData.from_swift_file(swift_file=example_swiftfile)
 
     def test_init_no_swift_file(self):
         empty_data = SyntheticData()
@@ -221,9 +260,9 @@ class SyntheticDataTests(unittest.TestCase):
         self.assertEqual(4, self.synthetic_data.number_of_methods)
         self.assertEqual(1, self.synthetic_data.number_of_tests)
 
-    def test_append_data(self):
-        additional_data = SyntheticData(swift_file=example_swiftfile)
-        self.synthetic_data.append_data(data=additional_data)
+    def test_add_data(self):
+        additional_data = SyntheticData.from_swift_file(swift_file=example_swiftfile)
+        self.synthetic_data += additional_data
         self.assertEqual(2, self.synthetic_data.loc)
         self.assertEqual(14, self.synthetic_data.noc)
         self.assertEqual(4, self.synthetic_data.number_of_concrete_data_structures)
@@ -231,9 +270,9 @@ class SyntheticDataTests(unittest.TestCase):
         self.assertEqual(8, self.synthetic_data.number_of_methods)
         self.assertEqual(2, self.synthetic_data.number_of_tests)
 
-    def test_remove_data(self):
-        additional_data = SyntheticData(swift_file=example_swiftfile)
-        self.synthetic_data.remove_data(data=additional_data)
+    def test_subtract_data(self):
+        additional_data = SyntheticData.from_swift_file(swift_file=example_swiftfile)
+        self.synthetic_data -= additional_data
         self.assertEqual(0, self.synthetic_data.loc)
         self.assertEqual(0, self.synthetic_data.noc)
         self.assertEqual(0, self.synthetic_data.number_of_concrete_data_structures)
@@ -260,7 +299,7 @@ class SyntheticDataTests(unittest.TestCase):
 class FrameworkDataTests(unittest.TestCase):
 
     def setUp(self):
-        self.framework_data = FrameworkData(swift_file=example_swiftfile)
+        self.framework_data = FrameworkData.from_swift_file(swift_file=example_swiftfile)
 
     def test_init_swift_file(self):
         self.assertEqual(1, self.framework_data.loc)
@@ -272,10 +311,9 @@ class FrameworkDataTests(unittest.TestCase):
         self.assertEqual(2, self.framework_data.n_o_i)
 
     def test_append_framework(self):
-        framework_additional_data = SyntheticData(swift_file=example_swiftfile)
         test_framework = Framework('Test')
         test_framework.append_import(Framework('Imported'))
-        test_framework.data = framework_additional_data
+        test_framework.raw_files['File'] = example_swiftfile
 
         self.framework_data.append_framework(test_framework)
         self.assertEqual(2, self.framework_data.loc)
@@ -287,9 +325,9 @@ class FrameworkDataTests(unittest.TestCase):
         self.assertEqual(3, self.framework_data.n_o_i)
 
     def test_remove_framework_data(self):
-        framework_additional_data = FrameworkData(swift_file=example_swiftfile)
+        framework_additional_data = FrameworkData.from_swift_file(swift_file=example_swiftfile)
 
-        self.framework_data.remove_data(framework_additional_data)
+        self.framework_data -= framework_additional_data
         self.assertEqual(0, self.framework_data.loc)
         self.assertEqual(0, self.framework_data.noc)
         self.assertEqual(0, self.framework_data.number_of_concrete_data_structures)

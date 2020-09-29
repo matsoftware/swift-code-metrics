@@ -1,5 +1,6 @@
-from ._helpers import AnalyzerHelpers, Log, ParsingHelpers, ReportingHelpers
+from ._helpers import AnalyzerHelpers, Log, ParsingHelpers, ReportingHelpers, flatten_nested_dictionary_values
 from ._parser import SwiftFile
+from dataclasses import dataclass
 from functional import seq
 from typing import Dict, List, Optional
 
@@ -191,31 +192,61 @@ class Metrics:
                    .list()) > 0
 
 
+@dataclass
 class SyntheticData:
-    def __init__(self, swift_file: Optional['SwiftFile'] = None):
-        self.loc = 0 if swift_file is None else swift_file.loc
-        self.noc = 0 if swift_file is None else swift_file.n_of_comments
-        self.number_of_interfaces = 0 if swift_file is None else len(swift_file.interfaces)
-        self.number_of_concrete_data_structures = 0 if swift_file is None else \
-            len(swift_file.structs + swift_file.classes)
-        self.number_of_methods = 0 if swift_file is None else len(swift_file.methods)
-        self.number_of_tests = 0 if swift_file is None else len(swift_file.tests)
+    """
+    Representation of synthetic code metric data
+    """
+    loc: int = 0
+    noc: int = 0
+    number_of_interfaces: int = 0
+    number_of_concrete_data_structures: int = 0
+    number_of_methods: int = 0
+    number_of_tests: int = 0
 
-    def append_data(self, data: 'SyntheticData'):
-        self.loc += data.loc
-        self.noc += data.noc
-        self.number_of_interfaces += data.number_of_interfaces
-        self.number_of_concrete_data_structures += data.number_of_concrete_data_structures
-        self.number_of_methods += data.number_of_methods
-        self.number_of_tests += data.number_of_tests
+    @classmethod
+    def from_swift_file(cls, swift_file: Optional['SwiftFile'] = None) -> 'SyntheticData':
+        return SyntheticData(
+            loc=0 if swift_file is None else swift_file.loc,
+            noc=0 if swift_file is None else swift_file.n_of_comments,
+            number_of_interfaces=0 if swift_file is None else len(swift_file.interfaces),
+            number_of_concrete_data_structures=0 if swift_file is None else \
+                len(swift_file.structs + swift_file.classes),
+            number_of_methods=0 if swift_file is None else len(swift_file.methods),
+            number_of_tests=0 if swift_file is None else len(swift_file.tests)
+        )
 
-    def remove_data(self, data: 'SyntheticData'):
-        self.loc -= data.loc
-        self.noc -= data.noc
-        self.number_of_interfaces -= data.number_of_interfaces
-        self.number_of_concrete_data_structures -= data.number_of_concrete_data_structures
-        self.number_of_methods -= data.number_of_methods
-        self.number_of_tests -= data.number_of_tests
+    def __add__(self, data):
+        """
+        Implementation of the `+` operator
+        :param data: An instance of SyntheticData
+        :return: a new instance of SyntheticData
+        """
+        return SyntheticData(
+            loc=self.loc + data.loc,
+            noc=self.noc + data.noc,
+            number_of_interfaces=self.number_of_interfaces + data.number_of_interfaces,
+            number_of_concrete_data_structures=self.number_of_concrete_data_structures
+                                               + data.number_of_concrete_data_structures,
+            number_of_methods=self.number_of_methods + data.number_of_methods,
+            number_of_tests=self.number_of_tests + data.number_of_tests
+        )
+
+    def __sub__(self, data):
+        """
+        Implementation of the `-` operator
+        :param data: An instance of SyntheticData
+        :return: a new instance of SyntheticData
+        """
+        return SyntheticData(
+            loc=self.loc - data.loc,
+            noc=self.noc - data.noc,
+            number_of_interfaces=self.number_of_interfaces - data.number_of_interfaces,
+            number_of_concrete_data_structures=self.number_of_concrete_data_structures
+                                               - data.number_of_concrete_data_structures,
+            number_of_methods=self.number_of_methods - data.number_of_methods,
+            number_of_tests=self.number_of_tests - data.number_of_tests
+        )
 
     @property
     def poc(self) -> float:
@@ -234,30 +265,82 @@ class SyntheticData:
         }
 
 
+@dataclass()
 class FrameworkData(SyntheticData):
-    def __init__(self, swift_file: Optional['SwiftFile'] = None):
-        super().__init__(swift_file)
-        self.n_o_i = 0 if swift_file is None else\
-            len([imp for imp in swift_file.imports if imp not in AnalyzerHelpers.APPLE_FRAMEWORKS])
+    """
+    Enriched synthetic data
+    """
+    n_o_i: int = 0
+
+    @classmethod
+    def from_swift_file(cls, swift_file: Optional['SwiftFile'] = None) -> 'FrameworkData':
+        sd = SyntheticData.from_swift_file(swift_file=swift_file)
+        return FrameworkData.__from_sd(sd=sd,
+                                       n_o_i=0 if swift_file is None else \
+                                           len([imp for imp in swift_file.imports if imp not in \
+                                                AnalyzerHelpers.APPLE_FRAMEWORKS]))
+
+    def __add__(self, data):
+        """
+        Implementation of the `+` operator
+        :param data: An instance of FrameworkData
+        :return: a new instance of FrameworkData
+        """
+        sd = self.__current_sd().__add__(data=data)
+        return FrameworkData.__from_sd(sd=sd, n_o_i=self.n_o_i + data.n_o_i)
+
+    def __sub__(self, data):
+        """
+        Implementation of the `-` operator
+        :param data: An instance of FrameworkData
+        :return: a new instance of FrameworkData
+        """
+        sd = self.__current_sd().__sub__(data=data)
+        return FrameworkData.__from_sd(sd=sd, n_o_i=self.n_o_i - data.n_o_i)
 
     def append_framework(self, f: 'Framework'):
-        super().append_data(data=f.data)
+        sd = f.data
+        self.loc += sd.loc
+        self.noc += sd.noc
+        self.number_of_interfaces += sd.number_of_interfaces
+        self.number_of_concrete_data_structures += sd.number_of_concrete_data_structures
+        self.number_of_methods += sd.number_of_methods
+        self.number_of_tests += sd.number_of_tests
         self.n_o_i += f.number_of_imports
-
-    def remove_data(self, data: 'FrameworkData'):
-        super().remove_data(data=data)
-        self.n_o_i -= data.n_o_i
 
     @property
     def as_dict(self) -> Dict:
         return {**super().as_dict, **{"noi": self.n_o_i}}
 
+    # Private
+
+    def __current_sd(self) -> 'SyntheticData':
+        return SyntheticData(
+            loc=self.loc,
+            noc=self.noc,
+            number_of_interfaces=self.number_of_interfaces,
+            number_of_concrete_data_structures=self.number_of_concrete_data_structures,
+            number_of_methods=self.number_of_methods,
+            number_of_tests=self.number_of_tests
+        )
+
+    @classmethod
+    def __from_sd(cls, sd: 'SyntheticData', n_o_i: int) -> 'FrameworkData':
+        return FrameworkData(
+            loc=sd.loc,
+            noc=sd.noc,
+            number_of_interfaces=sd.number_of_interfaces,
+            number_of_concrete_data_structures=sd.number_of_concrete_data_structures,
+            number_of_methods=sd.number_of_methods,
+            number_of_tests=sd.number_of_tests,
+            n_o_i=n_o_i
+        )
+
 
 class Framework:
     def __init__(self, name: str, is_test_framework: bool = False):
         self.name = name
-        self.number_of_files = 0
-        self.data = SyntheticData()
+        self.raw_files = {}
         self.__total_imports = {}
         self.is_test_framework = is_test_framework
 
@@ -275,6 +358,25 @@ class Framework:
             self.__total_imports[framework_import] = 1
         else:
             self.__total_imports[framework_import] += 1
+
+    @property
+    def data(self) -> SyntheticData:
+        """
+        The metrics data describing the framework
+        :return: an instance of SyntheticData
+        """
+        if self.number_of_files == 0:
+            return SyntheticData()
+        return seq([SyntheticData.from_swift_file(swift_file=sf) for sf in self.__raw_files_data()]) \
+            .reduce(lambda sd1, sd2: sd1 + sd2)
+
+    @property
+    def number_of_files(self) -> int:
+        """
+        Number of files in the framework
+        :return: The total number of files in this framework (int)
+        """
+        return len(self.__raw_files_data())
 
     @property
     def imports(self) -> Dict[str, int]:
@@ -311,12 +413,17 @@ class Framework:
     def __filtered_imports(items: 'ItemsView') -> Dict[str, int]:
         return seq(items).filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS).dict()
 
+    # Private
 
+    def __raw_files_data(self) -> List['SwiftFile']:
+        return list(flatten_nested_dictionary_values(self.raw_files))
+
+
+@dataclass
 class Dependency:
-    def __init__(self, name: str, dependent_framework: str, number_of_imports: int = 0):
-        self.name = name
-        self.dependent_framework = dependent_framework
-        self.number_of_imports = number_of_imports
+    name: str
+    dependent_framework: str
+    number_of_imports: int = 0
 
     def __eq__(self, other):
         return (self.name == other.name) and \
@@ -333,4 +440,3 @@ class Dependency:
     @property
     def relationship(self) -> str:
         return f'{self.name} > {self.dependent_framework}'
-

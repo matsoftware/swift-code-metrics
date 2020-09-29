@@ -164,6 +164,13 @@ class HelpersTests(unittest.TestCase):
     def test_helpers_funcs_reduce_dictionary(self):
         self.assertEqual(3, _helpers.ParsingHelpers.reduce_dictionary({"one": 1, "two": 2}))
 
+    # Additional helpers
+
+    def test_flatten_nested_dictionary_values(self):
+        nested_dictionary = {'group1': {'subGroup1': 1}, 'group2': 2, 'group3': {'subGroup3': {'subSubGroup3': 3}}}
+        flattened_values = list(_helpers.flatten_nested_dictionary_values(nested_dictionary))
+        self.assertEqual([1, 2, 3], flattened_values)
+
 
 if __name__ == '__main__':
     unittest.main()

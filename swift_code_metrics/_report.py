@@ -13,14 +13,14 @@ class ReportProcessor:
         # Shared files
         for _, shared_files in shared_files.items():
             shared_file = shared_files[0]
-            shared_file_data = FrameworkData(swift_file=shared_file)
+            shared_file_data = FrameworkData.from_swift_file(swift_file=shared_file)
             for _ in range((len(shared_files) - 1)):
-                report.shared_code.append_data(shared_file_data)
-                report.total_aggregate.remove_data(shared_file_data)
+                report.shared_code += shared_file_data
+                report.total_aggregate -= shared_file_data
                 if shared_file.is_test:
-                    report.test_framework_aggregate.remove_data(shared_file_data)
+                    report.test_framework_aggregate -= shared_file_data
                 else:
-                    report.non_test_framework_aggregate.remove_data(shared_file_data)
+                    report.non_test_framework_aggregate -= shared_file_data
 
         # Frameworks
         for f in sorted(frameworks, key=lambda fr: fr.name, reverse=False):
