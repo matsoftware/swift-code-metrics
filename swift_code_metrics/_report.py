@@ -41,16 +41,17 @@ class ReportProcessor:
         :param framework: The framework to analyze
         :return: The architectural analysis of the framework
         """
-        loc = framework.data.loc
-        noc = framework.data.noc
-        poc = Metrics.percentage_of_comments(framework.data.noc,
-                                             framework.data.loc)
+        framework_data = framework.data
+        loc = framework_data.loc
+        noc = framework_data.noc
+        poc = Metrics.percentage_of_comments(framework_data.noc,
+                                             framework_data.loc)
         analysis = Metrics.poc_analysis(poc)
-        n_a = framework.data.number_of_interfaces
-        n_c = framework.data.number_of_concrete_data_structures
-        nom = framework.data.number_of_methods
+        n_a = framework_data.number_of_interfaces
+        n_c = framework_data.number_of_concrete_data_structures
+        nom = framework_data.number_of_methods
         dependencies = Metrics.total_dependencies(framework)
-        n_of_tests = framework.data.number_of_tests
+        n_of_tests = framework_data.number_of_tests
         n_of_imports = framework.number_of_imports
 
         # Non-test framework analysis

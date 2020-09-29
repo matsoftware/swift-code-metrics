@@ -8,25 +8,6 @@
 
 import Foundation
 
-public enum Result {
-    
-    case success(data: Data)
-    case error(error: Error)
-    
-}
-
-public enum NetworkingError: Error, Equatable {
-    case dummyError
-}
-
-public typealias ResultHandler = (Result) -> Void
-
-public protocol NetworkingProtocol {
-    
-    func makeRequest(with dummyUrl: URL, result: ResultHandler)
-    
-}
-
 public struct Networking: NetworkingProtocol {
     
     public init() {}
