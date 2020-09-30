@@ -87,8 +87,8 @@ class GraphsRender:
             # Single submodule folder - not useful
             return
         if len(submodule.files) > 0:
-            # Add a submodule with the name of the current module to represent the root slice
-            submodules = submodules + [SubModule(name=submodule.name,
+            # Add a submodule to represent the root slice
+            submodules = submodules + [SubModule(name='(root)',
                                                  files=submodule.files,
                                                  submodules=[],
                                                  parent=submodule)]
