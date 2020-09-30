@@ -414,11 +414,6 @@ class Framework:
     def __filtered_imports(items: 'ItemsView') -> Dict[str, int]:
         return seq(items).filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS).dict()
 
-    # Private
-
-    def __raw_files_data(self) -> List['SwiftFile']:
-        return list(flatten_nested_dictionary_values(self.raw_files))
-
 
 @dataclass
 class SubModule:
