@@ -24,15 +24,15 @@
         },
         {
             "FoundationFramework": {
-                "loc": 26,
-                "noc": 14,
-                "poc": 35.0,
+                "loc": 27,
+                "noc": 21,
+                "poc": 43.75,
                 "n_a": 1,
                 "n_c": 2,
                 "nom": 3,
                 "not": 0,
                 "noi": 0,
-                "analysis": "Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
+                "analysis": "The code is over commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
                 "dependencies": [],
                 "fan_in": 1,
                 "fan_out": 0,
@@ -144,13 +144,13 @@
     },
     "aggregate": {
         "non-test-frameworks": {
-            "loc": 107,
-            "noc": 42,
+            "loc": 108,
+            "noc": 49,
             "n_a": 1,
             "n_c": 8,
             "nom": 11,
             "not": 0,
-            "poc": 28.188,
+            "poc": 31.21,
             "noi": 3
         },
         "tests-frameworks": {
@@ -164,13 +164,13 @@
             "noi": 4
         },
         "total": {
-            "loc": 160,
-            "noc": 70,
+            "loc": 161,
+            "noc": 77,
             "n_a": 1,
             "n_c": 12,
             "nom": 18,
             "not": 5,
-            "poc": 30.435,
+            "poc": 32.353,
             "noi": 7
         }
     }

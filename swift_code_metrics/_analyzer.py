@@ -3,11 +3,10 @@ import json
 
 from ._helpers import AnalyzerHelpers
 from ._parser import SwiftFileParser, SwiftFile
-from ._metrics import Framework
+from ._metrics import Framework, SubModule
 from ._report import ReportProcessor
 from functional import seq
 from typing import List, Optional
-from mergedeep import merge
 
 
 class Inspector:
@@ -61,7 +60,7 @@ class Inspector:
 
     def __append_dependency(self, swift_file: 'SwiftFile'):
         framework = self.__get_or_create_framework(swift_file.framework_name)
-        Inspector.__add_raw_files(framework=framework, swift_file=swift_file)
+        Inspector.__populate_submodule(framework=framework, swift_file=swift_file)
         # This covers the scenario where a test framework might contain no tests
         framework.is_test_framework = swift_file.is_test
 
@@ -72,12 +71,23 @@ class Inspector:
             framework.append_import(imported_framework)
 
     @staticmethod
-    def __add_raw_files(framework: 'Framework', swift_file: 'SwiftFile'):
-        paths = str(swift_file.path).split('/')
-        ref_dict = swift_file
-        for key in reversed(paths):
-            ref_dict = {key: ref_dict}
-        merge(framework.raw_files, ref_dict)
+    def __populate_submodule(framework: 'Framework', swift_file: 'SwiftFile'):
+        current_paths = str(swift_file.path).split('/')
+        paths = list(reversed(current_paths))
+
+        submodule = framework.submodule
+        while len(paths) > 1:
+            path = paths.pop()
+            submodules = [s for s in submodule.submodules]
+            existing_submodule = seq(submodules).filter(lambda sm: sm.name == path)
+            if len(list(existing_submodule)) > 0:
+                submodule = existing_submodule.first()
+            else:
+                new_submodule = SubModule(name=path, files=[], submodules=[])
+                submodule.submodules.append(new_submodule)
+                submodule = new_submodule
+
+        submodule.files.append(swift_file)
 
     def __process_shared_file(self, swift_file: 'SwiftFile', directory: str):
         if not swift_file.is_shared:

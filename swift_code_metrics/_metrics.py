@@ -1,4 +1,4 @@
-from ._helpers import AnalyzerHelpers, Log, ParsingHelpers, ReportingHelpers, flatten_nested_dictionary_values
+from ._helpers import AnalyzerHelpers, Log, ParsingHelpers, ReportingHelpers
 from ._parser import SwiftFile
 from dataclasses import dataclass
 from functional import seq
@@ -340,8 +340,12 @@ class FrameworkData(SyntheticData):
 class Framework:
     def __init__(self, name: str, is_test_framework: bool = False):
         self.name = name
-        self.raw_files = {}
         self.__total_imports = {}
+        self.submodule = SubModule(
+            name=self.name,
+            files=[],
+            submodules=[]
+        )
         self.is_test_framework = is_test_framework
 
     def __repr__(self):
@@ -365,10 +369,7 @@ class Framework:
         The metrics data describing the framework
         :return: an instance of SyntheticData
         """
-        if self.number_of_files == 0:
-            return SyntheticData()
-        return seq([SyntheticData.from_swift_file(swift_file=sf) for sf in self.__raw_files_data()]) \
-            .reduce(lambda sd1, sd2: sd1 + sd2)
+        return self.submodule.data
 
     @property
     def number_of_files(self) -> int:
@@ -376,7 +377,7 @@ class Framework:
         Number of files in the framework
         :return: The total number of files in this framework (int)
         """
-        return len(self.__raw_files_data())
+        return self.submodule.n_of_files
 
     @property
     def imports(self) -> Dict[str, int]:
@@ -413,10 +414,38 @@ class Framework:
     def __filtered_imports(items: 'ItemsView') -> Dict[str, int]:
         return seq(items).filter(lambda f: f[0].name not in AnalyzerHelpers.APPLE_FRAMEWORKS).dict()
 
-    # Private
 
-    def __raw_files_data(self) -> List['SwiftFile']:
-        return list(flatten_nested_dictionary_values(self.raw_files))
+@dataclass
+class SubModule:
+    """
+    Representation of a submodule inside a Framework
+    """
+    name: str
+    files: List['SwiftFile']
+    submodules: List['SubModule']
+
+    @property
+    def n_of_files(self) -> int:
+        sub_files = 0 if (len(self.submodules) == 0) else \
+            seq([s.n_of_files for s in self.submodules]).reduce(lambda a, b: a + b)
+        return len(self.files) + sub_files
+
+    @property
+    def data(self) -> 'SyntheticData':
+        root_module_files = [SyntheticData()] if (len(self.files) == 0) else \
+            [SyntheticData.from_swift_file(swift_file=f) for f in self.files]
+        submodules_files = SyntheticData() if (len(self.submodules) == 0) else \
+            seq([s.data for s in self.submodules]).reduce(lambda a, b: a + b)
+        return seq(root_module_files).reduce(lambda a, b: a + b) + submodules_files
+
+    @property
+    def as_dict(self) -> Dict:
+        return {
+            self.name: {
+                "n_of_files": self.n_of_files,
+                "metric": self.data.as_dict
+            }
+        }
 
 
 @dataclass

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E511F8282523A68600EE2AEC /* CommonTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511F8272523A68600EE2AEC /* CommonTypes.swift */; };
 		E576963D2117671600CADE76 /* FoundationFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E57696332117671600CADE76 /* FoundationFramework.framework */; };
 		E57696422117671600CADE76 /* FoundationFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57696412117671600CADE76 /* FoundationFrameworkTests.swift */; };
 		E576964E2117672A00CADE76 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E576964D2117672A00CADE76 /* Networking.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E511F8272523A68600EE2AEC /* CommonTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonTypes.swift; sourceTree = "<group>"; };
 		E57696332117671600CADE76 /* FoundationFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FoundationFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E57696372117671600CADE76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E576963C2117671600CADE76 /* FoundationFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FoundationFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,6 +68,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E511F8262523A66900EE2AEC /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				E511F8272523A68600EE2AEC /* CommonTypes.swift */,
+			);
+			path = Interfaces;
+			sourceTree = "<group>";
+		};
 		E57696292117671600CADE76 = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +102,7 @@
 			children = (
 				E57696372117671600CADE76 /* Info.plist */,
 				E576964D2117672A00CADE76 /* Networking.swift */,
+				E511F8262523A66900EE2AEC /* Interfaces */,
 			);
 			path = FoundationFramework;
 			sourceTree = "<group>";
@@ -272,6 +283,7 @@
 			files = (
 				E576964E2117672A00CADE76 /* Networking.swift in Sources */,
 				E57696502117673500CADE76 /* Helpers.swift in Sources */,
+				E511F8282523A68600EE2AEC /* CommonTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
