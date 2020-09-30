@@ -443,7 +443,8 @@ class SubModule:
         return {
             self.name: {
                 "n_of_files": self.n_of_files,
-                "metric": self.data.as_dict
+                "metric": self.data.as_dict,
+                "submodules": [s.as_dict for s in self.submodules]
             }
         }
 

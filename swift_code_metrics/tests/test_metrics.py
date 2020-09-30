@@ -399,7 +399,24 @@ class SubModuleTests(unittest.TestCase):
                      "nom": 8,
                      "not": 2,
                      "poc": 87.5
-                }
+                },
+                "submodules": [
+                    {
+                        "Helper": {
+                            "n_of_files": 1,
+                            "metric": {
+                                "loc": 1,
+                                "n_a": 8,
+                                "n_c": 4,
+                                "noc": 7,
+                                "nom": 4,
+                                "not": 1,
+                                "poc": 87.5
+                            },
+                            "submodules": []
+                        }
+                    }
+                ]
             }
         }, self.submodule.as_dict)
 
