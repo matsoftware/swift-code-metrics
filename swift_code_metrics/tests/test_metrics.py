@@ -38,9 +38,7 @@ class FrameworkTests(unittest.TestCase):
     def setUp(self):
         self.frameworks = [Framework('BusinessLogic'), Framework('UIKit'), Framework('Other')]
         self.framework = Framework('AwesomeName')
-        self.framework.raw_files['Group1'] = {}
-        self.framework.raw_files['Group1']['File1'] = example_swiftfile
-        self.framework.raw_files['Group1']['File2'] = example_swiftfile
+        self.framework.submodule.files = [example_swiftfile, example_file2]
         seq(self.frameworks) \
             .for_each(lambda f: self.framework.append_import(f))
 
@@ -134,7 +132,7 @@ class MetricsTests(unittest.TestCase):
             is_shared=False,
             is_test=False
         )
-        self.app_layer.raw_files['File'] = example_file
+        self.app_layer.submodule.files.append(example_file)
 
         self.assertAlmostEqual(0.286,
                                Metrics.distance_main_sequence(self.app_layer, self.frameworks),
@@ -153,7 +151,7 @@ class MetricsTests(unittest.TestCase):
         self.assertEqual(0, Metrics.abstractness(self.foundation_kit))
 
     def test_abstractness_concretes(self):
-        self.foundation_kit.raw_files['File'] = example_file2
+        self.foundation_kit.submodule.files.append(example_file2)
         self.assertEqual(2, Metrics.abstractness(self.foundation_kit))
 
     def test_fan_in_test_frameworks(self):
@@ -312,7 +310,7 @@ class FrameworkDataTests(unittest.TestCase):
     def test_append_framework(self):
         test_framework = Framework('Test')
         test_framework.append_import(Framework('Imported'))
-        test_framework.raw_files['File'] = example_swiftfile
+        test_framework.submodule.files.append(example_swiftfile)
 
         self.framework_data.append_framework(test_framework)
         self.assertEqual(2, self.framework_data.loc)
@@ -377,6 +375,17 @@ class SubModuleTests(unittest.TestCase):
             number_of_tests=2
         )
         self.assertEqual(data, self.submodule.data)
+
+    def test_empty_data(self):
+        data = SyntheticData(
+            loc=0,
+            noc=0,
+            number_of_interfaces=0,
+            number_of_concrete_data_structures=0,
+            number_of_methods=0,
+            number_of_tests=0
+        )
+        self.assertEqual(data, SubModule(name="", files=[], submodules=[]).data)
 
     def test_dict_repr(self):
         self.assertEqual({
