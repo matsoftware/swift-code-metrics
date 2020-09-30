@@ -344,7 +344,8 @@ class Framework:
         self.submodule = SubModule(
             name=self.name,
             files=[],
-            submodules=[]
+            submodules=[],
+            parent=None
         )
         self.is_test_framework = is_test_framework
 
@@ -423,12 +424,38 @@ class SubModule:
     name: str
     files: List['SwiftFile']
     submodules: List['SubModule']
+    parent: Optional['SubModule']
+
+    @property
+    def next(self) -> 'SubModule':
+        if len(self.submodules) == 0:
+            if self.parent is None:
+                return self
+        else:
+            return self.submodules[0]
+
+        next_level = self.parent
+        current_level = self
+        while next_level is not None:
+            next_i = next_level.submodules.index(current_level) + 1
+            if next_i < len(next_level.submodules):
+                return next_level.submodules[next_i]
+            else:
+                current_level = next_level
+                next_level = next_level.parent
+
+        return current_level
 
     @property
     def n_of_files(self) -> int:
         sub_files = 0 if (len(self.submodules) == 0) else \
             seq([s.n_of_files for s in self.submodules]).reduce(lambda a, b: a + b)
         return len(self.files) + sub_files
+
+    @property
+    def path(self) -> str:
+        parent_path = "" if not self.parent else f'{self.parent.path} > '
+        return f'{parent_path}{self.name}'
 
     @property
     def data(self) -> 'SyntheticData':
