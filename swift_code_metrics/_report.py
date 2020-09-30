@@ -78,6 +78,7 @@ class ReportProcessor:
             "noi": n_of_imports,
             "analysis": analysis,
             "dependencies": dependencies,
+            "submodules": framework.submodule.as_dict
         }
 
         return {
