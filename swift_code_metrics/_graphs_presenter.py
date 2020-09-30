@@ -1,5 +1,5 @@
 from swift_code_metrics._metrics import Metrics
-from ._graphics import Graph
+from ._graph_helpers import Graph
 from functional import seq
 from math import ceil
 
