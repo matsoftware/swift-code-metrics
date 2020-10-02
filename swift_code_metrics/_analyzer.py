@@ -83,7 +83,7 @@ class Inspector:
             if len(list(existing_submodule)) > 0:
                 submodule = existing_submodule.first()
             else:
-                new_submodule = SubModule(name=path, files=[], submodules=[])
+                new_submodule = SubModule(name=path, files=[], submodules=[], parent=submodule)
                 submodule.submodules.append(new_submodule)
                 submodule = new_submodule
 

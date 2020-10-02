@@ -1,10 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from argparse import ArgumentParser
 
-from ._helpers import Log,ReportingHelpers
+from ._helpers import Log
 from ._analyzer import Inspector
-from ._metrics import Metrics
 from .version import VERSION
 import sys
 
@@ -74,43 +73,13 @@ def main():
         sys.exit(0)
 
     # Creates graphs
-    from ._presenter import GraphPresenter
-    graph_presenter = GraphPresenter(artifacts)
+    from ._graphs_renderer import GraphsRender
     non_test_frameworks = analyzer.filtered_frameworks(is_test=False)
     test_frameworks = analyzer.filtered_frameworks(is_test=True)
-
-    # Sorted data plots
-    non_test_reports_sorted_data = {
-        'N. of classes and structs': lambda fr: fr.data.number_of_concrete_data_structures,
-        'Lines Of Code - LOC': lambda fr: fr.data.loc,
-        'Number Of Comments - NOC': lambda fr: fr.data.noc,
-        'N. of imports - NOI': lambda fr: fr.number_of_imports
-    }
-
-    tests_reports_sorted_data = {
-        'Number of tests - NOT': lambda fr: fr.data.number_of_tests
-    }
-
-    # Non-test graphs
-    for title, framework_function in non_test_reports_sorted_data.items():
-        graph_presenter.sorted_data_plot(title, non_test_frameworks, framework_function)
-
-    # Distance from the main sequence
-    graph_presenter.distance_from_main_sequence_plot(non_test_frameworks,
-                                                     lambda fr: Metrics.instability(fr, analyzer.frameworks),
-                                                     lambda fr: Metrics.abstractness(fr))
-
-    # Dependency graph
-    graph_presenter.dependency_graph(non_test_frameworks,
-                                     analyzer.report.non_test_framework_aggregate.loc,
-                                     analyzer.report.non_test_framework_aggregate.n_o_i)
-
-    # Code distribution
-    graph_presenter.pie_plot('Code distribution', non_test_frameworks,
-                             lambda fr:
-                             ReportingHelpers.decimal_format(fr.data.loc
-                                                             / analyzer.report.non_test_framework_aggregate.loc))
-
-    # Test graphs
-    for title, framework_function in tests_reports_sorted_data.items():
-        graph_presenter.sorted_data_plot(title, test_frameworks, framework_function)
+    graphs_renderer = GraphsRender(
+        artifacts_path=artifacts,
+        test_frameworks=test_frameworks,
+        non_test_frameworks=non_test_frameworks,
+        report=analyzer.report
+    )
+    graphs_renderer.render_graphs()

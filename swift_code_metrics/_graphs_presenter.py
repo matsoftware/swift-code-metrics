@@ -1,5 +1,5 @@
 from swift_code_metrics._metrics import Metrics
-from ._graphics import Graph
+from ._graph_helpers import Graph
 from functional import seq
 from math import ceil
 
@@ -20,7 +20,7 @@ class GraphPresenter:
 
         self.graph.bar_plot(title, plot_data)
 
-    def pie_plot(self, title, list_of_frameworks, f_of_framework):
+    def frameworks_pie_plot(self, title, list_of_frameworks, f_of_framework):
         """
         Renders the percentage distribution data related to a framework in a pie chart.
         :param title: The chart title
@@ -39,6 +39,16 @@ class GraphPresenter:
                      )
 
         self.graph.pie_plot(title, plot_data[0], plot_data[1], plot_data[2])
+
+    def submodules_pie_plot(self, title, list_of_submodules, f_of_submodules):
+        sorted_data = sorted(list(map(lambda s: (f_of_submodules(s),
+                                                 s.name),
+                                      list_of_submodules)),
+                             key=lambda tup: tup[0])
+        plot_data = (list(map(lambda f: f[0], sorted_data)),
+                     list(map(lambda f: f[1], sorted_data)))
+
+        self.graph.pie_plot(title, plot_data[0], plot_data[1], plot_data[1])
 
     def distance_from_main_sequence_plot(self, list_of_frameworks, x_ax_f_framework, y_ax_f_framework):
         """

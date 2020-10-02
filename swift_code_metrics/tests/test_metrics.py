@@ -353,17 +353,52 @@ class SubModuleTests(unittest.TestCase):
         self.submodule = SubModule(
             name="BusinessModule",
             files=[example_swiftfile],
-            submodules=[
-                SubModule(
-                    name="Helper",
-                    files=[example_file2],
-                    submodules=[]
-                )
-            ]
+            submodules=[],
+            parent=None
         )
+        self.helper = SubModule(
+            name="Helper",
+            files=[example_file2],
+            submodules=[],
+            parent=self.submodule
+        )
+        self.additional_module = SubModule(
+            name="AdditionalModule",
+            files=[example_file2],
+            submodules=[],
+            parent=self.submodule
+        )
+        self.additional_submodule = SubModule(
+            name="AdditionalSubModule",
+            files=[example_file2],
+            submodules=[],
+            parent=self.additional_module
+        )
+        self.additional_module.submodules.append(self.additional_submodule)
+        self.submodule.submodules.append(self.helper)
 
     def test_n_of_files(self):
         self.assertEqual(2, self.submodule.n_of_files)
+
+    def test_path(self):
+        self.submodule.submodules.append(self.additional_module)
+        self.assertEqual('BusinessModule > AdditionalModule > AdditionalSubModule', self.additional_submodule.path)
+
+    def test_next_only_module(self):
+        self.additional_submodule.parent = None
+        self.assertEqual(self.additional_submodule, self.additional_submodule.next)
+
+    def test_next_closed_circle(self):
+        self.submodule.submodules.append(self.additional_module)
+        #    *
+        #   / \
+        #  H   AM
+        #       \
+        #        AS
+        self.assertEqual(self.helper, self.submodule.next)
+        self.assertEqual(self.additional_module, self.helper.next)
+        self.assertEqual(self.additional_submodule, self.additional_module.next)
+        self.assertEqual(self.submodule, self.additional_submodule.next)
 
     def test_data(self):
         data = SyntheticData(
@@ -385,7 +420,7 @@ class SubModuleTests(unittest.TestCase):
             number_of_methods=0,
             number_of_tests=0
         )
-        self.assertEqual(data, SubModule(name="", files=[], submodules=[]).data)
+        self.assertEqual(data, SubModule(name="", files=[], submodules=[], parent=None).data)
 
     def test_dict_repr(self):
         self.assertEqual({
@@ -399,7 +434,24 @@ class SubModuleTests(unittest.TestCase):
                      "nom": 8,
                      "not": 2,
                      "poc": 87.5
-                }
+                },
+                "submodules": [
+                    {
+                        "Helper": {
+                            "n_of_files": 1,
+                            "metric": {
+                                "loc": 1,
+                                "n_a": 8,
+                                "n_c": 4,
+                                "noc": 7,
+                                "nom": 4,
+                                "not": 1,
+                                "poc": 87.5
+                            },
+                            "submodules": []
+                        }
+                    }
+                ]
             }
         }, self.submodule.as_dict)
 

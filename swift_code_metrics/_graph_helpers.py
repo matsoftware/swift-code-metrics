@@ -27,8 +27,8 @@ class Graph:
         plt.title(title)
         patches, _, _ = plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
         plt.legend(patches, legend, loc='best')
-        plt.tight_layout()
         plt.axis('equal')
+        plt.tight_layout()
 
         self.__render(plt, title)
 
@@ -84,7 +84,7 @@ class Graph:
             plt.show()
         else:
             save_file = self.__file_path(name)
-            plt.savefig(save_file)
+            plt.savefig(save_file, bbox_inches='tight')
             plt.close()
 
     def __file_path(self, name, extension='.pdf'):
