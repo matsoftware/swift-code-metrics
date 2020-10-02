@@ -1,5 +1,5 @@
-from ._metrics import Framework, Metrics, SubModule
-from ._report import Report, ReportingHelpers
+from ._metrics import Metrics, SubModule
+from ._report import ReportingHelpers
 from dataclasses import dataclass
 from typing import List
 from ._graphs_presenter import GraphPresenter
@@ -7,9 +7,7 @@ from ._graphs_presenter import GraphPresenter
 
 @dataclass
 class GraphsRender:
-    """
-    Component responsible to generate the needed graphs for the given report.
-    """
+    "Component responsible to generate the needed graphs for the given report."
     artifacts_path: str
     test_frameworks: List['Framework']
     non_test_frameworks: List['Framework']

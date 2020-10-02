@@ -390,13 +390,11 @@ class SubModuleTests(unittest.TestCase):
 
     def test_next_closed_circle(self):
         self.submodule.submodules.append(self.additional_module)
-        """
-            *
-           / \
-          H   AM
-               \
-                AS  
-        """
+        #    *
+        #   / \
+        #  H   AM
+        #       \
+        #        AS
         self.assertEqual(self.helper, self.submodule.next)
         self.assertEqual(self.additional_module, self.helper.next)
         self.assertEqual(self.additional_submodule, self.additional_module.next)
