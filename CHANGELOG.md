@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## UNRELEASED
+## [1.5.0](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.5.0) - 2020-10-06
+
+### Added
+
+-   [Issue-21](https://github.com/matsoftware/swift-code-metrics/issues/21) Recursive analysis of subdirectories (submodules) in frameworks
 
 ### Fixed
 
