@@ -2,16 +2,24 @@
 
 A sample project is provided in the `resources` folder:
 
-`python3 swift-code-metrics-runner.py --source swift_code_metrics/tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs`
+```bash
+python3 swift-code-metrics-runner.py --source swift_code_metrics/tests/test_resources/ExampleProject/SwiftCodeMetricsExample --artifacts report --generate-graphs
+```
 
-### Source
+## Source
 
 The library will start scanning the content under the `source` folder provided. Frameworks will be identified by their 
 relative path to the root folder specified, meaning that the file system hierarchy will define the naming convention
 (e.g. if a class is under the path `SwiftCodeMetricsExample/BusinessLogic/Logic.swift`, the framework name will be identified
 as `BusinessLogic` since `SwiftCodeMetricsExample` is the root of the `source` parameter in the command above).
 
-#### Project paths override
+### Submodules
+
+A Submodule is a folder inside a framework and the library will perform an analysis of the synthetic metrics data for each submodule recursively.
+Please make sure that your project folder structure is consistent with your logical groups on Xcode to improve the quality of the analysis
+(you can use [synx](https://github.com/venmo/synx) to reconcile groups and local folders). 
+
+### Project paths override
 
 Sometimes the folder structure is not enough to provide a description of the libraries involved, for instance when multiple frameworks are
 defined inside the same folder and they are reusing shared code. For these scenarios, it's possible to define a `scm.json` 
@@ -59,34 +67,113 @@ The `libraries` array defines the list of frameworks with their relative path.
 The code in the `Shared` folder will contribute to the metrics of every single framework defined in the `libraries` 
 array but it will be counted only once for the total aggregate data.
 
-### Output format
+## Output format
 
 The `output.json` file will contain the metrics related to all frameworks
 and an _aggregate_ result for the project.
 
 The example below is an excerpt from the example available [here](../swift_code_metrics/tests/test_resources/expected_output.json).
 
+<details>
+<summary>Output.json example</summary>
+
 ```json
 {
     "non-test-frameworks": [
         {
-            "BusinessLogic": {
-                "loc": 49,
-                "noc": 7,
-                "poc": 12.5,
-                "n_a": 0,
-                "n_c": 3,
+            "FoundationFramework": {
+                "loc": 27,
+                "noc": 21,
+                "poc": 43.75,
+                "n_a": 1,
+                "n_c": 2,
                 "nom": 3,
                 "not": 0,
-                "noi": 1,
-                "analysis": "The code is under commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
-                "dependencies": [
-                    "FoundationFramework(1)"
-                ],
+                "noi": 0,
+                "analysis": "The code is over commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
+                "dependencies": [],
+                "submodules": {
+                    "FoundationFramework": {
+                        "n_of_files": 3,
+                        "metric": {
+                            "loc": 27,
+                            "noc": 21,
+                            "n_a": 1,
+                            "n_c": 2,
+                            "nom": 3,
+                            "not": 0,
+                            "poc": 43.75
+                        },
+                        "submodules": [
+                            {
+                                "Foundation": {
+                                    "n_of_files": 3,
+                                    "metric": {
+                                        "loc": 27,
+                                        "noc": 21,
+                                        "n_a": 1,
+                                        "n_c": 2,
+                                        "nom": 3,
+                                        "not": 0,
+                                        "poc": 43.75
+                                    },
+                                    "submodules": [
+                                        {
+                                            "FoundationFramework": {
+                                                "n_of_files": 2,
+                                                "metric": {
+                                                    "loc": 23,
+                                                    "noc": 14,
+                                                    "n_a": 1,
+                                                    "n_c": 1,
+                                                    "nom": 2,
+                                                    "not": 0,
+                                                    "poc": 37.838
+                                                },
+                                                "submodules": [
+                                                    {
+                                                        "Interfaces": {
+                                                            "n_of_files": 1,
+                                                            "metric": {
+                                                                "loc": 12,
+                                                                "noc": 7,
+                                                                "n_a": 1,
+                                                                "n_c": 0,
+                                                                "nom": 1,
+                                                                "not": 0,
+                                                                "poc": 36.842
+                                                            },
+                                                            "submodules": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "Shared": {
+                                                "n_of_files": 1,
+                                                "metric": {
+                                                    "loc": 4,
+                                                    "noc": 7,
+                                                    "n_a": 0,
+                                                    "n_c": 1,
+                                                    "nom": 1,
+                                                    "not": 0,
+                                                    "poc": 63.636
+                                                },
+                                                "submodules": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
                 "fan_in": 1,
-                "fan_out": 1,
-                "i": 0.5,
-                "a": 0.0,
+                "fan_out": 0,
+                "i": 0.0,
+                "a": 0.5,
                 "d_3": 0.5
             }
         }
@@ -141,6 +228,7 @@ The example below is an excerpt from the example available [here](../swift_code_
     }
 }
 ```
+</details>
 
 KPIs legend:
 
@@ -197,4 +285,4 @@ For a more detailed description, please refer to the _Clean Architecture, Robert
 
 ### Code distribution
 
-![LOC](assets/lines_of_code_-_loc.jpeg) ![NOC](assets/number_of_comments_-_noc.jpeg) ![Nc](assets/n._of_classes_and_structs.jpeg)  ![NOT](assets/number_of_tests_-_not.jpeg) ![Code distribution](assets/code_distribution.jpeg)
+![LOC](assets/lines_of_code_-_loc.jpeg) ![NOC](assets/number_of_comments_-_noc.jpeg) ![Nc](assets/n._of_classes_and_structs.jpeg)  ![NOT](assets/number_of_tests_-_not.jpeg) ![Code distribution](assets/code_distribution.jpeg) ![Code distribution in submodules](assets/code_distribution_submodules.jpeg)
