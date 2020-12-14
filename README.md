@@ -42,7 +42,7 @@ The syntax is:
 
 -   `--source` is the path to the folder that contains the main Xcode project or Workspace
 -   `--artifacts` path to the folder that will contain the generated `output.json` report
--   `--excluded` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
+-   `--exclude` (optional) space separated list of path substrings to exclude from analysis (e.g. `Tests` will ignore all files/folders that contain `Tests`)
 -   `--tests-paths` (default: `Test Tests`) space separated list of path substrings matching test classes
 -   `--generate-graphs` (optional) if passed, it will generate the graphs related to the analysis and save them in the artifacts folder
 
