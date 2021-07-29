@@ -5,21 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### [UNRELEASED]
+## UNRELEASED
 
 ### Added
 
-- Python 3.8 support
+-   Python 3.8 support
 
 ### Fixed
 
-- [Issue#34](https://github.com/matsoftware/swift-code-metrics/issues/34) Improved dependencies resolution
+-   [Issue#34](https://github.com/matsoftware/swift-code-metrics/issues/34) Improved dependencies resolution
 
 ## [1.5.1](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.5.1) - 2020-02-09
 
 ### Fixed
 
-- [PR-32](https://github.com/matsoftware/swift-code-metrics/pull/32) Fix on dependencies version requirements
+-   [PR-32](https://github.com/matsoftware/swift-code-metrics/pull/32) Fix on dependencies version requirements
 
 ## [1.5.0](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.5.0) - 2020-10-06
 
