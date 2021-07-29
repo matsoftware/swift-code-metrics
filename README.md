@@ -46,6 +46,10 @@ The syntax is:
 -   `--tests-paths` (default: `Test Tests`) space separated list of path substrings matching test classes
 -   `--generate-graphs` (optional) if passed, it will generate the graphs related to the analysis and save them in the artifacts folder
 
+### Development
+
+Please run `./install.sh` and `./build_and_test.sh` to install dependencies and run the tests.
+
 ## Documentation
 
 Please follow the [guide](https://github.com/matsoftware/swift-code-metrics/tree/master/docs/GUIDE.md) with a practical example to get started.

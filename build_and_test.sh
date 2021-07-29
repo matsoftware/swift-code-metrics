@@ -2,4 +2,6 @@
 
 set -e
 
-pytest --cov=swift_code_metrics
+top=$(dirname $0)
+
+${top}/venv/bin/pytest --cov=swift_code_metrics
