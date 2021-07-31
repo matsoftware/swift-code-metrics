@@ -6,7 +6,7 @@ install:
   - ./install.sh
 script: ./build_and_test.sh
 after_success:
-  - codecov
+  - ./codecov.sh
 branches:
   only:
     - master
