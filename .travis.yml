@@ -1,17 +1,12 @@
 language: python
 
 python:
-  - "3.7"
-before_install:
-  - pip install codecov
-  - pip install pytest 'pytest-cov==2.5.0'
+  - "3.8"
 install:
-  - pip install -q coverage
-  - pip install -r requirements.txt
-  - pip install .
+  - ./install.sh
 script: ./build_and_test.sh
 after_success:
-  - codecov
+  - ./codecov.sh
 branches:
   only:
     - master
