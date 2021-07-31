@@ -1,4 +1,4 @@
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics?ref=badge_shield) [![License](https://img.shields.io/badge/license-MIT-blue.svg?x=1)](LICENSE) [![Build Status](https://travis-ci.org/matsoftware/swift-code-metrics.svg?branch=master)](https://travis-ci.org/matsoftware/swift-code-metrics) [![codecov](https://codecov.io/gh/matsoftware/swift-code-metrics/branch/master/graph/badge.svg)](https://codecov.io/gh/matsoftware/swift-code-metrics) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ff12e0cafce4ec68024d47b000d2e42)](https://app.codacy.com/app/matsoftware/swift-code-metrics?utm_source=github.com&utm_medium=referral&utm_content=matsoftware/swift-code-metrics&utm_campaign=Badge_Grade_Dashboard)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmatsoftware%2Fswift-code-metrics?ref=badge_shield) [![License](https://img.shields.io/badge/license-MIT-blue.svg?x=1)](LICENSE) [![Build Status](https://travis-ci.org/matsoftware/swift-code-metrics.svg?branch=master)](https://travis-ci.org/matsoftware/swift-code-metrics) [![codecov](https://codecov.io/gh/matsoftware/swift-code-metrics/branch/master/graph/badge.svg)](https://codecov.io/gh/matsoftware/swift-code-metrics) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/c4ecbd3b64cf4518a113bb56d93f6323)](https://www.codacy.com/gh/matsoftware/swift-code-metrics/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matsoftware/swift-code-metrics&amp;utm_campaign=Badge_Grade)
 [![PyPI](https://img.shields.io/pypi/v/swift-code-metrics.svg)](https://pypi.python.org/pypi/swift-code-metrics)
 
 # swift-code-metrics
@@ -49,6 +49,8 @@ The syntax is:
 ### Development
 
 Please run `./install.sh` and `./build_and_test.sh` to install dependencies and run the tests.
+
+The repo comes with a predefined setup for VS Code to debug and run tests as well.
 
 ## Documentation
 

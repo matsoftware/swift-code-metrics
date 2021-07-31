@@ -1,0 +1,21 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "SCM - Example",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/swift-code-metrics-runner.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--source", "swift_code_metrics/tests/test_resources/ExampleProject",
+                "--artifacts", "demo",
+                "--generate-graphs"
+            ]
+        }
+    ]
+}
