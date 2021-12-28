@@ -26,7 +26,7 @@ class IntegrationTest(unittest.TestCase):
         expected_file = os.path.join("swift_code_metrics/tests/test_resources", "expected_output.json")
         expected_json = JSONReader.read_json_file(expected_file)
         generated_json = JSONReader.read_json_file(output_file)
-        self.assertEqual(generated_json, expected_json)
+        self.assertDictEqual(generated_json, expected_json)
 
 
 class IntegrationUnhappyTest(unittest.TestCase):
