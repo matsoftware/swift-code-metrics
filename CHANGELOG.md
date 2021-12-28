@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+-   [Issue#37](https://github.com/matsoftware/swift-code-metrics/issues/37) Support for M1 architecture
 -   [Issue#34](https://github.com/matsoftware/swift-code-metrics/issues/34) Improved dependencies resolution
 
 ## [1.5.1](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.5.1) - 2020-02-09

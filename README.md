@@ -30,7 +30,7 @@ Inspired by the book of Robert C. Martin, _Clean Architecture_, the software wil
 
 This is a _Python 3_ script that depends on _matplotlib_, _adjustText_, _pyfunctional_ and _pygraphviz_.
 
-This latest package depends on the [Graphviz](https://www.graphviz.org/download/) binary that must be installed.
+This latest package depends on the [Graphviz](https://www.graphviz.org/download/) binary that must be installed before. If you're in a Mac environment, you can install it directly with `brew install graphviz`.
 
 ## Usage
 
