@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 install_requires = [
     "matplotlib >= 2",
     "adjustText < 1",
-    "pygraphviz",
+    "pygraphviz > 1.5",
     "pyfunctional == 1.2",
     "numpy == 1.21.1",
     "dataclasses"
