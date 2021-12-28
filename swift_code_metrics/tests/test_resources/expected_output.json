@@ -1,58 +1,95 @@
 {
+    "aggregate": {
+        "non-test-frameworks": {
+            "loc": 108,
+            "n_a": 1,
+            "n_c": 8,
+            "noc": 49,
+            "noi": 3,
+            "nom": 11,
+            "not": 0,
+            "poc": 31.21
+        },
+        "tests-frameworks": {
+            "loc": 53,
+            "n_a": 0,
+            "n_c": 4,
+            "noc": 28,
+            "noi": 4,
+            "nom": 7,
+            "not": 5,
+            "poc": 34.568
+        },
+        "total": {
+            "loc": 161,
+            "n_a": 1,
+            "n_c": 12,
+            "noc": 77,
+            "noi": 7,
+            "nom": 18,
+            "not": 5,
+            "poc": 32.353
+        }
+    },
     "non-test-frameworks": [
         {
             "BusinessLogic": {
-                "loc": 51,
-                "noc": 7,
-                "poc": 12.069,
-                "n_a": 0,
-                "n_c": 3,
-                "nom": 3,
-                "not": 0,
-                "noi": 2,
+                "a": 0.0,
                 "analysis": "The code is under commented. Low abstract component, few interfaces. ",
+                "d_3": 0.333,
                 "dependencies": [
                     "FoundationFramework(1)",
                     "SecretLib(1)"
                 ],
+                "fan_in": 1,
+                "fan_out": 2,
+                "i": 0.667,
+                "loc": 51,
+                "n_a": 0,
+                "n_c": 3,
+                "noc": 7,
+                "noi": 2,
+                "nom": 3,
+                "not": 0,
+                "poc": 12.069,
                 "submodules": {
                     "BusinessLogic": {
-                        "n_of_files": 1,
                         "metric": {
                             "loc": 51,
-                            "noc": 7,
                             "n_a": 0,
                             "n_c": 3,
+                            "noc": 7,
                             "nom": 3,
                             "not": 0,
                             "poc": 12.069
                         },
+                        "n_of_files": 1,
                         "submodules": [
                             {
                                 "BusinessLogic": {
-                                    "n_of_files": 1,
                                     "metric": {
                                         "loc": 51,
-                                        "noc": 7,
                                         "n_a": 0,
                                         "n_c": 3,
+                                        "noc": 7,
                                         "nom": 3,
                                         "not": 0,
                                         "poc": 12.069
                                     },
+                                    "n_of_files": 1,
                                     "submodules": [
                                         {
                                             "BusinessLogic": {
-                                                "n_of_files": 1,
                                                 "metric": {
                                                     "loc": 51,
-                                                    "noc": 7,
                                                     "n_a": 0,
                                                     "n_c": 3,
+                                                    "noc": 7,
                                                     "nom": 3,
                                                     "not": 0,
                                                     "poc": 12.069
                                                 },
+                                                "n_of_files": 1,
                                                 "submodules": []
                                             }
                                         }
@@ -61,77 +98,77 @@
                             }
                         ]
                     }
-                },
-                "fan_in": 1,
-                "fan_out": 2,
-                "i": 0.667,
-                "a": 0.0,
-                "d_3": 0.333
+                }
             }
         },
         {
             "FoundationFramework": {
+                "a": 0.5,
+                "analysis": "The code is over commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
+                "d_3": 0.5,
+                "dependencies": [],
+                "fan_in": 1,
+                "fan_out": 0,
+                "i": 0.0,
                 "loc": 27,
-                "noc": 21,
-                "poc": 43.75,
                 "n_a": 1,
                 "n_c": 2,
+                "noc": 21,
+                "noi": 0,
                 "nom": 3,
                 "not": 0,
-                "noi": 0,
-                "analysis": "The code is over commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
-                "dependencies": [],
+                "poc": 43.75,
                 "submodules": {
                     "FoundationFramework": {
-                        "n_of_files": 3,
                         "metric": {
                             "loc": 27,
-                            "noc": 21,
                             "n_a": 1,
                             "n_c": 2,
+                            "noc": 21,
                             "nom": 3,
                             "not": 0,
                             "poc": 43.75
                         },
+                        "n_of_files": 3,
                         "submodules": [
                             {
                                 "Foundation": {
-                                    "n_of_files": 3,
                                     "metric": {
                                         "loc": 27,
-                                        "noc": 21,
                                         "n_a": 1,
                                         "n_c": 2,
+                                        "noc": 21,
                                         "nom": 3,
                                         "not": 0,
                                         "poc": 43.75
                                     },
+                                    "n_of_files": 3,
                                     "submodules": [
                                         {
                                             "FoundationFramework": {
-                                                "n_of_files": 2,
                                                 "metric": {
                                                     "loc": 23,
-                                                    "noc": 14,
                                                     "n_a": 1,
                                                     "n_c": 1,
+                                                    "noc": 14,
                                                     "nom": 2,
                                                     "not": 0,
                                                     "poc": 37.838
                                                 },
+                                                "n_of_files": 2,
                                                 "submodules": [
                                                     {
                                                         "Interfaces": {
-                                                            "n_of_files": 1,
                                                             "metric": {
                                                                 "loc": 12,
-                                                                "noc": 7,
                                                                 "n_a": 1,
                                                                 "n_c": 0,
+                                                                "noc": 7,
                                                                 "nom": 1,
                                                                 "not": 0,
                                                                 "poc": 36.842
                                                             },
+                                                            "n_of_files": 1,
                                                             "submodules": []
                                                         }
                                                     }
@@ -140,16 +177,16 @@
                                         },
                                         {
                                             "Shared": {
-                                                "n_of_files": 1,
                                                 "metric": {
                                                     "loc": 4,
-                                                    "noc": 7,
                                                     "n_a": 0,
                                                     "n_c": 1,
+                                                    "noc": 7,
                                                     "nom": 1,
                                                     "not": 0,
                                                     "poc": 63.636
                                                 },
+                                                "n_of_files": 1,
                                                 "submodules": []
                                             }
                                         }
@@ -158,79 +195,79 @@
                             }
                         ]
                     }
-                },
-                "fan_in": 1,
-                "fan_out": 0,
-                "i": 0.0,
-                "a": 0.5,
-                "d_3": 0.5
+                }
             }
         },
         {
             "SecretLib": {
+                "a": 0.0,
+                "analysis": "The code is over commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
+                "d_3": 1.0,
+                "dependencies": [],
+                "fan_in": 1,
+                "fan_out": 0,
+                "i": 0.0,
                 "loc": 12,
-                "noc": 14,
-                "poc": 53.846,
                 "n_a": 0,
                 "n_c": 2,
+                "noc": 14,
+                "noi": 0,
                 "nom": 2,
                 "not": 0,
-                "noi": 0,
-                "analysis": "The code is over commented. Zone of Pain. Highly stable and concrete component - rigid, hard to extend (not abstract). This component should not be volatile (e.g. a stable foundation library such as Strings).",
-                "dependencies": [],
+                "poc": 53.846,
                 "submodules": {
                     "SecretLib": {
-                        "n_of_files": 2,
                         "metric": {
                             "loc": 12,
-                            "noc": 14,
                             "n_a": 0,
                             "n_c": 2,
+                            "noc": 14,
                             "nom": 2,
                             "not": 0,
                             "poc": 53.846
                         },
+                        "n_of_files": 2,
                         "submodules": [
                             {
                                 "Foundation": {
-                                    "n_of_files": 2,
                                     "metric": {
                                         "loc": 12,
-                                        "noc": 14,
                                         "n_a": 0,
                                         "n_c": 2,
+                                        "noc": 14,
                                         "nom": 2,
                                         "not": 0,
                                         "poc": 53.846
                                     },
+                                    "n_of_files": 2,
                                     "submodules": [
                                         {
                                             "SecretLib": {
-                                                "n_of_files": 1,
                                                 "metric": {
                                                     "loc": 8,
-                                                    "noc": 7,
                                                     "n_a": 0,
                                                     "n_c": 1,
+                                                    "noc": 7,
                                                     "nom": 1,
                                                     "not": 0,
                                                     "poc": 46.667
                                                 },
+                                                "n_of_files": 1,
                                                 "submodules": []
                                             }
                                         },
                                         {
                                             "Shared": {
-                                                "n_of_files": 1,
                                                 "metric": {
                                                     "loc": 4,
-                                                    "noc": 7,
                                                     "n_a": 0,
                                                     "n_c": 1,
+                                                    "noc": 7,
                                                     "nom": 1,
                                                     "not": 0,
                                                     "poc": 63.636
                                                 },
+                                                "n_of_files": 1,
                                                 "submodules": []
                                             }
                                         }
@@ -239,120 +276,125 @@
                             }
                         ]
                     }
-                },
-                "fan_in": 1,
-                "fan_out": 0,
-                "i": 0.0,
-                "a": 0.0,
-                "d_3": 1.0
+                }
             }
         },
         {
             "SwiftCodeMetricsExample": {
-                "loc": 22,
-                "noc": 14,
-                "poc": 38.889,
-                "n_a": 0,
-                "n_c": 2,
-                "nom": 4,
-                "not": 0,
-                "noi": 1,
+                "a": 0.0,
                 "analysis": "Highly unstable component (lack of dependents, easy to change, irresponsible) Low abstract component, few interfaces. ",
+                "d_3": 0.0,
                 "dependencies": [
                     "BusinessLogic(1)"
                 ],
+                "fan_in": 0,
+                "fan_out": 1,
+                "i": 1.0,
+                "loc": 22,
+                "n_a": 0,
+                "n_c": 2,
+                "noc": 14,
+                "noi": 1,
+                "nom": 4,
+                "not": 0,
+                "poc": 38.889,
                 "submodules": {
                     "SwiftCodeMetricsExample": {
-                        "n_of_files": 2,
                         "metric": {
                             "loc": 22,
-                            "noc": 14,
                             "n_a": 0,
                             "n_c": 2,
+                            "noc": 14,
                             "nom": 4,
                             "not": 0,
                             "poc": 38.889
                         },
+                        "n_of_files": 2,
                         "submodules": [
                             {
                                 "SwiftCodeMetricsExample": {
-                                    "n_of_files": 2,
                                     "metric": {
                                         "loc": 22,
-                                        "noc": 14,
                                         "n_a": 0,
                                         "n_c": 2,
+                                        "noc": 14,
                                         "nom": 4,
                                         "not": 0,
                                         "poc": 38.889
                                     },
+                                    "n_of_files": 2,
                                     "submodules": []
                                 }
                             }
                         ]
                     }
-                },
-                "fan_in": 0,
-                "fan_out": 1,
-                "i": 1.0,
-                "a": 0.0,
-                "d_3": 0.0
+                }
             }
         }
     ],
+    "shared": {
+        "loc": 4,
+        "n_a": 0,
+        "n_c": 1,
+        "noc": 7,
+        "noi": 0,
+        "nom": 1,
+        "not": 0,
+        "poc": 63.636
+    },
     "tests-frameworks": [
         {
             "BusinessLogic_Test": {
-                "loc": 7,
-                "noc": 7,
-                "poc": 50.0,
-                "n_a": 0,
-                "n_c": 1,
-                "nom": 1,
-                "not": 1,
-                "noi": 1,
                 "analysis": "The code is over commented. ",
                 "dependencies": [
                     "BusinessLogic(1)"
                 ],
+                "loc": 7,
+                "n_a": 0,
+                "n_c": 1,
+                "noc": 7,
+                "noi": 1,
+                "nom": 1,
+                "not": 1,
+                "poc": 50.0,
                 "submodules": {
                     "BusinessLogic_Test": {
-                        "n_of_files": 1,
                         "metric": {
                             "loc": 7,
-                            "noc": 7,
                             "n_a": 0,
                             "n_c": 1,
+                            "noc": 7,
                             "nom": 1,
                             "not": 1,
                             "poc": 50.0
                         },
+                        "n_of_files": 1,
                         "submodules": [
                             {
                                 "BusinessLogic": {
-                                    "n_of_files": 1,
                                     "metric": {
                                         "loc": 7,
-                                        "noc": 7,
                                         "n_a": 0,
                                         "n_c": 1,
+                                        "noc": 7,
                                         "nom": 1,
                                         "not": 1,
                                         "poc": 50.0
                                     },
+                                    "n_of_files": 1,
                                     "submodules": [
                                         {
                                             "BusinessLogicTests": {
-                                                "n_of_files": 1,
                                                 "metric": {
                                                     "loc": 7,
-                                                    "noc": 7,
                                                     "n_a": 0,
                                                     "n_c": 1,
+                                                    "noc": 7,
                                                     "nom": 1,
                                                     "not": 1,
                                                     "poc": 50.0
                                                 },
+                                                "n_of_files": 1,
                                                 "submodules": []
                                             }
                                         }
@@ -366,56 +408,56 @@
         },
         {
             "FoundationFrameworkTests": {
-                "loc": 41,
-                "noc": 14,
-                "poc": 25.455,
-                "n_a": 0,
-                "n_c": 2,
-                "nom": 5,
-                "not": 3,
-                "noi": 2,
                 "analysis": "",
                 "dependencies": [
                     "FoundationFramework(2)"
                 ],
+                "loc": 41,
+                "n_a": 0,
+                "n_c": 2,
+                "noc": 14,
+                "noi": 2,
+                "nom": 5,
+                "not": 3,
+                "poc": 25.455,
                 "submodules": {
                     "FoundationFrameworkTests": {
-                        "n_of_files": 2,
                         "metric": {
                             "loc": 41,
-                            "noc": 14,
                             "n_a": 0,
                             "n_c": 2,
+                            "noc": 14,
                             "nom": 5,
                             "not": 3,
                             "poc": 25.455
                         },
+                        "n_of_files": 2,
                         "submodules": [
                             {
                                 "Foundation": {
-                                    "n_of_files": 2,
                                     "metric": {
                                         "loc": 41,
-                                        "noc": 14,
                                         "n_a": 0,
                                         "n_c": 2,
+                                        "noc": 14,
                                         "nom": 5,
                                         "not": 3,
                                         "poc": 25.455
                                     },
+                                    "n_of_files": 2,
                                     "submodules": [
                                         {
                                             "FoundationFrameworkTests": {
-                                                "n_of_files": 2,
                                                 "metric": {
                                                     "loc": 41,
-                                                    "noc": 14,
                                                     "n_a": 0,
                                                     "n_c": 2,
+                                                    "noc": 14,
                                                     "nom": 5,
                                                     "not": 3,
                                                     "poc": 25.455
                                                 },
+                                                "n_of_files": 2,
                                                 "submodules": []
                                             }
                                         }
@@ -429,43 +471,43 @@
         },
         {
             "SwiftCodeMetricsExampleTests_Test": {
-                "loc": 5,
-                "noc": 7,
-                "poc": 58.333,
-                "n_a": 0,
-                "n_c": 1,
-                "nom": 1,
-                "not": 1,
-                "noi": 1,
                 "analysis": "The code is over commented. ",
                 "dependencies": [
                     "SwiftCodeMetricsExample(1)"
                 ],
+                "loc": 5,
+                "n_a": 0,
+                "n_c": 1,
+                "noc": 7,
+                "noi": 1,
+                "nom": 1,
+                "not": 1,
+                "poc": 58.333,
                 "submodules": {
                     "SwiftCodeMetricsExampleTests_Test": {
-                        "n_of_files": 1,
                         "metric": {
                             "loc": 5,
-                            "noc": 7,
                             "n_a": 0,
                             "n_c": 1,
+                            "noc": 7,
                             "nom": 1,
                             "not": 1,
                             "poc": 58.333
                         },
+                        "n_of_files": 1,
                         "submodules": [
                             {
                                 "SwiftCodeMetricsExampleTests": {
-                                    "n_of_files": 1,
                                     "metric": {
                                         "loc": 5,
-                                        "noc": 7,
                                         "n_a": 0,
                                         "n_c": 1,
+                                        "noc": 7,
                                         "nom": 1,
                                         "not": 1,
                                         "poc": 58.333
                                     },
+                                    "n_of_files": 1,
                                     "submodules": []
                                 }
                             }
@@ -474,47 +516,5 @@
                 }
             }
         }
-    ],
-    "shared": {
-        "loc": 4,
-        "noc": 7,
-        "n_a": 0,
-        "n_c": 1,
-        "nom": 1,
-        "not": 0,
-        "poc": 63.636,
-        "noi": 0
-    },
-    "aggregate": {
-        "non-test-frameworks": {
-            "loc": 108,
-            "noc": 49,
-            "n_a": 1,
-            "n_c": 8,
-            "nom": 11,
-            "not": 0,
-            "poc": 31.21,
-            "noi": 3
-        },
-        "tests-frameworks": {
-            "loc": 53,
-            "noc": 28,
-            "n_a": 0,
-            "n_c": 4,
-            "nom": 7,
-            "not": 5,
-            "poc": 34.568,
-            "noi": 4
-        },
-        "total": {
-            "loc": 161,
-            "noc": 77,
-            "n_a": 1,
-            "n_c": 12,
-            "nom": 18,
-            "not": 5,
-            "poc": 32.353,
-            "noi": 7
-        }
-    }
+    ]
 }

@@ -38,7 +38,7 @@ class Inspector:
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(os.path.join(directory, 'output.json'), 'w') as fp:
-            json.dump(self.report.as_dict, fp, indent=4)
+            json.dump(self.report.as_dict, fp, indent=4, sort_keys=True)
 
     # Directory inspection
 

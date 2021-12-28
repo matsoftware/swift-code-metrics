@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Python 3.8 support
 
+### Changed
+
+-   The generated report is now containing a dictionary with sorted keys
+
 ### Fixed
 
 -   [Issue#37](https://github.com/matsoftware/swift-code-metrics/issues/37) Support for M1 architecture
