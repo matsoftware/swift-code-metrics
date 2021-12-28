@@ -5,7 +5,6 @@ import os
 from functional import seq
 from adjustText import adjust_text
 from math import ceil
-import pygraphviz as pgv
 import numpy as np
 
 
@@ -58,6 +57,7 @@ class Graph:
         self.__render(plt, title)
 
     def directed_graph(self, title, list_of_nodes, list_of_edges):
+        import pygraphviz as pgv
         dir_graph = pgv.AGraph(directed=True, strict=True, rankdir='TD', name=title)
         dir_graph.node_attr['shape'] = 'rectangle'
 
