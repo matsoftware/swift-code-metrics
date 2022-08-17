@@ -9,7 +9,7 @@ install_requires = [
     "adjustText < 1",
     "pygraphviz > 1.5",
     "pyfunctional == 1.2",
-    "numpy == 1.21.1",
+    "numpy == 1.22.0",
     "dataclasses"
 ]
 
