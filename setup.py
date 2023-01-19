@@ -8,8 +8,8 @@ install_requires = [
     "matplotlib >= 2",
     "adjustText < 1",
     "pygraphviz > 1.5",
-    "pyfunctional == 1.2",
-    "numpy == 1.22.0",
+    "pyfunctional >= 1.2",
+    "numpy >= 1.22.0",
     "dataclasses"
 ]
 
