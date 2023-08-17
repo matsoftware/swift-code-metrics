@@ -5,6 +5,8 @@ set -e
 top="$(dirname "$0")"
 python3 -m venv "${top}"/venv
 
+"${top}"/venv/bin/python3 ${top}/venv/bin/pip install --upgrade "pip>=23.0"
+
 "${top}"/venv/bin/python3 "${top}"/venv/bin/pip3 install wheel
 
 if arch | grep -q 'arm64'; then
