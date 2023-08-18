@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- [PR-45](https://github.com/matsoftware/swift-code-metrics/pull/45) Apple frameworks list update per Xcode 15 beta and CI evergreening
+-   [PR-45](https://github.com/matsoftware/swift-code-metrics/pull/45) Apple frameworks list update per Xcode 15 beta and CI evergreening
 
 ## [1.5.3](https://github.com/matsoftware/swift-code-metrics/releases/tag/1.5.3) - 2023-03-17
 
