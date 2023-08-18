@@ -5,11 +5,11 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 install_requires = [
-    "matplotlib >= 2",
-    "adjustText < 1",
+    "matplotlib > 2",
+    "adjustText",
     "pygraphviz > 1.5",
-    "pyfunctional >= 1.2",
-    "numpy >= 1.22.0",
+    "pyfunctional > 1.2",
+    "numpy > 1.22.0",
     "dataclasses"
 ]
 
