@@ -10,6 +10,9 @@ import numpy as np
 
 
 class Graph:
+    # Slices below this percentage are labelled only in the legend, to avoid overlapping text (issue #23)
+    PIE_MIN_LABEL_PCT = 3
+
     def __init__(self, path=None):
         self.path = path
         plt.rc('legend', fontsize='small')
@@ -25,8 +28,11 @@ class Graph:
 
     def pie_plot(self, title, sizes, labels, legend):
         plt.title(title)
-        patches, _, _ = plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
-        plt.legend(patches, legend, loc='best')
+        pie_labels, legend_labels = Graph.pie_labels(sizes, labels, legend)
+        patches, _, _ = plt.pie(sizes, labels=pie_labels,
+                                autopct=lambda pct: '%1.1f%%' % pct if pct >= Graph.PIE_MIN_LABEL_PCT else '',
+                                shadow=True, startangle=90)
+        plt.legend(patches, legend_labels, loc='center left', bbox_to_anchor=(1, 0.5))
         plt.axis('equal')
         plt.tight_layout()
 
@@ -90,6 +96,14 @@ class Graph:
     def __file_path(self, name, extension='.pdf'):
         filename = Graph.format_filename(name) + extension
         return os.path.join(self.path, filename)
+
+    @staticmethod
+    def pie_labels(sizes, labels, legend):
+        total = sum(sizes) or 1
+        pcts = [100 * s / total for s in sizes]
+        pie_labels = [l if p >= Graph.PIE_MIN_LABEL_PCT else '' for l, p in zip(labels, pcts)]
+        legend_labels = ['%s (%1.1f%%)' % (l, p) for l, p in zip(legend, pcts)]
+        return pie_labels, legend_labels
 
     @staticmethod
     def format_filename(s):
